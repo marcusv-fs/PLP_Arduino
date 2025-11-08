@@ -1,0 +1,31 @@
+<Programa> ::= ((<DecVar> ";\n")* (<Funcoes> "\n")* <Config> (<Funcoes> "\n")* <Repeticao>)
+
+
+<Config> ::= ("Config{\n" (((<pinMode> | <Monitor>) ";\n") | <Skip>)* "}\n")
+<Funcoes> ::= ("Funcao(" ((<DecVar> ", ")* <DecVar> ")" | ")") "{\n" <Skip>* "}\n")
+<Repeticao> ::= ("Repita{\n" <Skip>* "}\n")
+
+<DecVar> ::=  <TiposVar> " " <Variavel>
+<TiposVar> ::= ("byte" | "int" | "unsigned int" | "long " | "unsigned long" | "float" | "char" | "String" | "Boolean")
+
+<Variavel> ::= <Letras>+ (<Numeros> | <Especiais> | <Letras>)*
+<pinMode> ::= (("Entrada " | "Saida ") (<Pinos>))
+<Monitor> ::= ("MonitorRS " <FreqMonitor>)
+
+
+<digitalRead> ::= "LeiaDg " <Pinos>
+<analogRead> ::= "LeiaAn " <PinosA>
+<digitalWrite> ::= "EscrevaDg " <Pinos>
+<analogWrite> ::= "EscrevaPWM " <PinosPWM>
+<delay> ::= "Espere " <Numeros>+ " " <UndTempo>
+
+<Skip> ::= (  " " | "\t" | "\n" | "\r" | "\f" )
+<Letras> ::= ([A-Z] | [a-z])+
+<Numeros> ::= ([0-9])
+<Especiais> ::= ("_")
+<Pinos> ::= <PinosD> | <PinosA>
+<PinosD> ::= (("0" [1-9]) | ("1" [0-3]))
+<PinosA> ::= ("A" [0-5])
+<PinosPWM> ::= ("3" | "5" | "6" | "9" | "10" | "11")
+<UndTempo> ::= ("ns" | "ms" | "s" | "min" | "h")
+<FreqMonitor> ::= ("300" | "600" | "1200" | "2400" | "4800" | "9600" | "14400" | "19200" | "28800" | "38400" | "57600" | "115200")
