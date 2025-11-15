@@ -2,7 +2,7 @@ options {
   JAVA_UNICODE_ESCAPE = true;
 }
 
-PARSER_BEGIN(Imp1Parser)
+PARSER_BEGIN(ADSL)
 
 import li1.plp.expressions1.util.*;
 import li1.plp.expressions2.expression.*;
@@ -12,18 +12,18 @@ import li1.plp.imperative1.memory.*;
 import li1.plp.imperative1.*;
 import java.util.*;
 
-public class Imp1Parser {
+public class ADSL {
 
     public static void main(String args[]) {
         ListaValor entrada = new ListaValor();
-	    Imp1Parser parser;
+	    ADSL parser;
 	    if (args.length == 0) {
-	    	System.out.println("Imperativa 1 PLP Parser Version 0.0.2:  Reading from standard input . . .");
-	    	parser = new Imp1Parser(System.in);
+	    	System.out.println("ADSL Parser Version 1.0:  Reading from standard input . . .");
+	    	parser = new ADSL(System.in);
 	    } else  {
-	    	System.out.println("Imperativa 1 PLP Parser Version 0.0.2:  Reading from file " + args[0] + " . . .");
+	    	System.out.println("ADSL Parser Version 1.0:  Reading from file " + args[0] + " . . .");
 	    	try {
-	    		parser = new Imp1Parser(new java.io.FileInputStream(args[0]));
+	    		parser = new ADSL(new java.io.FileInputStream(args[0]));
 	    	} catch (java.io.FileNotFoundException e) {
 	        	System.out.println("Java Parser Version 1.0.2:  File " + args[0] + " not found.");
 	        	return;
@@ -56,7 +56,7 @@ public class Imp1Parser {
 
 	    try {
             Programa programa = parser.Input();
-            System.out.println("Imperativa 1 PLP Parser Version 0.0.2:  Imperativa2 program parsed successfully.");
+            System.out.println("ADSL Parser Version 1.0:  Imperativa2 program parsed successfully.");
             if(programa.checaTipo(new ContextoCompilacaoImperativa(entrada))) {
                 ListaValor saida = programa.executar(new ContextoExecucaoImperativa(entrada));
                 System.out.println(saida);
@@ -65,7 +65,7 @@ public class Imp1Parser {
                 System.out.println("Erro de tipo");
             }
         } catch (Exception e) {
-            System.out.println("Imperativa 1 PLP Parser Version 0.0.2:  Encountered errors during parse.");
+            System.out.println("ADSL Parser Version 1.0:  Encountered errors during parse.");
             e.printStackTrace();
         }
 	}
@@ -82,7 +82,7 @@ public class Imp1Parser {
 	}
 }
 
-PARSER_END(Imp1Parser)
+PARSER_END(ADSL)
 
 
 SKIP : /* WHITE SPACE */

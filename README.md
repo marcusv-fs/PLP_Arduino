@@ -9,7 +9,10 @@ Na pasta src, temos os códigos específicos do nosso projeto.
 3. Reiniciar o computador. Após isso, testar se a configuração do javacc está funcionando:
 4. Abrir a pasta javacc-javacc-7.0.13 no console e digitar "javacc". Se tudo der certo, a versão do javacc será exibida.
 
-# Testes
+# Como testar nosso programa
+1. Abra a pasta src no terminal e execute: "java ADSL [ARQUIVO PARA TESTE] [PARAMETROS, SE NECESSÁRIO]"
+
+# Como usar o javacc
 1. Abra a pasta onde se encontra o arquivo .jj que deseja executar.
 2. Digite "javacc [ARQUIVO].jj
 3. Digite: "javac *.java"
