@@ -129,8 +129,10 @@
 	</licenses>
 
 	<properties>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.target>21</maven.compiler.target>
+		<!-- Use the release flag where supported to ensure cross-compilation correctness -->
+		<maven.compiler.release>21</maven.compiler.release>
 
 		<keystore.path>keystore</keystore.path>
 		<keystore.type>PKCS12</keystore.type>

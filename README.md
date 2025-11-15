@@ -1,3 +1,8 @@
+# Organização
+Na pasta Docs se encontram os arquivos docx, pdfs e pptx utilizados durante a disciplina.
+Na pasta javacc, temos a versão do javacc utilizada para a realização das atividades.
+Na pasta src, temos os códigos específicos do nosso projeto.
+
 # Instalação
 1. Adicionar o caminho da pasta scripts da pasta javacc-javacc-7.0.13 ao PATH do sistema
 2. Instalar JDK 25.
