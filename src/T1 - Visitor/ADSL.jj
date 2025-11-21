@@ -37,6 +37,29 @@ TOKEN: {
 | <REPITA: "Repita">
 | <ENTRADA: "Entrada">
 | <SAIDA: "Saida">
+| <ESPERA: "Espere">
+| <MONITOR: "Monitor">
+
+// Unidades de tempo
+| <NS: "ns">
+| <MS: "ms">
+| <S: "s">
+| <MIN: "min">
+| <H: "h">
+
+// Frequ\u00eancias de monitora\u00e7\u00e3o
+| <FREQ_300: "300">
+| <FREQ_600: "600">
+| <FREQ_1200: "1200">
+| <FREQ_2400: "2400">
+| <FREQ_4800: "4800">
+| <FREQ_9600: "9600">
+| <FREQ_14400: "14400">
+| <FREQ_19200: "19200">
+| <FREQ_28800: "28800">
+| <FREQ_38400: "38400">
+| <FREQ_57600: "57600">
+| <FREQ_115200: "115200">
 
 | <NUMERO: (["0"-"9"])+ >
 | <PINO_ANALOGICO: "A" (["0"-"5"]) >
@@ -130,6 +153,7 @@ void Config()        :
 /*@egen*/
   <CONFIG> "{" (
     PinMode()
+  | FreqMonitor()
   | SingleLineComment()
   | MultiLineComment()
   | FormalComment()
@@ -358,17 +382,17 @@ void PinosPWM()          :
 /*@egen*/
 }
 
-void Comando()         :
-{/*@bgen(jjtree) Comando */
-  ASTComando jjtn000 = new ASTComando(JJTCOMANDO);
+void FreqMonitor()             :
+{/*@bgen(jjtree) FreqMonitor */
+  ASTFreqMonitor jjtn000 = new ASTFreqMonitor(JJTFREQMONITOR);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
   jjtn000.jjtSetFirstToken(getToken(1));
 /*@egen*/}
-{/*@bgen(jjtree) Comando */
+{/*@bgen(jjtree) FreqMonitor */
   try {
 /*@egen*/
-  ( PinMode() )/*@bgen(jjtree)*/
+  <MONITOR> Frequencia() ";"/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -389,7 +413,139 @@ void Comando()         :
       jjtn000.jjtSetLastToken(getToken(0));
     }
   }
-/*@egen*/ // Adicione outros comandos aqui no futuro
+/*@egen*/
+}
+
+void Frequencia()            :
+{/*@bgen(jjtree) Frequencia */
+  ASTFrequencia jjtn000 = new ASTFrequencia(JJTFREQUENCIA);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) Frequencia */
+  try {
+/*@egen*/
+  (
+    <FREQ_300> | <FREQ_600> | <FREQ_1200> | <FREQ_2400> | <FREQ_4800> 
+  | <FREQ_9600> | <FREQ_14400> | <FREQ_19200> | <FREQ_28800> | <FREQ_38400> 
+  | <FREQ_57600> | <FREQ_115200>
+  )/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void Delay()       :
+{/*@bgen(jjtree) Delay */
+  ASTDelay jjtn000 = new ASTDelay(JJTDELAY);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) Delay */
+  try {
+/*@egen*/
+  <ESPERA> ValorTempo() UnidadeTempo() ";"/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void ValorTempo()            :
+{/*@bgen(jjtree) ValorTempo */
+ ASTValorTempo jjtn000 = new ASTValorTempo(JJTVALORTEMPO);
+ boolean jjtc000 = true;
+ jjtree.openNodeScope(jjtn000);
+ jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/Token t;}
+{/*@bgen(jjtree) ValorTempo */
+  try {
+/*@egen*/
+  t=<NUMERO>/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void UnidadeTempo()              :
+{/*@bgen(jjtree) UnidadeTempo */
+  ASTUnidadeTempo jjtn000 = new ASTUnidadeTempo(JJTUNIDADETEMPO);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) UnidadeTempo */
+  try {
+/*@egen*/
+  ( <NS> | <MS> | <S> | <MIN> | <H> )/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void Comando()         :
+{/*@bgen(jjtree) Comando */
+  ASTComando jjtn000 = new ASTComando(JJTCOMANDO);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) Comando */
+  try {
+/*@egen*/
+  ( PinMode() | Delay() )/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
 }
 
 void SingleLineComment()                    : {/*@bgen(jjtree) SingleLineComment */

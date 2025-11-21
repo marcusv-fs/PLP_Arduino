@@ -1,12 +1,14 @@
-// Configuração dos pinos
+// Configuração inicial
 Config {
   Entrada 2;
   Saida 13;
   Saida A0;
-  Entrada A1;
+  Monitor 9600;
 }
 
 // Loop principal
 Repita {
-  // Comandos futuros aqui
+  Espere 500 ms;
+  Espere 2 s;
+  Espere 1 min;
 }

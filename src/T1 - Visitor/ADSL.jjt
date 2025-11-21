@@ -33,6 +33,29 @@ TOKEN: {
 | <REPITA: "Repita">
 | <ENTRADA: "Entrada">
 | <SAIDA: "Saida">
+| <ESPERA: "Espere">
+| <MONITOR: "Monitor">
+
+// Unidades de tempo
+| <NS: "ns">
+| <MS: "ms">
+| <S: "s">
+| <MIN: "min">
+| <H: "h">
+
+// Frequências de monitoração
+| <FREQ_300: "300">
+| <FREQ_600: "600">
+| <FREQ_1200: "1200">
+| <FREQ_2400: "2400">
+| <FREQ_4800: "4800">
+| <FREQ_9600: "9600">
+| <FREQ_14400: "14400">
+| <FREQ_19200: "19200">
+| <FREQ_28800: "28800">
+| <FREQ_38400: "38400">
+| <FREQ_57600: "57600">
+| <FREQ_115200: "115200">
 
 | <NUMERO: (["0"-"9"])+ >
 | <PINO_ANALOGICO: "A" (["0"-"5"]) >
@@ -85,6 +108,7 @@ void Config() #Config:
 {
   <CONFIG> "{" (
     PinMode()
+  | FreqMonitor()
   | SingleLineComment()
   | MultiLineComment()
   | FormalComment()
@@ -154,10 +178,44 @@ void PinosPWM() #PinosPWM:
   }
 }
 
+void FreqMonitor() #FreqMonitor:
+{}
+{
+  <MONITOR> Frequencia() ";"
+}
+
+void Frequencia() #Frequencia:
+{}
+{
+  (
+    <FREQ_300> | <FREQ_600> | <FREQ_1200> | <FREQ_2400> | <FREQ_4800> 
+  | <FREQ_9600> | <FREQ_14400> | <FREQ_19200> | <FREQ_28800> | <FREQ_38400> 
+  | <FREQ_57600> | <FREQ_115200>
+  )
+}
+
+void Delay() #Delay:
+{}
+{
+  <ESPERA> ValorTempo() UnidadeTempo() ";"
+}
+
+void ValorTempo() #ValorTempo:
+{Token t;}
+{
+  t=<NUMERO>
+}
+
+void UnidadeTempo() #UnidadeTempo:
+{}
+{
+  ( <NS> | <MS> | <S> | <MIN> | <H> )
+}
+
 void Comando() #Comando:
 {}
 {
-  ( PinMode() ) // Adicione outros comandos aqui no futuro
+  ( PinMode() | Delay() )
 }
 
 void SingleLineComment() #SingleLineComment : {}

@@ -10,9 +10,14 @@ public interface ADSLVisitor
   public Object visit(ASTPinosD node, Object data);
   public Object visit(ASTPinosA node, Object data);
   public Object visit(ASTPinosPWM node, Object data);
+  public Object visit(ASTFreqMonitor node, Object data);
+  public Object visit(ASTFrequencia node, Object data);
+  public Object visit(ASTDelay node, Object data);
+  public Object visit(ASTValorTempo node, Object data);
+  public Object visit(ASTUnidadeTempo node, Object data);
   public Object visit(ASTComando node, Object data);
   public Object visit(ASTSingleLineComment node, Object data);
   public Object visit(ASTMultiLineComment node, Object data);
   public Object visit(ASTFormalComment node, Object data);
 }
-/* JavaCC - OriginalChecksum=4e3b34dc27bfbd789ecc168ff83200bc (do not edit this line) */
+/* JavaCC - OriginalChecksum=0ef0d616c019eae8ec314fe7e457394c (do not edit this line) */

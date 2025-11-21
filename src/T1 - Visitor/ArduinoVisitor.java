@@ -32,28 +32,79 @@ public class ArduinoVisitor implements ADSLVisitor {
 
     @Override
     public Object visit(ASTPinMode node, Object data) {
-        // O primeiro token é "Entrada" ou "Saida"
         Token tipoToken = node.jjtGetFirstToken();
         String tipo = tipoToken.image;
         
-        // O nó Pinos é o primeiro filho
         SimpleNode pinosNode = (SimpleNode) node.jjtGetChild(0);
         Token pinoToken = pinosNode.jjtGetFirstToken();
         String pino = pinoToken.image;
         
-        // Converter para constantes do Arduino
         String arduinoMode = "INPUT";
         if (tipo.equals("Saida")) {
             arduinoMode = "OUTPUT";
         }
         
-        // Se for pino analógico, converter para número digital (A0 -> 14, A1 -> 15, etc)
         if (pinosNode instanceof ASTPinosA) {
             int analogPin = Integer.parseInt(pino.substring(1));
             pino = String.valueOf(analogPin + 14);
         }
         
         System.out.println("  pinMode(" + pino + ", " + arduinoMode + ");");
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTFreqMonitor node, Object data) {
+        // O nó Frequencia é o primeiro filho
+        SimpleNode freqNode = (SimpleNode) node.jjtGetChild(0);
+        Token freqToken = freqNode.jjtGetFirstToken();
+        String baudRate = freqToken.image;
+        
+        System.out.println("  Serial.begin(" + baudRate + ");");
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTFrequencia node, Object data) {
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTDelay node, Object data) {
+        // Primeiro filho: ValorTempo
+        SimpleNode valorNode = (SimpleNode) node.jjtGetChild(0);
+        Token valorToken = valorNode.jjtGetFirstToken();
+        String valor = valorToken.image;
+        
+        // Segundo filho: UnidadeTempo
+        SimpleNode unidadeNode = (SimpleNode) node.jjtGetChild(1);
+        Token unidadeToken = unidadeNode.jjtGetFirstToken();
+        String unidade = unidadeToken.image;
+        
+        // Converter para milissegundos
+        long ms = converterParaMs(Long.parseLong(valor), unidade);
+        System.out.println("  delay(" + ms + ");");
+        return data;
+    }
+
+    private long converterParaMs(long valor, String unidade) {
+        switch (unidade) {
+            case "ns": return valor / 1000000;
+            case "ms": return valor;
+            case "s": return valor * 1000;
+            case "min": return valor * 60 * 1000;
+            case "h": return valor * 60 * 60 * 1000;
+            default: return valor;
+        }
+    }
+
+    @Override
+    public Object visit(ASTValorTempo node, Object data) {
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTUnidadeTempo node, Object data) {
         return data;
     }
 

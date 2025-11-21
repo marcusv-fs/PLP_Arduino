@@ -9,10 +9,15 @@ public interface ADSLTreeConstants
   public int JJTPINOSD = 5;
   public int JJTPINOSA = 6;
   public int JJTPINOSPWM = 7;
-  public int JJTCOMANDO = 8;
-  public int JJTSINGLELINECOMMENT = 9;
-  public int JJTMULTILINECOMMENT = 10;
-  public int JJTFORMALCOMMENT = 11;
+  public int JJTFREQMONITOR = 8;
+  public int JJTFREQUENCIA = 9;
+  public int JJTDELAY = 10;
+  public int JJTVALORTEMPO = 11;
+  public int JJTUNIDADETEMPO = 12;
+  public int JJTCOMANDO = 13;
+  public int JJTSINGLELINECOMMENT = 14;
+  public int JJTMULTILINECOMMENT = 15;
+  public int JJTFORMALCOMMENT = 16;
 
 
   public String[] jjtNodeName = {
@@ -24,10 +29,15 @@ public interface ADSLTreeConstants
     "PinosD",
     "PinosA",
     "PinosPWM",
+    "FreqMonitor",
+    "Frequencia",
+    "Delay",
+    "ValorTempo",
+    "UnidadeTempo",
     "Comando",
     "SingleLineComment",
     "MultiLineComment",
     "FormalComment",
   };
 }
-/* JavaCC - OriginalChecksum=b2a6b65863b78fe3c8fba74cfde85c78 (do not edit this line) */
+/* JavaCC - OriginalChecksum=a35e0603d616dce1d91f6798377c7306 (do not edit this line) */
