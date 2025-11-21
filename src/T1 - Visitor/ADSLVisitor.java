@@ -15,9 +15,14 @@ public interface ADSLVisitor
   public Object visit(ASTDelay node, Object data);
   public Object visit(ASTValorTempo node, Object data);
   public Object visit(ASTUnidadeTempo node, Object data);
+  public Object visit(ASTRead node, Object data);
+  public Object visit(ASTDigitalWrite node, Object data);
+  public Object visit(ASTAnalogWrite node, Object data);
+  public Object visit(ASTValorDigital node, Object data);
+  public Object visit(ASTValorAnalogico node, Object data);
   public Object visit(ASTComando node, Object data);
   public Object visit(ASTSingleLineComment node, Object data);
   public Object visit(ASTMultiLineComment node, Object data);
   public Object visit(ASTFormalComment node, Object data);
 }
-/* JavaCC - OriginalChecksum=0ef0d616c019eae8ec314fe7e457394c (do not edit this line) */
+/* JavaCC - OriginalChecksum=cc1b65828acdbb67f6072e880a279757 (do not edit this line) */

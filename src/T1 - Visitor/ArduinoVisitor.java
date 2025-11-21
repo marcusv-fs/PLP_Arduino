@@ -55,7 +55,6 @@ public class ArduinoVisitor implements ADSLVisitor {
 
     @Override
     public Object visit(ASTFreqMonitor node, Object data) {
-        // O nó Frequencia é o primeiro filho
         SimpleNode freqNode = (SimpleNode) node.jjtGetChild(0);
         Token freqToken = freqNode.jjtGetFirstToken();
         String baudRate = freqToken.image;
@@ -71,17 +70,14 @@ public class ArduinoVisitor implements ADSLVisitor {
 
     @Override
     public Object visit(ASTDelay node, Object data) {
-        // Primeiro filho: ValorTempo
         SimpleNode valorNode = (SimpleNode) node.jjtGetChild(0);
         Token valorToken = valorNode.jjtGetFirstToken();
         String valor = valorToken.image;
         
-        // Segundo filho: UnidadeTempo
         SimpleNode unidadeNode = (SimpleNode) node.jjtGetChild(1);
         Token unidadeToken = unidadeNode.jjtGetFirstToken();
         String unidade = unidadeToken.image;
         
-        // Converter para milissegundos
         long ms = converterParaMs(Long.parseLong(valor), unidade);
         System.out.println("  delay(" + ms + ");");
         return data;
@@ -96,6 +92,73 @@ public class ArduinoVisitor implements ADSLVisitor {
             case "h": return valor * 60 * 60 * 1000;
             default: return valor;
         }
+    }
+
+    @Override
+    public Object visit(ASTRead node, Object data) {
+        SimpleNode pinosNode = (SimpleNode) node.jjtGetChild(0);
+        Token pinoToken = pinosNode.jjtGetFirstToken();
+        String pino = pinoToken.image;
+
+        // Decide automaticamente se é leitura digital ou analógica
+        if (pinosNode instanceof ASTPinosA) {
+            // Para pino analógico, usa analogRead
+            int analogPin = Integer.parseInt(pino.substring(1));
+            System.out.println("  analogRead(" + analogPin + ");");
+        } else {
+            // Para pino digital, usa digitalRead
+            System.out.println("  digitalRead(" + pino + ");");
+        }
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTDigitalWrite node, Object data) {
+        SimpleNode pinosNode = (SimpleNode) node.jjtGetChild(0);
+        Token pinoToken = pinosNode.jjtGetFirstToken();
+        String pino = pinoToken.image;
+        
+        SimpleNode valorNode = (SimpleNode) node.jjtGetChild(1);
+        Token valorToken = valorNode.jjtGetFirstToken();
+        String valor = valorToken.image;
+        
+        if (pinosNode instanceof ASTPinosA) {
+            int analogPin = Integer.parseInt(pino.substring(1));
+            pino = String.valueOf(analogPin + 14);
+        }
+        
+        // Converter 0/1 para LOW/HIGH
+        String arduinoValue = "LOW";
+        if (valor.equals("1")) {
+            arduinoValue = "HIGH";
+        }
+        
+        System.out.println("  digitalWrite(" + pino + ", " + arduinoValue + ");");
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTAnalogWrite node, Object data) {
+        SimpleNode pinosNode = (SimpleNode) node.jjtGetChild(0);
+        Token pinoToken = pinosNode.jjtGetFirstToken();
+        String pino = pinoToken.image;
+        
+        SimpleNode valorNode = (SimpleNode) node.jjtGetChild(1);
+        Token valorToken = valorNode.jjtGetFirstToken();
+        String valor = valorToken.image;
+        
+        System.out.println("  analogWrite(" + pino + ", " + valor + ");");
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTValorDigital node, Object data) {
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTValorAnalogico node, Object data) {
+        return data;
     }
 
     @Override
@@ -137,7 +200,7 @@ public class ArduinoVisitor implements ADSLVisitor {
     public Object visit(ASTSingleLineComment node, Object data) {
         Token t = node.jjtGetFirstToken();
         if (t != null) {
-            System.out.print(t.image);
+            System.out.print("  " + t.image);
         }
         return data;
     }
@@ -149,9 +212,9 @@ public class ArduinoVisitor implements ADSLVisitor {
             String[] lines = t.image.split("\n", -1);
             for (int i = 0; i < lines.length; i++) {
                 if (i == 0) {
-                    System.out.println(lines[i]);
+                    System.out.print("  " + lines[i]);
                 } else {
-                    System.out.println(lines[i]);
+                    System.out.print("\n  " + lines[i]);
                 }
             }
         }
@@ -165,9 +228,9 @@ public class ArduinoVisitor implements ADSLVisitor {
             String[] lines = t.image.split("\n", -1);
             for (int i = 0; i < lines.length; i++) {
                 if (i == 0) {
-                    System.out.println(lines[i]);
+                    System.out.print("  " + lines[i]);
                 } else {
-                    System.out.println(lines[i]);
+                    System.out.print("\n  " + lines[i]);
                 }
             }
         }

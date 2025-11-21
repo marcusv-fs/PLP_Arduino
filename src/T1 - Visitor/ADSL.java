@@ -174,6 +174,9 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
         case ENTRADA:
         case SAIDA:
         case ESPERA:
+        case LEIA:
+        case ESCREVA:
+        case ESCREVA_PWM:
         case SINGLE_LINE_COMMENT:
         case MULTI_LINE_COMMENT:
         case FORMAL_COMMENT:
@@ -187,6 +190,9 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
         case ENTRADA:
         case SAIDA:
         case ESPERA:
+        case LEIA:
+        case ESCREVA:
+        case ESCREVA_PWM:
           Comando();
           break;
         case SINGLE_LINE_COMMENT:
@@ -322,10 +328,10 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
     jjtn000.jjtSetLastToken(getToken(0));
-    // Validação para pinos digitais (0-13)
+    // Validação para pinos digitais (0-19)
     int pino = Integer.parseInt(t.image);
-    if (pino < 0 || pino > 13) {
-      {if (true) throw new ParseException("Pino digital deve estar entre 0 e 13: " + pino);}
+    if (pino < 0 || pino > 19) {
+      {if (true) throw new ParseException("Pino digital deve estar entre 0 e 19: " + pino);}
     }
     } finally {
     if (jjtc000) {
@@ -557,6 +563,154 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
     }
   }
 
+// Comando de leitura unificado
+  final public void Read() throws ParseException {
+ /*@bgen(jjtree) Read */
+  ASTRead jjtn000 = new ASTRead(JJTREAD);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+    try {
+      jj_consume_token(LEIA);
+      Pinos();
+      jj_consume_token(SEMICOLON);
+    } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      {if (true) throw (RuntimeException)jjte000;}
+    }
+    if (jjte000 instanceof ParseException) {
+      {if (true) throw (ParseException)jjte000;}
+    }
+    {if (true) throw (Error)jjte000;}
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+    }
+  }
+
+// Comando de escrita digital unificado
+  final public void DigitalWrite() throws ParseException {
+ /*@bgen(jjtree) DigitalWrite */
+  ASTDigitalWrite jjtn000 = new ASTDigitalWrite(JJTDIGITALWRITE);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+    try {
+      jj_consume_token(ESCREVA);
+      Pinos();
+      ValorDigital();
+      jj_consume_token(SEMICOLON);
+    } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      {if (true) throw (RuntimeException)jjte000;}
+    }
+    if (jjte000 instanceof ParseException) {
+      {if (true) throw (ParseException)jjte000;}
+    }
+    {if (true) throw (Error)jjte000;}
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+    }
+  }
+
+  final public void AnalogWrite() throws ParseException {
+ /*@bgen(jjtree) AnalogWrite */
+  ASTAnalogWrite jjtn000 = new ASTAnalogWrite(JJTANALOGWRITE);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+    try {
+      jj_consume_token(ESCREVA_PWM);
+      PinosPWM();
+      ValorAnalogico();
+      jj_consume_token(SEMICOLON);
+    } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      {if (true) throw (RuntimeException)jjte000;}
+    }
+    if (jjte000 instanceof ParseException) {
+      {if (true) throw (ParseException)jjte000;}
+    }
+    {if (true) throw (Error)jjte000;}
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+    }
+  }
+
+  final public void ValorDigital() throws ParseException {
+ /*@bgen(jjtree) ValorDigital */
+ ASTValorDigital jjtn000 = new ASTValorDigital(JJTVALORDIGITAL);
+ boolean jjtc000 = true;
+ jjtree.openNodeScope(jjtn000);
+ jjtn000.jjtSetFirstToken(getToken(1));Token t;
+    try {
+      t = jj_consume_token(NUMERO);
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+    jjtn000.jjtSetLastToken(getToken(0));
+    // Validação para valores digitais (0 ou 1)
+    int valor = Integer.parseInt(t.image);
+    if (valor != 0 && valor != 1) {
+      {if (true) throw new ParseException("Valor digital deve ser 0 ou 1: " + valor);}
+    }
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+    }
+  }
+
+  final public void ValorAnalogico() throws ParseException {
+ /*@bgen(jjtree) ValorAnalogico */
+ ASTValorAnalogico jjtn000 = new ASTValorAnalogico(JJTVALORANALOGICO);
+ boolean jjtc000 = true;
+ jjtree.openNodeScope(jjtn000);
+ jjtn000.jjtSetFirstToken(getToken(1));Token t;
+    try {
+      t = jj_consume_token(NUMERO);
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+    jjtn000.jjtSetLastToken(getToken(0));
+    // Validação para valores analógicos/PWM (0-255)
+    int valor = Integer.parseInt(t.image);
+    if (valor < 0 || valor > 255) {
+      {if (true) throw new ParseException("Valor PWM deve estar entre 0 e 255: " + valor);}
+    }
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+    }
+  }
+
   final public void Comando() throws ParseException {
  /*@bgen(jjtree) Comando */
   ASTComando jjtn000 = new ASTComando(JJTCOMANDO);
@@ -571,6 +725,15 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
         break;
       case ESPERA:
         Delay();
+        break;
+      case LEIA:
+        Read();
+        break;
+      case ESCREVA:
+        DigitalWrite();
+        break;
+      case ESCREVA_PWM:
+        AnalogWrite();
         break;
       default:
         jj_la1[10] = jj_gen;
@@ -664,7 +827,7 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x1c000006,0x1c000006,0x1c000058,0x1c000058,0x1c000038,0x1c000038,0x18,0x3000000,0xfff000,0xf80,0x38,};
+      jj_la1_0 = new int[] {0xe0000006,0xe0000006,0xe0000058,0xe0000058,0xe00003b8,0xe00003b8,0x18,0x18000000,0x7ff8000,0x7c00,0x3b8,};
    }
    private static void jj_la1_init_1() {
       jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,};
@@ -787,7 +950,7 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[43];
+    boolean[] la1tokens = new boolean[46];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -804,7 +967,7 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
         }
       }
     }
-    for (int i = 0; i < 43; i++) {
+    for (int i = 0; i < 46; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

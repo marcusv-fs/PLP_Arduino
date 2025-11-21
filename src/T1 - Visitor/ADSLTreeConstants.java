@@ -14,10 +14,15 @@ public interface ADSLTreeConstants
   public int JJTDELAY = 10;
   public int JJTVALORTEMPO = 11;
   public int JJTUNIDADETEMPO = 12;
-  public int JJTCOMANDO = 13;
-  public int JJTSINGLELINECOMMENT = 14;
-  public int JJTMULTILINECOMMENT = 15;
-  public int JJTFORMALCOMMENT = 16;
+  public int JJTREAD = 13;
+  public int JJTDIGITALWRITE = 14;
+  public int JJTANALOGWRITE = 15;
+  public int JJTVALORDIGITAL = 16;
+  public int JJTVALORANALOGICO = 17;
+  public int JJTCOMANDO = 18;
+  public int JJTSINGLELINECOMMENT = 19;
+  public int JJTMULTILINECOMMENT = 20;
+  public int JJTFORMALCOMMENT = 21;
 
 
   public String[] jjtNodeName = {
@@ -34,10 +39,15 @@ public interface ADSLTreeConstants
     "Delay",
     "ValorTempo",
     "UnidadeTempo",
+    "Read",
+    "DigitalWrite",
+    "AnalogWrite",
+    "ValorDigital",
+    "ValorAnalogico",
     "Comando",
     "SingleLineComment",
     "MultiLineComment",
     "FormalComment",
   };
 }
-/* JavaCC - OriginalChecksum=a35e0603d616dce1d91f6798377c7306 (do not edit this line) */
+/* JavaCC - OriginalChecksum=2d2cc9c78e85fd27e42638aa5445ea78 (do not edit this line) */

@@ -36,6 +36,11 @@ TOKEN: {
 | <ESPERA: "Espere">
 | <MONITOR: "Monitor">
 
+// Comandos unificados de leitura/escrita
+| <LEIA: "Leia">
+| <ESCREVA: "Escreva">
+| <ESCREVA_PWM: "EscrevaPWM">
+
 // Unidades de tempo
 | <NS: "ns">
 | <MS: "ms">
@@ -143,10 +148,10 @@ void PinosD() #PinosD:
 {
   t=<NUMERO>
   {
-    // Validação para pinos digitais (0-13)
+    // Validação para pinos digitais (0-19)
     int pino = Integer.parseInt(t.image);
-    if (pino < 0 || pino > 13) {
-      throw new ParseException("Pino digital deve estar entre 0 e 13: " + pino);
+    if (pino < 0 || pino > 19) {
+      throw new ParseException("Pino digital deve estar entre 0 e 19: " + pino);
     }
   }
 }
@@ -212,10 +217,56 @@ void UnidadeTempo() #UnidadeTempo:
   ( <NS> | <MS> | <S> | <MIN> | <H> )
 }
 
+// Comando de leitura unificado
+void Read() #Read:
+{}
+{
+  <LEIA> Pinos() ";"
+}
+
+// Comando de escrita digital unificado
+void DigitalWrite() #DigitalWrite:
+{}
+{
+  <ESCREVA> Pinos() ValorDigital() ";"
+}
+
+void AnalogWrite() #AnalogWrite:
+{}
+{
+  <ESCREVA_PWM> PinosPWM() ValorAnalogico() ";"
+}
+
+void ValorDigital() #ValorDigital:
+{Token t;}
+{
+  t=<NUMERO>
+  {
+    // Validação para valores digitais (0 ou 1)
+    int valor = Integer.parseInt(t.image);
+    if (valor != 0 && valor != 1) {
+      throw new ParseException("Valor digital deve ser 0 ou 1: " + valor);
+    }
+  }
+}
+
+void ValorAnalogico() #ValorAnalogico:
+{Token t;}
+{
+  t=<NUMERO>
+  {
+    // Validação para valores analógicos/PWM (0-255)
+    int valor = Integer.parseInt(t.image);
+    if (valor < 0 || valor > 255) {
+      throw new ParseException("Valor PWM deve estar entre 0 e 255: " + valor);
+    }
+  }
+}
+
 void Comando() #Comando:
 {}
 {
-  ( PinMode() | Delay() )
+  ( PinMode() | Delay() | Read() | DigitalWrite() | AnalogWrite() )
 }
 
 void SingleLineComment() #SingleLineComment : {}
