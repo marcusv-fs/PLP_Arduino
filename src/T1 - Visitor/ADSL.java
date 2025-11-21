@@ -1088,6 +1088,48 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
       Condicao();
       jj_consume_token(RPAREN);
       jj_consume_token(LBRACE);
+      BlocoSe();
+      jj_consume_token(RBRACE);
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case SENAO:
+        jj_consume_token(SENAO);
+        jj_consume_token(LBRACE);
+        BlocoSenao();
+        jj_consume_token(RBRACE);
+        break;
+      default:
+        jj_la1[15] = jj_gen;
+        ;
+      }
+    } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      {if (true) throw (RuntimeException)jjte000;}
+    }
+    if (jjte000 instanceof ParseException) {
+      {if (true) throw (ParseException)jjte000;}
+    }
+    {if (true) throw (Error)jjte000;}
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+    }
+  }
+
+  final public void BlocoSe() throws ParseException {
+ /*@bgen(jjtree) BlocoSe */
+  ASTBlocoSe jjtn000 = new ASTBlocoSe(JJTBLOCOSE);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+    try {
       label_4:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1115,7 +1157,7 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
           ;
           break;
         default:
-          jj_la1[15] = jj_gen;
+          jj_la1[16] = jj_gen;
           break label_4;
         }
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1149,87 +1191,105 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
           FormalComment();
           break;
         default:
-          jj_la1[16] = jj_gen;
+          jj_la1[17] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
       }
-      jj_consume_token(RBRACE);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case SENAO:
-        jj_consume_token(SENAO);
-        jj_consume_token(LBRACE);
-        label_5:
-        while (true) {
-          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-          case ENTRADA:
-          case SAIDA:
-          case ESPERA:
-          case LEIA:
-          case ESCREVA:
-          case ESCREVA_PWM:
-          case ESCRITA_MON:
-          case SE:
-          case BYTE:
-          case INT:
-          case UNSIGNED_INT:
-          case LONG:
-          case UNSIGNED_LONG:
-          case FLOAT:
-          case CHAR:
-          case STRING_TYPE:
-          case BOOLEAN:
-          case IDENTIFIER:
-          case SINGLE_LINE_COMMENT:
-          case MULTI_LINE_COMMENT:
-          case FORMAL_COMMENT:
-            ;
-            break;
-          default:
-            jj_la1[17] = jj_gen;
-            break label_5;
-          }
-          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-          case ENTRADA:
-          case SAIDA:
-          case ESPERA:
-          case LEIA:
-          case ESCREVA:
-          case ESCREVA_PWM:
-          case ESCRITA_MON:
-          case SE:
-          case BYTE:
-          case INT:
-          case UNSIGNED_INT:
-          case LONG:
-          case UNSIGNED_LONG:
-          case FLOAT:
-          case CHAR:
-          case STRING_TYPE:
-          case BOOLEAN:
-          case IDENTIFIER:
-            Comando();
-            break;
-          case SINGLE_LINE_COMMENT:
-            SingleLineComment();
-            break;
-          case MULTI_LINE_COMMENT:
-            MultiLineComment();
-            break;
-          case FORMAL_COMMENT:
-            FormalComment();
-            break;
-          default:
-            jj_la1[18] = jj_gen;
-            jj_consume_token(-1);
-            throw new ParseException();
-          }
+    } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      {if (true) throw (RuntimeException)jjte000;}
+    }
+    if (jjte000 instanceof ParseException) {
+      {if (true) throw (ParseException)jjte000;}
+    }
+    {if (true) throw (Error)jjte000;}
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+    }
+  }
+
+  final public void BlocoSenao() throws ParseException {
+ /*@bgen(jjtree) BlocoSenao */
+  ASTBlocoSenao jjtn000 = new ASTBlocoSenao(JJTBLOCOSENAO);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+    try {
+      label_5:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case ENTRADA:
+        case SAIDA:
+        case ESPERA:
+        case LEIA:
+        case ESCREVA:
+        case ESCREVA_PWM:
+        case ESCRITA_MON:
+        case SE:
+        case BYTE:
+        case INT:
+        case UNSIGNED_INT:
+        case LONG:
+        case UNSIGNED_LONG:
+        case FLOAT:
+        case CHAR:
+        case STRING_TYPE:
+        case BOOLEAN:
+        case IDENTIFIER:
+        case SINGLE_LINE_COMMENT:
+        case MULTI_LINE_COMMENT:
+        case FORMAL_COMMENT:
+          ;
+          break;
+        default:
+          jj_la1[18] = jj_gen;
+          break label_5;
         }
-        jj_consume_token(RBRACE);
-        break;
-      default:
-        jj_la1[19] = jj_gen;
-        ;
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case ENTRADA:
+        case SAIDA:
+        case ESPERA:
+        case LEIA:
+        case ESCREVA:
+        case ESCREVA_PWM:
+        case ESCRITA_MON:
+        case SE:
+        case BYTE:
+        case INT:
+        case UNSIGNED_INT:
+        case LONG:
+        case UNSIGNED_LONG:
+        case FLOAT:
+        case CHAR:
+        case STRING_TYPE:
+        case BOOLEAN:
+        case IDENTIFIER:
+          Comando();
+          break;
+        case SINGLE_LINE_COMMENT:
+          SingleLineComment();
+          break;
+        case MULTI_LINE_COMMENT:
+          MultiLineComment();
+          break;
+        case FORMAL_COMMENT:
+          FormalComment();
+          break;
+        default:
+          jj_la1[19] = jj_gen;
+          jj_consume_token(-1);
+          throw new ParseException();
+        }
       }
     } catch (Throwable jjte000) {
     if (jjtc000) {
@@ -1423,10 +1483,10 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x6,0x6,0xc0000058,0xc0000058,0xc0000fb8,0xc0000fb8,0x18,0x0,0x3ffc0000,0x3e000,0xc0000fb8,0x0,0x0,0xc0000000,0x0,0xc0000fb8,0xc0000fb8,0xc0000fb8,0xc0000fb8,0x1000,0x80,0x0,};
+      jj_la1_0 = new int[] {0x6,0x6,0xc0000058,0xc0000058,0xc0000fb8,0xc0000fb8,0x18,0x0,0x3ffc0000,0x3e000,0xc0000fb8,0x0,0x0,0xc0000000,0x0,0x1000,0xc0000fb8,0xc0000fb8,0xc0000fb8,0xc0000fb8,0x80,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x7000,0x7000,0x707f,0x707f,0x787f,0x787f,0x0,0x300,0x0,0x0,0x87f,0xc00,0x20000000,0x7f,0xd80,0x787f,0x787f,0x787f,0x787f,0x0,0x980,0x180,};
+      jj_la1_1 = new int[] {0x7000,0x7000,0x707f,0x707f,0x787f,0x787f,0x0,0x300,0x0,0x0,0x87f,0xc00,0x20000000,0x7f,0xd80,0x0,0x787f,0x787f,0x787f,0x787f,0x980,0x180,};
    }
 
   /** Constructor with InputStream. */

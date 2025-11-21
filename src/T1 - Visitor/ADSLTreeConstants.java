@@ -30,11 +30,13 @@ public interface ADSLTreeConstants
   public int JJTTIPOSVAR = 26;
   public int JJTINICIALIZADOR = 27;
   public int JJTSESENAO = 28;
-  public int JJTCONDICAO = 29;
-  public int JJTATRIBUICAO = 30;
-  public int JJTEXPRESSAO = 31;
-  public int JJTLEIAEXPRESSAO = 32;
-  public int JJTVALORNUMERICO = 33;
+  public int JJTBLOCOSE = 29;
+  public int JJTBLOCOSENAO = 30;
+  public int JJTCONDICAO = 31;
+  public int JJTATRIBUICAO = 32;
+  public int JJTEXPRESSAO = 33;
+  public int JJTLEIAEXPRESSAO = 34;
+  public int JJTVALORNUMERICO = 35;
 
 
   public String[] jjtNodeName = {
@@ -67,6 +69,8 @@ public interface ADSLTreeConstants
     "TiposVar",
     "Inicializador",
     "SeSenao",
+    "BlocoSe",
+    "BlocoSenao",
     "Condicao",
     "Atribuicao",
     "Expressao",
@@ -74,4 +78,4 @@ public interface ADSLTreeConstants
     "ValorNumerico",
   };
 }
-/* JavaCC - OriginalChecksum=22ae3cdb068c19eba53df4f3d0a89111 (do not edit this line) */
+/* JavaCC - OriginalChecksum=262b5019726e03edc775c9dd0d6ac507 (do not edit this line) */

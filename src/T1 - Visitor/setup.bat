@@ -24,7 +24,7 @@ echo Executando o analisador com o arquivo de teste...
 echo.
 echo ############ Codigo.c ###############
 echo.
-call java ADSL .\02_teste.txt
+call java ADSL .\00_teste.txt
 echo.
 echo #################################
 echo.

@@ -976,17 +976,85 @@ void SeSenao()         :
 {/*@bgen(jjtree) SeSenao */
   try {
 /*@egen*/
-  <SE> "(" Condicao() ")" "{" (
+  <SE> "(" Condicao() ")" "{" BlocoSe() "}" ( <SENAO> "{" BlocoSenao() "}" )?/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void BlocoSe()         :
+{/*@bgen(jjtree) BlocoSe */
+  ASTBlocoSe jjtn000 = new ASTBlocoSe(JJTBLOCOSE);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) BlocoSe */
+  try {
+/*@egen*/
+  (
     Comando()
   | SingleLineComment()
   | MultiLineComment()
   | FormalComment()
-  )* "}" ( <SENAO> "{" (
+  )*/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void BlocoSenao()            :
+{/*@bgen(jjtree) BlocoSenao */
+  ASTBlocoSenao jjtn000 = new ASTBlocoSenao(JJTBLOCOSENAO);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) BlocoSenao */
+  try {
+/*@egen*/
+  (
     Comando()
   | SingleLineComment()
   | MultiLineComment()
   | FormalComment()
-  )* "}" )?/*@bgen(jjtree)*/
+  )*/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);

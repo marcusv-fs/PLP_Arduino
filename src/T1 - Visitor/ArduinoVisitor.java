@@ -1,4 +1,13 @@
 public class ArduinoVisitor implements ADSLVisitor {
+    private int indentLevel = 0;
+    
+    private String getIndent() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < indentLevel; i++) {
+            sb.append("  "); // 2 espaços por nível
+        }
+        return sb.toString();
+    }
     
     @Override
     public Object visit(SimpleNode node, Object data) {
@@ -16,7 +25,9 @@ public class ArduinoVisitor implements ADSLVisitor {
     @Override
     public Object visit(ASTConfig node, Object data) {
         System.out.println("void setup() {");
+        indentLevel++;
         node.childrenAccept(this, data);
+        indentLevel--;
         System.out.println("}");
         System.out.println();
         return data;
@@ -25,7 +36,9 @@ public class ArduinoVisitor implements ADSLVisitor {
     @Override
     public Object visit(ASTRepita node, Object data) {
         System.out.println("void loop() {");
+        indentLevel++;
         node.childrenAccept(this, data);
+        indentLevel--;
         System.out.println("}");
         return data;
     }
@@ -49,7 +62,7 @@ public class ArduinoVisitor implements ADSLVisitor {
             pino = String.valueOf(analogPin + 14);
         }
         
-        System.out.println("  pinMode(" + pino + ", " + arduinoMode + ");");
+        System.out.println(getIndent() + "pinMode(" + pino + ", " + arduinoMode + ");");
         return data;
     }
 
@@ -59,7 +72,7 @@ public class ArduinoVisitor implements ADSLVisitor {
         Token freqToken = freqNode.jjtGetFirstToken();
         String baudRate = freqToken.image;
         
-        System.out.println("  Serial.begin(" + baudRate + ");");
+        System.out.println(getIndent() + "Serial.begin(" + baudRate + ");");
         return data;
     }
 
@@ -79,7 +92,7 @@ public class ArduinoVisitor implements ADSLVisitor {
         String unidade = unidadeToken.image;
         
         long ms = converterParaMs(Long.parseLong(valor), unidade);
-        System.out.println("  delay(" + ms + ");");
+        System.out.println(getIndent() + "delay(" + ms + ");");
         return data;
     }
 
@@ -104,10 +117,10 @@ public class ArduinoVisitor implements ADSLVisitor {
         if (pinosNode instanceof ASTPinosA) {
             // Para pino analógico, usa analogRead
             int analogPin = Integer.parseInt(pino.substring(1));
-            System.out.println("  analogRead(" + analogPin + ");");
+            System.out.println(getIndent() + "analogRead(" + analogPin + ");");
         } else {
             // Para pino digital, usa digitalRead
-            System.out.println("  digitalRead(" + pino + ");");
+            System.out.println(getIndent() + "digitalRead(" + pino + ");");
         }
         return data;
     }
@@ -133,7 +146,7 @@ public class ArduinoVisitor implements ADSLVisitor {
             arduinoValue = "HIGH";
         }
         
-        System.out.println("  digitalWrite(" + pino + ", " + arduinoValue + ");");
+        System.out.println(getIndent() + "digitalWrite(" + pino + ", " + arduinoValue + ");");
         return data;
     }
 
@@ -147,7 +160,7 @@ public class ArduinoVisitor implements ADSLVisitor {
         Token valorToken = valorNode.jjtGetFirstToken();
         String valor = valorToken.image;
         
-        System.out.println("  analogWrite(" + pino + ", " + valor + ");");
+        System.out.println(getIndent() + "analogWrite(" + pino + ", " + valor + ");");
         return data;
     }
 
@@ -200,7 +213,10 @@ public class ArduinoVisitor implements ADSLVisitor {
     public Object visit(ASTSingleLineComment node, Object data) {
         Token t = node.jjtGetFirstToken();
         if (t != null) {
-            System.out.print("  " + t.image);
+            String[] lines = t.image.split("\n", -1);
+            for (String line : lines) {
+                System.out.println(getIndent() + line);
+            }
         }
         return data;
     }
@@ -212,9 +228,9 @@ public class ArduinoVisitor implements ADSLVisitor {
             String[] lines = t.image.split("\n", -1);
             for (int i = 0; i < lines.length; i++) {
                 if (i == 0) {
-                    System.out.print("  " + lines[i]);
+                    System.out.print(getIndent() + lines[i]);
                 } else {
-                    System.out.print("\n  " + lines[i]);
+                    System.out.print("\n" + getIndent() + lines[i]);
                 }
             }
         }
@@ -228,9 +244,9 @@ public class ArduinoVisitor implements ADSLVisitor {
             String[] lines = t.image.split("\n", -1);
             for (int i = 0; i < lines.length; i++) {
                 if (i == 0) {
-                    System.out.print("  " + lines[i]);
+                    System.out.print(getIndent() + lines[i]);
                 } else {
-                    System.out.print("\n  " + lines[i]);
+                    System.out.print("\n" + getIndent() + lines[i]);
                 }
             }
         }
@@ -250,7 +266,7 @@ public class ArduinoVisitor implements ADSLVisitor {
         }
         // Se for identificador, usa diretamente (não precisa de processamento)
         
-        System.out.println("  Serial.println(" + content + ");");
+        System.out.println(getIndent() + "Serial.println(" + content + ");");
         return data;
     }
 
@@ -312,7 +328,7 @@ public class ArduinoVisitor implements ADSLVisitor {
         // Mapeia o tipo do ADSL para o tipo do Arduino
         String arduinoType = mapType(tipo);
         
-        System.out.println("  " + arduinoType + " " + identifier + inicializacao + ";");
+        System.out.println(getIndent() + arduinoType + " " + identifier + inicializacao + ";");
         return data;
     }
 
@@ -348,30 +364,39 @@ public class ArduinoVisitor implements ADSLVisitor {
         Token condicaoToken = condicaoNode.jjtGetFirstToken();
         String condicao = condicaoToken.image;
         
-        System.out.println("  if (" + condicao + ") {");
+        String currentIndent = getIndent();
+        System.out.println(currentIndent + "if (" + condicao + ") {");
         
-        // Processa os comandos do bloco "se"
-        // Começa do filho 1 até encontrar o senao ou terminar
-        boolean inElse = false;
-        for (int i = 1; i < node.jjtGetNumChildren(); i++) {
-            Node child = node.jjtGetChild(i);
-            if (child instanceof SimpleNode) {
-                SimpleNode simpleChild = (SimpleNode) child;
-                // Verifica se é um nó de comando (não é condição)
-                if (!(simpleChild instanceof ASTCondicao)) {
-                    simpleChild.jjtAccept(this, data);
-                }
-            }
+        // Aumenta indentação para o bloco se
+        indentLevel++;
+        SimpleNode blocoSeNode = (SimpleNode) node.jjtGetChild(1);
+        blocoSeNode.jjtAccept(this, data);
+        indentLevel--;
+        
+        System.out.println(currentIndent + "}");
+        
+        // Se houver terceiro filho, é o bloco senao
+        if (node.jjtGetNumChildren() > 2) {
+            SimpleNode blocoSenaoNode = (SimpleNode) node.jjtGetChild(2);
+            System.out.println(currentIndent + "else {");
+            // Aumenta indentação para o bloco senao
+            indentLevel++;
+            blocoSenaoNode.jjtAccept(this, data);
+            indentLevel--;
+            System.out.println(currentIndent + "}");
         }
         
-        System.out.println("  }");
-        
-        // Por enquanto, não processamos o senao automaticamente
-        // Você precisaria modificar a estrutura do nó para identificar
-        // onde começa o bloco senao
-        // Esta é uma implementação simplificada
-        
         return data;
+    }
+
+    @Override
+    public Object visit(ASTBlocoSe node, Object data) {
+        return node.childrenAccept(this, data);
+    }
+
+    @Override
+    public Object visit(ASTBlocoSenao node, Object data) {
+        return node.childrenAccept(this, data);
     }
 
     @Override
@@ -386,7 +411,7 @@ public class ArduinoVisitor implements ADSLVisitor {
         
         SimpleNode expressaoNode = (SimpleNode) node.jjtGetChild(0);
         
-        System.out.print("  " + identifier + " = ");
+        System.out.print(getIndent() + identifier + " = ");
         expressaoNode.jjtAccept(this, data);
         System.out.println(";");
         

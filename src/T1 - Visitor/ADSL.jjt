@@ -361,17 +361,29 @@ void Inicializador() #Inicializador:
 void SeSenao() #SeSenao:
 {}
 {
-  <SE> "(" Condicao() ")" "{" (
+  <SE> "(" Condicao() ")" "{" BlocoSe() "}" ( <SENAO> "{" BlocoSenao() "}" )?
+}
+
+void BlocoSe() #BlocoSe:
+{}
+{
+  (
     Comando()
   | SingleLineComment()
   | MultiLineComment()
   | FormalComment()
-  )* "}" ( <SENAO> "{" (
+  )*
+}
+
+void BlocoSenao() #BlocoSenao:
+{}
+{
+  (
     Comando()
   | SingleLineComment()
   | MultiLineComment()
   | FormalComment()
-  )* "}" )?
+  )*
 }
 
 void Condicao() #Condicao:

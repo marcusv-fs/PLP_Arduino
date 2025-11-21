@@ -1,21 +1,27 @@
 Config {
-    Monitor 9600;
-    Entrada 2;
-    Saida 13;
-    
-    Boolean sensorAtivo = false;
+    Saida 11;
 }
 
 Repita {
-    sensorAtivo = Leia 2;
+    EscritaMon("Iniciando programa...");
+    EscritaMon("Ligando LED");
+    Escreva 13 1;
+    Espere 1500 ms;
+    EscritaMon("Desligando LED");
+    Escreva 13 0;
+    Espere 500 ms;
+
+    // Declarações de variáveis no loop
+    int leituraSensor;
+    long tempoInicio;
+    EscritaMon(mensagem);
+
+    String msg = "oi";
     
-    se (sensorAtivo) {
-        EscritaMon("Sensor ativado!");
-        Escreva 13 1;
-    } senao {
-        EscritaMon("Sensor desativado");
-        Escreva 13 0;
-    }
+    EscritaMon("Testando PWM");
+    EscrevaPWM 9 128;
+    Espere 2000 ms;
+    EscrevaPWM 9 0;
     
-    Espere 100 ms;
+    EscritaMon(msg);
 }
