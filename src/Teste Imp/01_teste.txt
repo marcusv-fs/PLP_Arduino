@@ -1,0 +1,9 @@
+{
+var x = 10, var y = 0;
+leia (y);
+    se (x > y) entao
+        escreva ("O X é maior")
+    senao
+        escreva ("O Y é maior")
+
+}

@@ -1,0 +1,49 @@
+options {
+  STATIC = false;
+  VISITOR = true;
+  MULTI=true;
+}
+
+PARSER_BEGIN(ADSL)
+
+import java.io.*;
+
+public class ADSL {
+  public static void main(String[] args) throws ParseException {
+    ADSL parser = new ADSL(System.in);
+    SimpleNode root = parser.Start();
+    root.jjtAccept(new ArduinoVisitor(), null);
+  }
+}
+PARSER_END(ADSL)
+
+SKIP: {
+  " "
+| "\t"
+| "\n"
+| "\r"
+}
+
+TOKEN: {
+  <CONFIG: "Config">
+| <REPITA: "Repita">
+}
+
+SimpleNode Start() #Start:
+{}
+{
+  (Config() | Repita())* <EOF>
+  { return jjtThis; }
+}
+
+void Config() #Config:
+{}
+{
+  <CONFIG> "{" "}"
+}
+
+void Repita() #Repita:
+{}
+{
+  <REPITA> "{" "}"
+}

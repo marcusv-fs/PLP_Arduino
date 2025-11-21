@@ -1,0 +1,13 @@
+int sensor1;
+unsigned long tempo;
+Config{
+  Entrada A0;
+  Saida 13;
+  MonitorRS 9600;
+}
+Repita{
+  LeiaAn A0;
+  EscrevaDg 13 HIGH;
+  EscrevaPWM 9 255;
+  Espere 500 ms;
+}
