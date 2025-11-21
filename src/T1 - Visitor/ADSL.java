@@ -59,8 +59,8 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
   jjtree.openNodeScope(jjtn000);
     try {
       jj_consume_token(CONFIG);
-      jj_consume_token(7);
-      jj_consume_token(8);
+      jj_consume_token(LBRACE);
+      jj_consume_token(RBRACE);
     } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
@@ -75,8 +75,8 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
   jjtree.openNodeScope(jjtn000);
     try {
       jj_consume_token(REPITA);
-      jj_consume_token(7);
-      jj_consume_token(8);
+      jj_consume_token(LBRACE);
+      jj_consume_token(RBRACE);
     } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
@@ -219,7 +219,7 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[9];
+    boolean[] la1tokens = new boolean[20];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -233,7 +233,7 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
         }
       }
     }
-    for (int i = 0; i < 9; i++) {
+    for (int i = 0; i < 20; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

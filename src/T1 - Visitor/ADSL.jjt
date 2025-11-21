@@ -27,16 +27,39 @@ public class ADSL {
 }
 PARSER_END(ADSL)
 
-SKIP: {
+SKIP : /* WHITE SPACE */
+{
   " "
 | "\t"
 | "\n"
 | "\r"
+| "\f"
 }
+
+SPECIAL_TOKEN : /* COMMENTS */
+{
+  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
+| <FORMAL_COMMENT: "/**" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
+| <MULTI_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
+}
+
 
 TOKEN: {
   <CONFIG: "Config">
 | <REPITA: "Repita">
+}
+
+TOKEN : /* SEPARATORS */
+{
+  < LPAREN: "(" >
+| < RPAREN: ")" >
+| < LBRACE: "{" >
+| < RBRACE: "}" >
+| < LBRACKET: "[" >
+| < RBRACKET: "]" >
+| < SEMICOLON: ";" >
+| < COMMA: "," >
+| < DOT: "." >
 }
 
 SimpleNode Start() #Start:

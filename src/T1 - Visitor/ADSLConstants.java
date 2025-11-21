@@ -9,9 +9,33 @@ public interface ADSLConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int CONFIG = 5;
+  int SINGLE_LINE_COMMENT = 6;
   /** RegularExpression Id. */
-  int REPITA = 6;
+  int FORMAL_COMMENT = 7;
+  /** RegularExpression Id. */
+  int MULTI_LINE_COMMENT = 8;
+  /** RegularExpression Id. */
+  int CONFIG = 9;
+  /** RegularExpression Id. */
+  int REPITA = 10;
+  /** RegularExpression Id. */
+  int LPAREN = 11;
+  /** RegularExpression Id. */
+  int RPAREN = 12;
+  /** RegularExpression Id. */
+  int LBRACE = 13;
+  /** RegularExpression Id. */
+  int RBRACE = 14;
+  /** RegularExpression Id. */
+  int LBRACKET = 15;
+  /** RegularExpression Id. */
+  int RBRACKET = 16;
+  /** RegularExpression Id. */
+  int SEMICOLON = 17;
+  /** RegularExpression Id. */
+  int COMMA = 18;
+  /** RegularExpression Id. */
+  int DOT = 19;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -23,10 +47,21 @@ public interface ADSLConstants {
     "\"\\t\"",
     "\"\\n\"",
     "\"\\r\"",
+    "\"\\f\"",
+    "<SINGLE_LINE_COMMENT>",
+    "<FORMAL_COMMENT>",
+    "<MULTI_LINE_COMMENT>",
     "\"Config\"",
     "\"Repita\"",
+    "\"(\"",
+    "\")\"",
     "\"{\"",
     "\"}\"",
+    "\"[\"",
+    "\"]\"",
+    "\";\"",
+    "\",\"",
+    "\".\"",
   };
 
 }
