@@ -3,7 +3,7 @@ public interface ADSLTreeConstants
 {
   public int JJTSTART = 0;
   public int JJTCONFIG = 1;
-  public int JJTREPITA = 2;
+  public int JJTEXECUTE = 2;
   public int JJTPINMODE = 3;
   public int JJTPINOS = 4;
   public int JJTPINOSD = 5;
@@ -50,7 +50,7 @@ public interface ADSLTreeConstants
   public String[] jjtNodeName = {
     "Start",
     "Config",
-    "Repita",
+    "Execute",
     "PinMode",
     "Pinos",
     "PinosD",
@@ -94,4 +94,4 @@ public interface ADSLTreeConstants
     "ValorNumerico",
   };
 }
-/* JavaCC - OriginalChecksum=5e09a547425a1c4d6acd13b4d977aec7 (do not edit this line) */
+/* JavaCC - OriginalChecksum=6fad9ad04827fab8f07a8c3d283b713e (do not edit this line) */

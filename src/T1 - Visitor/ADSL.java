@@ -29,7 +29,7 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case CONFIG:
-        case REPITA:
+        case EXECUTE:
         case BYTE:
         case INT:
         case UNSIGNED_INT:
@@ -52,8 +52,8 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
         case CONFIG:
           Config();
           break;
-        case REPITA:
-          Repita();
+        case EXECUTE:
+          Execute();
           break;
         case SINGLE_LINE_COMMENT:
           SingleLineComment();
@@ -199,14 +199,14 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
     }
   }
 
-  final public void Repita() throws ParseException {
- /*@bgen(jjtree) Repita */
-  ASTRepita jjtn000 = new ASTRepita(JJTREPITA);
+  final public void Execute() throws ParseException {
+ /*@bgen(jjtree) Execute */
+  ASTExecute jjtn000 = new ASTExecute(JJTEXECUTE);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
   jjtn000.jjtSetFirstToken(getToken(1));
     try {
-      jj_consume_token(REPITA);
+      jj_consume_token(EXECUTE);
       jj_consume_token(LBRACE);
       label_3:
       while (true) {

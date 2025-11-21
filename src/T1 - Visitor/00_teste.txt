@@ -5,7 +5,7 @@ Config {
 }
 real sensorAtivo;
 
-Repita {
+Execute {
     sensorAtivo = Leia A0;
     
     se (sensorAtivo >= 0.4) {

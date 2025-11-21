@@ -4,7 +4,7 @@ public interface ADSLVisitor
   public Object visit(SimpleNode node, Object data);
   public Object visit(ASTStart node, Object data);
   public Object visit(ASTConfig node, Object data);
-  public Object visit(ASTRepita node, Object data);
+  public Object visit(ASTExecute node, Object data);
   public Object visit(ASTPinMode node, Object data);
   public Object visit(ASTPinos node, Object data);
   public Object visit(ASTPinosD node, Object data);
@@ -47,4 +47,4 @@ public interface ADSLVisitor
   public Object visit(ASTLeiaExpressao node, Object data);
   public Object visit(ASTValorNumerico node, Object data);
 }
-/* JavaCC - OriginalChecksum=bde39f077966839d64d8b32c1da1e424 (do not edit this line) */
+/* JavaCC - OriginalChecksum=7e9b85ffe7d6c813e75aadeb92d00290 (do not edit this line) */

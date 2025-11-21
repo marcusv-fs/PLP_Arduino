@@ -34,7 +34,7 @@ public class ArduinoVisitor implements ADSLVisitor {
     }
 
     @Override
-    public Object visit(ASTRepita node, Object data) {
+    public Object visit(ASTExecute node, Object data) {
         System.out.println("void loop() {");
         indentLevel++;
         node.childrenAccept(this, data);

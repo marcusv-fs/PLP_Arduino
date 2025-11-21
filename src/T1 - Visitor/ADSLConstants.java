@@ -11,7 +11,7 @@ public interface ADSLConstants {
   /** RegularExpression Id. */
   int CONFIG = 1;
   /** RegularExpression Id. */
-  int REPITA = 2;
+  int EXECUTE = 2;
   /** RegularExpression Id. */
   int ENTRADA = 3;
   /** RegularExpression Id. */
@@ -170,7 +170,7 @@ public interface ADSLConstants {
   String[] tokenImage = {
     "<EOF>",
     "\"Config\"",
-    "\"Repita\"",
+    "\"Execute\"",
     "\"Entrada\"",
     "\"Saida\"",
     "\"Espere\"",

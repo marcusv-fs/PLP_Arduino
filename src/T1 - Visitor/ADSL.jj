@@ -35,7 +35,7 @@ PARSER_END(ADSL)
 // Palavras reservadas
 TOKEN: {
   <CONFIG: "Config">
-| <REPITA: "Repita">
+| <EXECUTE: "Execute">
 | <ENTRADA: "Entrada">
 | <SAIDA: "Saida">
 | <ESPERA: "Espere">
@@ -159,7 +159,7 @@ SimpleNode Start()       :
 /*@egen*/
   (
     Config()
-  | Repita() 
+  | Execute() 
   | SingleLineComment()
   | MultiLineComment()
   | FormalComment()
@@ -237,17 +237,17 @@ void Config()        :
 /*@egen*/
 }
 
-void Repita()        :
-{/*@bgen(jjtree) Repita */
-  ASTRepita jjtn000 = new ASTRepita(JJTREPITA);
+void Execute()         :
+{/*@bgen(jjtree) Execute */
+  ASTExecute jjtn000 = new ASTExecute(JJTEXECUTE);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
   jjtn000.jjtSetFirstToken(getToken(1));
 /*@egen*/}
-{/*@bgen(jjtree) Repita */
+{/*@bgen(jjtree) Execute */
   try {
 /*@egen*/
-  <REPITA> "{" (
+  <EXECUTE> "{" (
     Comando()
   | SingleLineComment()
   | MultiLineComment()
