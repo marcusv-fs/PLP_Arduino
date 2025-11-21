@@ -24,7 +24,11 @@ public interface ADSLTreeConstants
   public int JJTMULTILINECOMMENT = 20;
   public int JJTFORMALCOMMENT = 21;
   public int JJTSERIALPRINT = 22;
-  public int JJTSTRING = 23;
+  public int JJTPRINTCONTENT = 23;
+  public int JJTSTRING = 24;
+  public int JJTDECVAR = 25;
+  public int JJTTIPOSVAR = 26;
+  public int JJTINICIALIZADOR = 27;
 
 
   public String[] jjtNodeName = {
@@ -51,7 +55,11 @@ public interface ADSLTreeConstants
     "MultiLineComment",
     "FormalComment",
     "SerialPrint",
+    "PrintContent",
     "String",
+    "DecVar",
+    "TiposVar",
+    "Inicializador",
   };
 }
-/* JavaCC - OriginalChecksum=b8f07b5ed8018c764f321f5b72e8e3a4 (do not edit this line) */
+/* JavaCC - OriginalChecksum=5cea1f00798ae89ddfc2a30b45712757 (do not edit this line) */

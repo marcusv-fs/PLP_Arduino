@@ -44,7 +44,7 @@ TOKEN: {
 | <LEIA: "Leia">
 | <ESCREVA: "Escreva">
 | <ESCREVA_PWM: "EscrevaPWM">
-| <ESCRITA_MON: "EscritaMon">  
+| <ESCRITA_MON: "EscritaMon">
 
 // Unidades de tempo
 | <NS: "ns">
@@ -67,10 +67,22 @@ TOKEN: {
 | <FREQ_57600: "57600">
 | <FREQ_115200: "115200">
 
-| <NUM_INT: (["0"-"9"])+ >
+// Tipos de vari\u00e1veis
+| <BYTE: "byte">
+| <INT: "int">
+| <UNSIGNED_INT: "unsigned int">
+| <LONG: "long">
+| <UNSIGNED_LONG: "unsigned long">
+| <FLOAT: "float">
+| <CHAR: "char">
+| <STRING_TYPE: "String">
+| <BOOLEAN: "Boolean">
+
 | <NUM_FLT: (["0"-"9"])+ "." (["0"-"9"])+ >
+| <NUM_INT: (["0"-"9"])+ >
 | <PINO_ANALOGICO: "A" (["0"-"5"]) >
-| <STRING: "\"" (~["\""])* "\"">  // Novo token para strings
+| <STRING: "\"" (~["\""])* "\"">
+| <IDENTIFIER: ["a"-"z","A"-"Z","_"] (["a"-"z","A"-"Z","_","0"-"9"])* >
 }
 
 TOKEN: { /* COMMENTS */
@@ -162,6 +174,7 @@ void Config()        :
   <CONFIG> "{" (
     PinMode()
   | FreqMonitor()
+  | DecVar()
   | SingleLineComment()
   | MultiLineComment()
   | FormalComment()
@@ -702,7 +715,7 @@ void Comando()         :
 {/*@bgen(jjtree) Comando */
   try {
 /*@egen*/
-  ( PinMode() | Delay() | Read() | DigitalWrite() | AnalogWrite() | SerialPrint() )/*@bgen(jjtree)*/
+  ( PinMode() | Delay() | Read() | DigitalWrite() | AnalogWrite() | SerialPrint() | DecVar() )/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -794,7 +807,7 @@ void SerialPrint()             :
 {/*@bgen(jjtree) SerialPrint */
   try {
 /*@egen*/
-  <ESCRITA_MON> "(" String() ")" ";"/*@bgen(jjtree)*/
+  <ESCRITA_MON> "(" PrintContent() ")" ";"/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -818,6 +831,26 @@ void SerialPrint()             :
 /*@egen*/
 }
 
+void PrintContent()              :
+{/*@bgen(jjtree) PrintContent */
+ ASTPrintContent jjtn000 = new ASTPrintContent(JJTPRINTCONTENT);
+ boolean jjtc000 = true;
+ jjtree.openNodeScope(jjtn000);
+ jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/Token t;}
+{/*@bgen(jjtree) PrintContent */
+  try {
+/*@egen*/
+  (t=<STRING> | t=<IDENTIFIER>)/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
 void String()        :
 {/*@bgen(jjtree) String */
  ASTString jjtn000 = new ASTString(JJTSTRING);
@@ -829,6 +862,96 @@ void String()        :
   try {
 /*@egen*/
   t=<STRING>/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+// Declara\u00e7\u00e3o de vari\u00e1veis
+void DecVar()        :
+{/*@bgen(jjtree) DecVar */
+  ASTDecVar jjtn000 = new ASTDecVar(JJTDECVAR);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) DecVar */
+  try {
+/*@egen*/
+  TiposVar() <IDENTIFIER> ( "=" Inicializador() )? ";"/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void TiposVar()          :
+{/*@bgen(jjtree) TiposVar */
+  ASTTiposVar jjtn000 = new ASTTiposVar(JJTTIPOSVAR);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) TiposVar */
+  try {
+/*@egen*/
+  (
+    <BYTE>
+  | <INT>
+  | <UNSIGNED_INT>
+  | <LONG>
+  | <UNSIGNED_LONG>
+  | <FLOAT>
+  | <CHAR>
+  | <STRING_TYPE>
+  | <BOOLEAN>
+  )/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void Inicializador()               :
+{/*@bgen(jjtree) Inicializador */
+ ASTInicializador jjtn000 = new ASTInicializador(JJTINICIALIZADOR);
+ boolean jjtc000 = true;
+ jjtree.openNodeScope(jjtn000);
+ jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/Token t;}
+{/*@bgen(jjtree) Inicializador */
+  try {
+/*@egen*/
+  (
+    t=<NUM_INT>
+  | t=<NUM_FLT>
+  | t=<STRING>
+  | t=<IDENTIFIER>
+  )/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);

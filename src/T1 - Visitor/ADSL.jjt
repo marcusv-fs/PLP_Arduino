@@ -40,7 +40,7 @@ TOKEN: {
 | <LEIA: "Leia">
 | <ESCREVA: "Escreva">
 | <ESCREVA_PWM: "EscrevaPWM">
-| <ESCRITA_MON: "EscritaMon">  
+| <ESCRITA_MON: "EscritaMon">
 
 // Unidades de tempo
 | <NS: "ns">
@@ -63,10 +63,22 @@ TOKEN: {
 | <FREQ_57600: "57600">
 | <FREQ_115200: "115200">
 
-| <NUM_INT: (["0"-"9"])+ >
+// Tipos de variáveis
+| <BYTE: "byte">
+| <INT: "int">
+| <UNSIGNED_INT: "unsigned int">
+| <LONG: "long">
+| <UNSIGNED_LONG: "unsigned long">
+| <FLOAT: "float">
+| <CHAR: "char">
+| <STRING_TYPE: "String">
+| <BOOLEAN: "Boolean">
+
 | <NUM_FLT: (["0"-"9"])+ "." (["0"-"9"])+ >
+| <NUM_INT: (["0"-"9"])+ >
 | <PINO_ANALOGICO: "A" (["0"-"5"]) >
-| <STRING: "\"" (~["\""])* "\"">  // Novo token para strings
+| <STRING: "\"" (~["\""])* "\"">
+| <IDENTIFIER: ["a"-"z","A"-"Z","_"] (["a"-"z","A"-"Z","_","0"-"9"])* >
 }
 
 TOKEN: { /* COMMENTS */
@@ -117,6 +129,7 @@ void Config() #Config:
   <CONFIG> "{" (
     PinMode()
   | FreqMonitor()
+  | DecVar()
   | SingleLineComment()
   | MultiLineComment()
   | FormalComment()
@@ -269,7 +282,7 @@ void ValorAnalogico() #ValorAnalogico:
 void Comando() #Comando:
 {}
 {
-  ( PinMode() | Delay() | Read() | DigitalWrite() | AnalogWrite() | SerialPrint() )
+  ( PinMode() | Delay() | Read() | DigitalWrite() | AnalogWrite() | SerialPrint() | DecVar() )
 }
 
 void SingleLineComment() #SingleLineComment : {}
@@ -291,11 +304,51 @@ void FormalComment() #FormalComment : {}
 void SerialPrint() #SerialPrint:
 {}
 {
-  <ESCRITA_MON> "(" String() ")" ";"
+  <ESCRITA_MON> "(" PrintContent() ")" ";"
+}
+
+void PrintContent() #PrintContent:
+{Token t;}
+{
+  (t=<STRING> | t=<IDENTIFIER>)
 }
 
 void String() #String:
 {Token t;}
 {
   t=<STRING>
+}
+
+// Declaração de variáveis
+void DecVar() #DecVar:
+{}
+{
+  TiposVar() <IDENTIFIER> ( "=" Inicializador() )? ";"
+}
+
+void TiposVar() #TiposVar:
+{}
+{
+  (
+    <BYTE>
+  | <INT>
+  | <UNSIGNED_INT>
+  | <LONG>
+  | <UNSIGNED_LONG>
+  | <FLOAT>
+  | <CHAR>
+  | <STRING_TYPE>
+  | <BOOLEAN>
+  )
+}
+
+void Inicializador() #Inicializador:
+{Token t;}
+{
+  (
+    t=<NUM_INT>
+  | t=<NUM_FLT>
+  | t=<STRING>
+  | t=<IDENTIFIER>
+  )
 }

@@ -63,37 +63,57 @@ public interface ADSLConstants {
   /** RegularExpression Id. */
   int FREQ_115200 = 27;
   /** RegularExpression Id. */
-  int NUM_INT = 28;
+  int BYTE = 28;
   /** RegularExpression Id. */
-  int NUM_FLT = 29;
+  int INT = 29;
   /** RegularExpression Id. */
-  int PINO_ANALOGICO = 30;
+  int UNSIGNED_INT = 30;
   /** RegularExpression Id. */
-  int STRING = 31;
+  int LONG = 31;
   /** RegularExpression Id. */
-  int SINGLE_LINE_COMMENT = 32;
+  int UNSIGNED_LONG = 32;
   /** RegularExpression Id. */
-  int MULTI_LINE_COMMENT = 33;
+  int FLOAT = 33;
   /** RegularExpression Id. */
-  int FORMAL_COMMENT = 34;
+  int CHAR = 34;
   /** RegularExpression Id. */
-  int LPAREN = 40;
+  int STRING_TYPE = 35;
   /** RegularExpression Id. */
-  int RPAREN = 41;
+  int BOOLEAN = 36;
   /** RegularExpression Id. */
-  int LBRACE = 42;
+  int NUM_FLT = 37;
   /** RegularExpression Id. */
-  int RBRACE = 43;
+  int NUM_INT = 38;
   /** RegularExpression Id. */
-  int LBRACKET = 44;
+  int PINO_ANALOGICO = 39;
   /** RegularExpression Id. */
-  int RBRACKET = 45;
+  int STRING = 40;
   /** RegularExpression Id. */
-  int SEMICOLON = 46;
+  int IDENTIFIER = 41;
   /** RegularExpression Id. */
-  int COMMA = 47;
+  int SINGLE_LINE_COMMENT = 42;
   /** RegularExpression Id. */
-  int DOT = 48;
+  int MULTI_LINE_COMMENT = 43;
+  /** RegularExpression Id. */
+  int FORMAL_COMMENT = 44;
+  /** RegularExpression Id. */
+  int LPAREN = 50;
+  /** RegularExpression Id. */
+  int RPAREN = 51;
+  /** RegularExpression Id. */
+  int LBRACE = 52;
+  /** RegularExpression Id. */
+  int RBRACE = 53;
+  /** RegularExpression Id. */
+  int LBRACKET = 54;
+  /** RegularExpression Id. */
+  int RBRACKET = 55;
+  /** RegularExpression Id. */
+  int SEMICOLON = 56;
+  /** RegularExpression Id. */
+  int COMMA = 57;
+  /** RegularExpression Id. */
+  int DOT = 58;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -128,10 +148,20 @@ public interface ADSLConstants {
     "\"38400\"",
     "\"57600\"",
     "\"115200\"",
-    "<NUM_INT>",
+    "\"byte\"",
+    "\"int\"",
+    "\"unsigned int\"",
+    "\"long\"",
+    "\"unsigned long\"",
+    "\"float\"",
+    "\"char\"",
+    "\"String\"",
+    "\"Boolean\"",
     "<NUM_FLT>",
+    "<NUM_INT>",
     "<PINO_ANALOGICO>",
     "<STRING>",
+    "<IDENTIFIER>",
     "<SINGLE_LINE_COMMENT>",
     "<MULTI_LINE_COMMENT>",
     "<FORMAL_COMMENT>",
@@ -149,6 +179,7 @@ public interface ADSLConstants {
     "\";\"",
     "\",\"",
     "\".\"",
+    "\"=\"",
   };
 
 }

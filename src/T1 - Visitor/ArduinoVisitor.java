@@ -236,42 +236,110 @@ public class ArduinoVisitor implements ADSLVisitor {
         }
         return data;
     }
-    
+
     @Override
-public Object visit(ASTSerialPrint node, Object data) {
-    SimpleNode stringNode = (SimpleNode) node.jjtGetChild(0);
-    Token stringToken = stringNode.jjtGetFirstToken();
-    String texto = stringToken.image;
-    
-    // Remove as aspas e processa caracteres especiais
-    texto = processarString(texto);
-    System.out.println("  Serial.println(" + texto + ");");
-    return data;
-}
-
-@Override
-public Object visit(ASTString node, Object data) {
-    return data;
-}
-
-private String processarString(String str) {
-    // Remove as aspas externas
-    str = str.substring(1, str.length() - 1);
-    
-    // Processa caracteres de escape básicos
-    str = str.replace("\\n", "\" + \"\\n\" + \"");
-    str = str.replace("\\t", "\" + \"\\t\" + \"");
-    str = str.replace("\\\"", "\" + \"\\\"\" + \"");
-    
-    // Se houve substituições, precisamos reconstruir a string
-    if (str.contains("\" + \"")) {
-        // Remove o último " + " se existir
-        if (str.endsWith("\" + \"")) {
-            str = str.substring(0, str.length() - 4);
+    public Object visit(ASTSerialPrint node, Object data) {
+        SimpleNode contentNode = (SimpleNode) node.jjtGetChild(0);
+        Token contentToken = contentNode.jjtGetFirstToken();
+        String content = contentToken.image;
+        
+        // Verifica se é string ou identificador
+        if (contentToken.kind == ADSLConstants.STRING) {
+            // Se for string, processa como antes
+            content = processarString(content);
+        } else {
+            // Se for identificador, usa diretamente (já é o nome da variável)
+            // Não precisa de processamento
         }
-        return "String(" + str + ")";
+        
+        System.out.println("  Serial.println(" + content + ");");
+        return data;
     }
-    
-    return "\"" + str + "\"";
-}
+
+    @Override
+    public Object visit(ASTPrintContent node, Object data) {
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTString node, Object data) {
+        return data;
+    }
+
+    private String processarString(String str) {
+        // Remove as aspas externas
+        str = str.substring(1, str.length() - 1);
+        
+        // Processa caracteres de escape básicos
+        str = str.replace("\\n", "\" + \"\\n\" + \"");
+        str = str.replace("\\t", "\" + \"\\t\" + \"");
+        str = str.replace("\\\"", "\" + \"\\\"\" + \"");
+        
+        // Se houve substituições, precisamos reconstruir a string
+        if (str.contains("\" + \"")) {
+            // Remove o último " + " se existir
+            if (str.endsWith("\" + \"")) {
+                str = str.substring(0, str.length() - 4);
+            }
+            return "String(" + str + ")";
+        }
+        
+        return "\"" + str + "\"";
+    }
+
+    @Override
+    public Object visit(ASTDecVar node, Object data) {
+        SimpleNode tipoNode = (SimpleNode) node.jjtGetChild(0);
+        Token tipoToken = tipoNode.jjtGetFirstToken();
+        String tipo = tipoToken.image;
+        
+        Token idToken = node.jjtGetFirstToken().next; // O token após o tipo é o identificador
+        String identifier = idToken.image;
+        
+        // Verifica se há inicializador
+        String inicializacao = "";
+        if (node.jjtGetNumChildren() > 1) {
+            SimpleNode initNode = (SimpleNode) node.jjtGetChild(1);
+            Token initToken = initNode.jjtGetFirstToken();
+            String valor = initToken.image;
+            
+            // Processa strings (remove aspas)
+            if (initToken.kind == ADSLConstants.STRING) {
+                valor = processarString(valor);
+            }
+            
+            inicializacao = " = " + valor;
+        }
+        
+        // Mapeia o tipo do ADSL para o tipo do Arduino
+        String arduinoType = mapType(tipo);
+        
+        System.out.println("  " + arduinoType + " " + identifier + inicializacao + ";");
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTTiposVar node, Object data) {
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTInicializador node, Object data) {
+        return data;
+    }
+
+    private String mapType(String tipo) {
+        switch (tipo) {
+            case "byte": return "byte";
+            case "int": return "int";
+            case "unsigned int": return "unsigned int";
+            case "long": return "long";
+            case "unsigned long": return "unsigned long";
+            case "float": return "float";
+            case "char": return "char";
+            case "String": return "String";
+            case "Boolean": return "boolean";
+            default: return "int"; // padrão
+        }
+    }
 }
