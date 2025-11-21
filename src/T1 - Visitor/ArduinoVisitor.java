@@ -137,7 +137,7 @@ public class ArduinoVisitor implements ADSLVisitor {
     public Object visit(ASTSingleLineComment node, Object data) {
         Token t = node.jjtGetFirstToken();
         if (t != null) {
-            System.out.print("  " + t.image);
+            System.out.print(t.image);
         }
         return data;
     }
@@ -149,9 +149,9 @@ public class ArduinoVisitor implements ADSLVisitor {
             String[] lines = t.image.split("\n", -1);
             for (int i = 0; i < lines.length; i++) {
                 if (i == 0) {
-                    System.out.print("  " + lines[i]);
+                    System.out.println(lines[i]);
                 } else {
-                    System.out.print("\n  " + lines[i]);
+                    System.out.println(lines[i]);
                 }
             }
         }
@@ -165,9 +165,9 @@ public class ArduinoVisitor implements ADSLVisitor {
             String[] lines = t.image.split("\n", -1);
             for (int i = 0; i < lines.length; i++) {
                 if (i == 0) {
-                    System.out.print("  " + lines[i]);
+                    System.out.println(lines[i]);
                 } else {
-                    System.out.print("\n  " + lines[i]);
+                    System.out.println(lines[i]);
                 }
             }
         }
