@@ -40,6 +40,7 @@ TOKEN: {
 | <LEIA: "Leia">
 | <ESCREVA: "Escreva">
 | <ESCREVA_PWM: "EscrevaPWM">
+| <ESCRITA_MON: "EscritaMon">  
 
 // Unidades de tempo
 | <NS: "ns">
@@ -62,8 +63,10 @@ TOKEN: {
 | <FREQ_57600: "57600">
 | <FREQ_115200: "115200">
 
-| <NUMERO: (["0"-"9"])+ >
+| <NUM_INT: (["0"-"9"])+ >
+| <NUM_FLT: (["0"-"9"])+ "." (["0"-"9"])+ >
 | <PINO_ANALOGICO: "A" (["0"-"5"]) >
+| <STRING: "\"" (~["\""])* "\"">  // Novo token para strings
 }
 
 TOKEN: { /* COMMENTS */
@@ -146,7 +149,7 @@ void Pinos() #Pinos:
 void PinosD() #PinosD:
 {Token t;}
 {
-  t=<NUMERO>
+  t=<NUM_INT>
   {
     // Validação para pinos digitais (0-19)
     int pino = Integer.parseInt(t.image);
@@ -165,7 +168,7 @@ void PinosA() #PinosA:
 void PinosPWM() #PinosPWM:
 {Token t;}
 {
-  t=<NUMERO>
+  t=<NUM_INT>
   {
     // Validação para pinos PWM (3,5,6,9,10,11)
     int pino = Integer.parseInt(t.image);
@@ -208,7 +211,7 @@ void Delay() #Delay:
 void ValorTempo() #ValorTempo:
 {Token t;}
 {
-  t=<NUMERO>
+  t=<NUM_INT>
 }
 
 void UnidadeTempo() #UnidadeTempo:
@@ -240,7 +243,7 @@ void AnalogWrite() #AnalogWrite:
 void ValorDigital() #ValorDigital:
 {Token t;}
 {
-  t=<NUMERO>
+  t=<NUM_INT>
   {
     // Validação para valores digitais (0 ou 1)
     int valor = Integer.parseInt(t.image);
@@ -253,7 +256,7 @@ void ValorDigital() #ValorDigital:
 void ValorAnalogico() #ValorAnalogico:
 {Token t;}
 {
-  t=<NUMERO>
+  t=<NUM_INT>
   {
     // Validação para valores analógicos/PWM (0-255)
     int valor = Integer.parseInt(t.image);
@@ -266,7 +269,7 @@ void ValorAnalogico() #ValorAnalogico:
 void Comando() #Comando:
 {}
 {
-  ( PinMode() | Delay() | Read() | DigitalWrite() | AnalogWrite() )
+  ( PinMode() | Delay() | Read() | DigitalWrite() | AnalogWrite() | SerialPrint() )
 }
 
 void SingleLineComment() #SingleLineComment : {}
@@ -282,4 +285,17 @@ void MultiLineComment() #MultiLineComment : {}
 void FormalComment() #FormalComment : {}
 {
   <FORMAL_COMMENT>  
+}
+
+// Comando de escrita no monitor serial
+void SerialPrint() #SerialPrint:
+{}
+{
+  <ESCRITA_MON> "(" String() ")" ";"
+}
+
+void String() #String:
+{Token t;}
+{
+  t=<STRING>
 }

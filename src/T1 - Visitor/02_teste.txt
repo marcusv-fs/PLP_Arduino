@@ -1,26 +1,22 @@
-// Configuração inicial
 Config {
-  Entrada 2;
-  Entrada A0;
-  Saida 13;
-  Saida 3;
-  Monitor 9600;
+    Monitor 9600;
+    Saida 13;
+    Saida 9;
 }
 
-// Loop principal
 Repita {
-  // Leitura unificada - decide automaticamente pelo tipo de pino
-  Leia 2;      // digitalRead(2)
-  Leia A0;     // analogRead(A0)
-  Leia 14;     // digitalRead(14) - pino A0 como digital
-  
-  // Escrita unificada
-  Escreva 13 1;    // digitalWrite(13, HIGH)
-  Escreva A0 0;    // digitalWrite(A0, LOW)
-  
-  // Escrita PWM
-  EscrevaPWM 3 128;  // analogWrite(3, 128)
-  
-  // Temporização
-  Espere 500 ms;
+    EscritaMon("Iniciando programa...");
+    EscritaMon("Ligando LED");
+    Escreva 13 1;
+    Espere 1500 ms;
+    EscritaMon("Desligando LED");
+    Escreva 13 0;
+    Espere 500 ms;
+    
+    EscritaMon("Testando PWM");
+    EscrevaPWM 9 128;
+    Espere 2000 ms;
+    EscrevaPWM 9 0;
+    
+    EscritaMon(23.5);
 }

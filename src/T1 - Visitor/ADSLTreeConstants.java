@@ -23,6 +23,8 @@ public interface ADSLTreeConstants
   public int JJTSINGLELINECOMMENT = 19;
   public int JJTMULTILINECOMMENT = 20;
   public int JJTFORMALCOMMENT = 21;
+  public int JJTSERIALPRINT = 22;
+  public int JJTSTRING = 23;
 
 
   public String[] jjtNodeName = {
@@ -48,6 +50,8 @@ public interface ADSLTreeConstants
     "SingleLineComment",
     "MultiLineComment",
     "FormalComment",
+    "SerialPrint",
+    "String",
   };
 }
-/* JavaCC - OriginalChecksum=2d2cc9c78e85fd27e42638aa5445ea78 (do not edit this line) */
+/* JavaCC - OriginalChecksum=b8f07b5ed8018c764f321f5b72e8e3a4 (do not edit this line) */

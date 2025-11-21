@@ -27,67 +27,73 @@ public interface ADSLConstants {
   /** RegularExpression Id. */
   int ESCREVA_PWM = 9;
   /** RegularExpression Id. */
-  int NS = 10;
+  int ESCRITA_MON = 10;
   /** RegularExpression Id. */
-  int MS = 11;
+  int NS = 11;
   /** RegularExpression Id. */
-  int S = 12;
+  int MS = 12;
   /** RegularExpression Id. */
-  int MIN = 13;
+  int S = 13;
   /** RegularExpression Id. */
-  int H = 14;
+  int MIN = 14;
   /** RegularExpression Id. */
-  int FREQ_300 = 15;
+  int H = 15;
   /** RegularExpression Id. */
-  int FREQ_600 = 16;
+  int FREQ_300 = 16;
   /** RegularExpression Id. */
-  int FREQ_1200 = 17;
+  int FREQ_600 = 17;
   /** RegularExpression Id. */
-  int FREQ_2400 = 18;
+  int FREQ_1200 = 18;
   /** RegularExpression Id. */
-  int FREQ_4800 = 19;
+  int FREQ_2400 = 19;
   /** RegularExpression Id. */
-  int FREQ_9600 = 20;
+  int FREQ_4800 = 20;
   /** RegularExpression Id. */
-  int FREQ_14400 = 21;
+  int FREQ_9600 = 21;
   /** RegularExpression Id. */
-  int FREQ_19200 = 22;
+  int FREQ_14400 = 22;
   /** RegularExpression Id. */
-  int FREQ_28800 = 23;
+  int FREQ_19200 = 23;
   /** RegularExpression Id. */
-  int FREQ_38400 = 24;
+  int FREQ_28800 = 24;
   /** RegularExpression Id. */
-  int FREQ_57600 = 25;
+  int FREQ_38400 = 25;
   /** RegularExpression Id. */
-  int FREQ_115200 = 26;
+  int FREQ_57600 = 26;
   /** RegularExpression Id. */
-  int NUMERO = 27;
+  int FREQ_115200 = 27;
   /** RegularExpression Id. */
-  int PINO_ANALOGICO = 28;
+  int NUM_INT = 28;
   /** RegularExpression Id. */
-  int SINGLE_LINE_COMMENT = 29;
+  int NUM_FLT = 29;
   /** RegularExpression Id. */
-  int MULTI_LINE_COMMENT = 30;
+  int PINO_ANALOGICO = 30;
   /** RegularExpression Id. */
-  int FORMAL_COMMENT = 31;
+  int STRING = 31;
   /** RegularExpression Id. */
-  int LPAREN = 37;
+  int SINGLE_LINE_COMMENT = 32;
   /** RegularExpression Id. */
-  int RPAREN = 38;
+  int MULTI_LINE_COMMENT = 33;
   /** RegularExpression Id. */
-  int LBRACE = 39;
+  int FORMAL_COMMENT = 34;
   /** RegularExpression Id. */
-  int RBRACE = 40;
+  int LPAREN = 40;
   /** RegularExpression Id. */
-  int LBRACKET = 41;
+  int RPAREN = 41;
   /** RegularExpression Id. */
-  int RBRACKET = 42;
+  int LBRACE = 42;
   /** RegularExpression Id. */
-  int SEMICOLON = 43;
+  int RBRACE = 43;
   /** RegularExpression Id. */
-  int COMMA = 44;
+  int LBRACKET = 44;
   /** RegularExpression Id. */
-  int DOT = 45;
+  int RBRACKET = 45;
+  /** RegularExpression Id. */
+  int SEMICOLON = 46;
+  /** RegularExpression Id. */
+  int COMMA = 47;
+  /** RegularExpression Id. */
+  int DOT = 48;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -104,6 +110,7 @@ public interface ADSLConstants {
     "\"Leia\"",
     "\"Escreva\"",
     "\"EscrevaPWM\"",
+    "\"EscritaMon\"",
     "\"ns\"",
     "\"ms\"",
     "\"s\"",
@@ -121,8 +128,10 @@ public interface ADSLConstants {
     "\"38400\"",
     "\"57600\"",
     "\"115200\"",
-    "<NUMERO>",
+    "<NUM_INT>",
+    "<NUM_FLT>",
     "<PINO_ANALOGICO>",
+    "<STRING>",
     "<SINGLE_LINE_COMMENT>",
     "<MULTI_LINE_COMMENT>",
     "<FORMAL_COMMENT>",

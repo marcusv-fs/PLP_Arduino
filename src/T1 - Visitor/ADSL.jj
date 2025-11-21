@@ -44,6 +44,7 @@ TOKEN: {
 | <LEIA: "Leia">
 | <ESCREVA: "Escreva">
 | <ESCREVA_PWM: "EscrevaPWM">
+| <ESCRITA_MON: "EscritaMon">  
 
 // Unidades de tempo
 | <NS: "ns">
@@ -66,8 +67,10 @@ TOKEN: {
 | <FREQ_57600: "57600">
 | <FREQ_115200: "115200">
 
-| <NUMERO: (["0"-"9"])+ >
+| <NUM_INT: (["0"-"9"])+ >
+| <NUM_FLT: (["0"-"9"])+ "." (["0"-"9"])+ >
 | <PINO_ANALOGICO: "A" (["0"-"5"]) >
+| <STRING: "\"" (~["\""])* "\"">  // Novo token para strings
 }
 
 TOKEN: { /* COMMENTS */
@@ -303,7 +306,7 @@ void PinosD()        :
 {/*@bgen(jjtree) PinosD */
   try {
 /*@egen*/
-  t=<NUMERO>/*@bgen(jjtree)*/
+  t=<NUM_INT>/*@bgen(jjtree)*/
   {
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
@@ -356,7 +359,7 @@ void PinosPWM()          :
 {/*@bgen(jjtree) PinosPWM */
   try {
 /*@egen*/
-  t=<NUMERO>/*@bgen(jjtree)*/
+  t=<NUM_INT>/*@bgen(jjtree)*/
   {
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
@@ -489,7 +492,7 @@ void ValorTempo()            :
 {/*@bgen(jjtree) ValorTempo */
   try {
 /*@egen*/
-  t=<NUMERO>/*@bgen(jjtree)*/
+  t=<NUM_INT>/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
@@ -633,7 +636,7 @@ void ValorDigital()              :
 {/*@bgen(jjtree) ValorDigital */
   try {
 /*@egen*/
-  t=<NUMERO>/*@bgen(jjtree)*/
+  t=<NUM_INT>/*@bgen(jjtree)*/
   {
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
@@ -666,7 +669,7 @@ void ValorAnalogico()                :
 {/*@bgen(jjtree) ValorAnalogico */
   try {
 /*@egen*/
-  t=<NUMERO>/*@bgen(jjtree)*/
+  t=<NUM_INT>/*@bgen(jjtree)*/
   {
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
@@ -699,7 +702,7 @@ void Comando()         :
 {/*@bgen(jjtree) Comando */
   try {
 /*@egen*/
-  ( PinMode() | Delay() | Read() | DigitalWrite() | AnalogWrite() )/*@bgen(jjtree)*/
+  ( PinMode() | Delay() | Read() | DigitalWrite() | AnalogWrite() | SerialPrint() )/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -778,4 +781,59 @@ void FormalComment()                : {/*@bgen(jjtree) FormalComment */
     }
   }
 /*@egen*/  
+}
+
+// Comando de escrita no monitor serial
+void SerialPrint()             :
+{/*@bgen(jjtree) SerialPrint */
+  ASTSerialPrint jjtn000 = new ASTSerialPrint(JJTSERIALPRINT);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) SerialPrint */
+  try {
+/*@egen*/
+  <ESCRITA_MON> "(" String() ")" ";"/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void String()        :
+{/*@bgen(jjtree) String */
+ ASTString jjtn000 = new ASTString(JJTSTRING);
+ boolean jjtc000 = true;
+ jjtree.openNodeScope(jjtn000);
+ jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/Token t;}
+{/*@bgen(jjtree) String */
+  try {
+/*@egen*/
+  t=<STRING>/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
 }

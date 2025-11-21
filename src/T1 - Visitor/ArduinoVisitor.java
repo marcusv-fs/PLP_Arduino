@@ -236,4 +236,42 @@ public class ArduinoVisitor implements ADSLVisitor {
         }
         return data;
     }
+    
+    @Override
+public Object visit(ASTSerialPrint node, Object data) {
+    SimpleNode stringNode = (SimpleNode) node.jjtGetChild(0);
+    Token stringToken = stringNode.jjtGetFirstToken();
+    String texto = stringToken.image;
+    
+    // Remove as aspas e processa caracteres especiais
+    texto = processarString(texto);
+    System.out.println("  Serial.println(" + texto + ");");
+    return data;
+}
+
+@Override
+public Object visit(ASTString node, Object data) {
+    return data;
+}
+
+private String processarString(String str) {
+    // Remove as aspas externas
+    str = str.substring(1, str.length() - 1);
+    
+    // Processa caracteres de escape básicos
+    str = str.replace("\\n", "\" + \"\\n\" + \"");
+    str = str.replace("\\t", "\" + \"\\t\" + \"");
+    str = str.replace("\\\"", "\" + \"\\\"\" + \"");
+    
+    // Se houve substituições, precisamos reconstruir a string
+    if (str.contains("\" + \"")) {
+        // Remove o último " + " se existir
+        if (str.endsWith("\" + \"")) {
+            str = str.substring(0, str.length() - 4);
+        }
+        return "String(" + str + ")";
+    }
+    
+    return "\"" + str + "\"";
+}
 }

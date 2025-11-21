@@ -24,5 +24,7 @@ public interface ADSLVisitor
   public Object visit(ASTSingleLineComment node, Object data);
   public Object visit(ASTMultiLineComment node, Object data);
   public Object visit(ASTFormalComment node, Object data);
+  public Object visit(ASTSerialPrint node, Object data);
+  public Object visit(ASTString node, Object data);
 }
-/* JavaCC - OriginalChecksum=cc1b65828acdbb67f6072e880a279757 (do not edit this line) */
+/* JavaCC - OriginalChecksum=f00c94f2db0dc8e1981d8d0c0069bd79 (do not edit this line) */
