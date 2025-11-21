@@ -14,9 +14,19 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants/*@egen*/ {/*@bgen
 
 /*@egen*/
   public static void main(String[] args) throws ParseException {
-    ADSL parser = new ADSL(System.in);
-    SimpleNode root = parser.Start();
-    root.jjtAccept(new ArduinoVisitor(), null);
+    if (args.length == 0) {
+      System.err.println("Uso: java ADSL <arquivo.txt>");
+      return;
+    }
+    
+    try {
+      FileInputStream input = new FileInputStream(args[0]);
+      ADSL parser = new ADSL(input);
+      SimpleNode root = parser.Start();
+      root.jjtAccept(new ArduinoVisitor(), null);
+    } catch (FileNotFoundException e) {
+      System.err.println("Arquivo n\u00e3o encontrado: " + args[0]);
+    }
   }
 }
 PARSER_END(ADSL)
@@ -42,7 +52,7 @@ SimpleNode Start()       :
 {/*@bgen(jjtree) Start */
   try {
 /*@egen*/
-  (Config() | Repita())* <EOF>/*@bgen(jjtree)*/
+  Config() Repita() <EOF>/*@bgen(jjtree)*/
   {
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;

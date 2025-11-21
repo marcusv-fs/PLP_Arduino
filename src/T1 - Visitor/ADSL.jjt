@@ -10,9 +10,19 @@ import java.io.*;
 
 public class ADSL {
   public static void main(String[] args) throws ParseException {
-    ADSL parser = new ADSL(System.in);
-    SimpleNode root = parser.Start();
-    root.jjtAccept(new ArduinoVisitor(), null);
+    if (args.length == 0) {
+      System.err.println("Uso: java ADSL <arquivo.txt>");
+      return;
+    }
+    
+    try {
+      FileInputStream input = new FileInputStream(args[0]);
+      ADSL parser = new ADSL(input);
+      SimpleNode root = parser.Start();
+      root.jjtAccept(new ArduinoVisitor(), null);
+    } catch (FileNotFoundException e) {
+      System.err.println("Arquivo não encontrado: " + args[0]);
+    }
   }
 }
 PARSER_END(ADSL)
@@ -32,7 +42,7 @@ TOKEN: {
 SimpleNode Start() #Start:
 {}
 {
-  (Config() | Repita())* <EOF>
+  Config() Repita() <EOF>
   { return jjtThis; }
 }
 
