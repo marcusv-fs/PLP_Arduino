@@ -624,4 +624,40 @@ public class ArduinoVisitor implements ADSLVisitor {
         }
         return data;
     }
+
+    @Override
+    public Object visit(ASTRepita node, Object data) {
+        Token numToken = null;
+        for (Token t = node.jjtGetFirstToken(); t != null; t = t.next) {
+            if (t.kind == ADSLConstants.NUM_INT) {
+                numToken = t;
+                break;
+            }
+        }
+        
+        if (numToken == null) {
+            throw new RuntimeException("Número de repetições não encontrado");
+        }
+        
+        String numero = numToken.image;
+        String currentIndent = getIndent();
+        System.out.println(currentIndent + "for (int i = 0; i < " + numero + "; i++) {");
+        
+        // Processa o bloco de comandos
+        indentLevel++;
+        if (node.jjtGetNumChildren() > 0) {
+            SimpleNode blocoNode = (SimpleNode) node.jjtGetChild(0);
+            blocoNode.jjtAccept(this, data);
+        }
+        indentLevel--;
+        
+        System.out.println(currentIndent + "}");
+        
+        return data;
+    }
+    
+    @Override
+    public Object visit(ASTBlocoRepita node, Object data) {
+        return node.childrenAccept(this, data);
+}
 }

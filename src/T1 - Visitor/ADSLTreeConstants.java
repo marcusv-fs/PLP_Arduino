@@ -19,32 +19,34 @@ public interface ADSLTreeConstants
   public int JJTANALOGWRITE = 15;
   public int JJTVALORDIGITAL = 16;
   public int JJTVALORANALOGICO = 17;
-  public int JJTCOMANDO = 18;
-  public int JJTSINGLELINECOMMENT = 19;
-  public int JJTMULTILINECOMMENT = 20;
-  public int JJTFORMALCOMMENT = 21;
-  public int JJTSERIALPRINT = 22;
-  public int JJTPRINTCONTENT = 23;
-  public int JJTSTRING = 24;
-  public int JJTDECVAR = 25;
-  public int JJTTIPOSVAR = 26;
-  public int JJTINICIALIZADOR = 27;
-  public int JJTSESENAO = 28;
-  public int JJTBLOCOSE = 29;
-  public int JJTBLOCOSENAO = 30;
-  public int JJTCONDICAO = 31;
-  public int JJTATRIBUICAO = 32;
-  public int JJTEXPRESSAO = 33;
-  public int JJTEXPRESSAOBOOLEANA = 34;
-  public int JJTEXPRESSAOOU = 35;
-  public int JJTEXPRESSAOE = 36;
-  public int JJTEXPRESSAORELACIONAL = 37;
-  public int JJTEXPRESSAOADITIVA = 38;
-  public int JJTEXPRESSAOMULTIPLICATIVA = 39;
-  public int JJTEXPRESSAOUNARIA = 40;
-  public int JJTEXPRESSAOPRIMARIA = 41;
-  public int JJTLEIAEXPRESSAO = 42;
-  public int JJTVALORNUMERICO = 43;
+  public int JJTREPITA = 18;
+  public int JJTBLOCOREPITA = 19;
+  public int JJTCOMANDO = 20;
+  public int JJTSINGLELINECOMMENT = 21;
+  public int JJTMULTILINECOMMENT = 22;
+  public int JJTFORMALCOMMENT = 23;
+  public int JJTSERIALPRINT = 24;
+  public int JJTPRINTCONTENT = 25;
+  public int JJTSTRING = 26;
+  public int JJTDECVAR = 27;
+  public int JJTTIPOSVAR = 28;
+  public int JJTINICIALIZADOR = 29;
+  public int JJTSESENAO = 30;
+  public int JJTBLOCOSE = 31;
+  public int JJTBLOCOSENAO = 32;
+  public int JJTCONDICAO = 33;
+  public int JJTATRIBUICAO = 34;
+  public int JJTEXPRESSAO = 35;
+  public int JJTEXPRESSAOBOOLEANA = 36;
+  public int JJTEXPRESSAOOU = 37;
+  public int JJTEXPRESSAOE = 38;
+  public int JJTEXPRESSAORELACIONAL = 39;
+  public int JJTEXPRESSAOADITIVA = 40;
+  public int JJTEXPRESSAOMULTIPLICATIVA = 41;
+  public int JJTEXPRESSAOUNARIA = 42;
+  public int JJTEXPRESSAOPRIMARIA = 43;
+  public int JJTLEIAEXPRESSAO = 44;
+  public int JJTVALORNUMERICO = 45;
 
 
   public String[] jjtNodeName = {
@@ -66,6 +68,8 @@ public interface ADSLTreeConstants
     "AnalogWrite",
     "ValorDigital",
     "ValorAnalogico",
+    "Repita",
+    "BlocoRepita",
     "Comando",
     "SingleLineComment",
     "MultiLineComment",
@@ -94,4 +98,4 @@ public interface ADSLTreeConstants
     "ValorNumerico",
   };
 }
-/* JavaCC - OriginalChecksum=6fad9ad04827fab8f07a8c3d283b713e (do not edit this line) */
+/* JavaCC - OriginalChecksum=27c14da0f11167c7c0439de950855c0e (do not edit this line) */

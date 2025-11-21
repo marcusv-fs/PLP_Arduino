@@ -12,8 +12,12 @@ Execute {
         EscritaMon("Sensor ativado!");
         Escreva 11 1;
     } senao {
-        EscritaMon("Sensor desativado");
-        Escreva 11 0;
+        repita 5{
+            Escreva 13 1;
+            Espere 500 ms;
+            Escreva 13 0;
+            Espere 500 ms;
+        }
     }
 
     EscritaMon(sensorAtivo);

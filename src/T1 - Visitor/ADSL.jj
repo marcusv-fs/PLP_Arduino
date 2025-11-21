@@ -40,6 +40,7 @@ TOKEN: {
 | <SAIDA: "Saida">
 | <ESPERA: "Espere">
 | <MONITOR: "Monitor">
+| <REPITA: "repita"> 
 
 // Comandos unificados de leitura/escrita
 | <LEIA: "Leia">
@@ -740,6 +741,79 @@ void ValorAnalogico()                :
 /*@egen*/
 }
 
+void Repita()        :
+{/*@bgen(jjtree) Repita */
+  ASTRepita jjtn000 = new ASTRepita(JJTREPITA);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) Repita */
+  try {
+/*@egen*/
+  <REPITA> <NUM_INT> "{" BlocoRepita() "}"/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void BlocoRepita()             :
+{/*@bgen(jjtree) BlocoRepita */
+  ASTBlocoRepita jjtn000 = new ASTBlocoRepita(JJTBLOCOREPITA);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) BlocoRepita */
+  try {
+/*@egen*/
+  (
+    Comando()
+  | SingleLineComment()
+  | MultiLineComment()
+  | FormalComment()
+  )*/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
 void Comando()         :
 {/*@bgen(jjtree) Comando */
   ASTComando jjtn000 = new ASTComando(JJTCOMANDO);
@@ -750,7 +824,7 @@ void Comando()         :
 {/*@bgen(jjtree) Comando */
   try {
 /*@egen*/
-  ( PinMode() | Delay() | Read() | DigitalWrite() | AnalogWrite() | SerialPrint() | DecVar() | SeSenao() | Atribuicao() )/*@bgen(jjtree)*/
+  ( PinMode() | Delay() | Read() | DigitalWrite() | AnalogWrite() | SerialPrint() | DecVar() | SeSenao() | Atribuicao() | Repita() )/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);

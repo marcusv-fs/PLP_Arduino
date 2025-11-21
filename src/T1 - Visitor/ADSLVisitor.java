@@ -20,6 +20,8 @@ public interface ADSLVisitor
   public Object visit(ASTAnalogWrite node, Object data);
   public Object visit(ASTValorDigital node, Object data);
   public Object visit(ASTValorAnalogico node, Object data);
+  public Object visit(ASTRepita node, Object data);
+  public Object visit(ASTBlocoRepita node, Object data);
   public Object visit(ASTComando node, Object data);
   public Object visit(ASTSingleLineComment node, Object data);
   public Object visit(ASTMultiLineComment node, Object data);
@@ -47,4 +49,4 @@ public interface ADSLVisitor
   public Object visit(ASTLeiaExpressao node, Object data);
   public Object visit(ASTValorNumerico node, Object data);
 }
-/* JavaCC - OriginalChecksum=7e9b85ffe7d6c813e75aadeb92d00290 (do not edit this line) */
+/* JavaCC - OriginalChecksum=fa5a6d459f93d515ff816e84fb2fd57e (do not edit this line) */

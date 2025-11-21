@@ -36,6 +36,7 @@ TOKEN: {
 | <SAIDA: "Saida">
 | <ESPERA: "Espere">
 | <MONITOR: "Monitor">
+| <REPITA: "repita"> 
 
 // Comandos unificados de leitura/escrita
 | <LEIA: "Leia">
@@ -314,10 +315,27 @@ void ValorAnalogico() #ValorAnalogico:
   }
 }
 
+void Repita() #Repita:
+{}
+{
+  <REPITA> <NUM_INT> "{" BlocoRepita() "}"
+}
+
+void BlocoRepita() #BlocoRepita:
+{}
+{
+  (
+    Comando()
+  | SingleLineComment()
+  | MultiLineComment()
+  | FormalComment()
+  )*
+}
+
 void Comando() #Comando:
 {}
 {
-  ( PinMode() | Delay() | Read() | DigitalWrite() | AnalogWrite() | SerialPrint() | DecVar() | SeSenao() | Atribuicao() )
+  ( PinMode() | Delay() | Read() | DigitalWrite() | AnalogWrite() | SerialPrint() | DecVar() | SeSenao() | Atribuicao() | Repita() )
 }
 
 void SingleLineComment() #SingleLineComment : {}
