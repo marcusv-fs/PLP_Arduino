@@ -32,6 +32,11 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants/*@egen*/ {/*@bgen
 }
 PARSER_END(ADSL)
 
+TOKEN: {
+  <CONFIG: "Config">
+| <REPITA: "Repita">
+}
+
 SKIP : /* WHITE SPACE */
 {
   " "
@@ -41,10 +46,8 @@ SKIP : /* WHITE SPACE */
 | "\f"
 }
 
-TOKEN: {
-  <CONFIG: "Config">
-| <REPITA: "Repita">
-| <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")?>
+TOKEN: { /* COMMENTS */
+  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")?>
 | <MULTI_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
 | <FORMAL_COMMENT: "/**" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
 }

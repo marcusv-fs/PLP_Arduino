@@ -9,9 +9,9 @@ public interface ADSLConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int CONFIG = 6;
+  int CONFIG = 1;
   /** RegularExpression Id. */
-  int REPITA = 7;
+  int REPITA = 2;
   /** RegularExpression Id. */
   int SINGLE_LINE_COMMENT = 8;
   /** RegularExpression Id. */
@@ -43,13 +43,13 @@ public interface ADSLConstants {
   /** Literal token values. */
   String[] tokenImage = {
     "<EOF>",
+    "\"Config\"",
+    "\"Repita\"",
     "\" \"",
     "\"\\t\"",
     "\"\\n\"",
     "\"\\r\"",
     "\"\\f\"",
-    "\"Config\"",
-    "\"Repita\"",
     "<SINGLE_LINE_COMMENT>",
     "<MULTI_LINE_COMMENT>",
     "<FORMAL_COMMENT>",

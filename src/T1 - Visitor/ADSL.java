@@ -272,7 +272,7 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
       jj_la1_init_0();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x7c0,0x7c0,0x700,0x700,0x700,0x700,};
+      jj_la1_0 = new int[] {0x706,0x706,0x700,0x700,0x700,0x700,};
    }
 
   /** Constructor with InputStream. */

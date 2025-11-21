@@ -1,13 +1,18 @@
-int sensor1;
-unsigned long tempo;
-Config{
-  Entrada A0;
-  Saida 13;
-  MonitorRS 9600;
+// Este é um comentário de linha única
+Config {
+  // Configurações do sistema 
 }
-Repita{
-  LeiaAn A0;
-  EscrevaDg 13 HIGH;
-  EscrevaPWM 9 255;
-  Espere 500 ms;
+
+/* 
+   Este é um comentário
+   multi-linha
+*/
+
+Repita {
+  // Loop principal
 }
+
+/**
+ * Este é um comentário formal
+ * que pode ter múltiplas linhas
+ */
