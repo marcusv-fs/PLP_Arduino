@@ -32,9 +32,8 @@ public class ArduinoVisitor implements ADSLVisitor {
 
     @Override
     public Object visit(ASTSingleLineComment node, Object data) {
-        // Usando jjtGetFirstToken() que está disponível com TRACK_TOKENS
         Token t = node.jjtGetFirstToken();
-        System.out.println(t.image); // Use print em vez de println se o token já incluir quebra de linha
+        System.out.println(t.image);
         return data;
     }
 

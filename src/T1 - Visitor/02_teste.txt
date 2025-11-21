@@ -1,12 +1,14 @@
 // Este é um comentário de linha única
 Config {
-  // Configurações do sistema
+  // Configurações do sistema 
+  // Configurações do sistema 
 }
 
 /* 
    Este é um comentário
    multi-linha
 */
+
 Repita {
   // Loop principal
 }

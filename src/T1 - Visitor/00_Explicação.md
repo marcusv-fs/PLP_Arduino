@@ -10,4 +10,4 @@ Para modificar a sintáxe, modifique o arquivo "ADSL.jjt" ao invés do "ADSL.jj"
 2. Digite: jjtree .\ADSL.jjt
 2. Digite: javacc ADSL.jj
 3. Digite: javac *.java
-4. Digite: java ArduinoParser
+4. Digite: java ADSL .\02_teste.txt
