@@ -42,6 +42,10 @@ TOKEN: {
 | <ESCREVA_PWM: "EscrevaPWM">
 | <ESCRITA_MON: "EscritaMon">
 
+// Estruturas de controle
+| <SE: "se">
+| <SENAO: "senao">
+
 // Unidades de tempo
 | <NS: "ns">
 | <MS: "ms">
@@ -282,7 +286,7 @@ void ValorAnalogico() #ValorAnalogico:
 void Comando() #Comando:
 {}
 {
-  ( PinMode() | Delay() | Read() | DigitalWrite() | AnalogWrite() | SerialPrint() | DecVar() )
+  ( PinMode() | Delay() | Read() | DigitalWrite() | AnalogWrite() | SerialPrint() | DecVar() | SeSenao() | Atribuicao() )
 }
 
 void SingleLineComment() #SingleLineComment : {}
@@ -351,4 +355,57 @@ void Inicializador() #Inicializador:
   | t=<STRING>
   | t=<IDENTIFIER>
   )
+}
+
+// Estrutura condicional
+void SeSenao() #SeSenao:
+{}
+{
+  <SE> "(" Condicao() ")" "{" (
+    Comando()
+  | SingleLineComment()
+  | MultiLineComment()
+  | FormalComment()
+  )* "}" ( <SENAO> "{" (
+    Comando()
+  | SingleLineComment()
+  | MultiLineComment()
+  | FormalComment()
+  )* "}" )?
+}
+
+void Condicao() #Condicao:
+{}
+{
+  // Aceita identificadores (variáveis booleanas)
+  <IDENTIFIER>
+}
+
+// Atribuição de variáveis
+void Atribuicao() #Atribuicao:
+{}
+{
+  <IDENTIFIER> "=" Expressao() ";"
+}
+
+void Expressao() #Expressao:
+{}
+{
+  (
+    LeiaExpressao()
+  | ValorNumerico()
+  | <IDENTIFIER>
+  )
+}
+
+void LeiaExpressao() #LeiaExpressao:
+{}
+{
+  <LEIA> Pinos()
+}
+
+void ValorNumerico() #ValorNumerico:
+{Token t;}
+{
+  (t=<NUM_INT> | t=<NUM_FLT>)
 }

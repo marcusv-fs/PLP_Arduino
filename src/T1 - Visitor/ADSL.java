@@ -198,6 +198,7 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
         case ESCREVA:
         case ESCREVA_PWM:
         case ESCRITA_MON:
+        case SE:
         case BYTE:
         case INT:
         case UNSIGNED_INT:
@@ -207,6 +208,7 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
         case CHAR:
         case STRING_TYPE:
         case BOOLEAN:
+        case IDENTIFIER:
         case SINGLE_LINE_COMMENT:
         case MULTI_LINE_COMMENT:
         case FORMAL_COMMENT:
@@ -224,6 +226,7 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
         case ESCREVA:
         case ESCREVA_PWM:
         case ESCRITA_MON:
+        case SE:
         case BYTE:
         case INT:
         case UNSIGNED_INT:
@@ -233,6 +236,7 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
         case CHAR:
         case STRING_TYPE:
         case BOOLEAN:
+        case IDENTIFIER:
           Comando();
           break;
         case SINGLE_LINE_COMMENT:
@@ -789,6 +793,12 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
       case BOOLEAN:
         DecVar();
         break;
+      case SE:
+        SeSenao();
+        break;
+      case IDENTIFIER:
+        Atribuicao();
+        break;
       default:
         jj_la1[10] = jj_gen;
         jj_consume_token(-1);
@@ -953,8 +963,8 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
       TiposVar();
       jj_consume_token(IDENTIFIER);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 59:
-        jj_consume_token(59);
+      case 61:
+        jj_consume_token(61);
         Inicializador();
         break;
       default:
@@ -1065,6 +1075,337 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
     }
   }
 
+// Estrutura condicional
+  final public void SeSenao() throws ParseException {
+ /*@bgen(jjtree) SeSenao */
+  ASTSeSenao jjtn000 = new ASTSeSenao(JJTSESENAO);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+    try {
+      jj_consume_token(SE);
+      jj_consume_token(LPAREN);
+      Condicao();
+      jj_consume_token(RPAREN);
+      jj_consume_token(LBRACE);
+      label_4:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case ENTRADA:
+        case SAIDA:
+        case ESPERA:
+        case LEIA:
+        case ESCREVA:
+        case ESCREVA_PWM:
+        case ESCRITA_MON:
+        case SE:
+        case BYTE:
+        case INT:
+        case UNSIGNED_INT:
+        case LONG:
+        case UNSIGNED_LONG:
+        case FLOAT:
+        case CHAR:
+        case STRING_TYPE:
+        case BOOLEAN:
+        case IDENTIFIER:
+        case SINGLE_LINE_COMMENT:
+        case MULTI_LINE_COMMENT:
+        case FORMAL_COMMENT:
+          ;
+          break;
+        default:
+          jj_la1[15] = jj_gen;
+          break label_4;
+        }
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case ENTRADA:
+        case SAIDA:
+        case ESPERA:
+        case LEIA:
+        case ESCREVA:
+        case ESCREVA_PWM:
+        case ESCRITA_MON:
+        case SE:
+        case BYTE:
+        case INT:
+        case UNSIGNED_INT:
+        case LONG:
+        case UNSIGNED_LONG:
+        case FLOAT:
+        case CHAR:
+        case STRING_TYPE:
+        case BOOLEAN:
+        case IDENTIFIER:
+          Comando();
+          break;
+        case SINGLE_LINE_COMMENT:
+          SingleLineComment();
+          break;
+        case MULTI_LINE_COMMENT:
+          MultiLineComment();
+          break;
+        case FORMAL_COMMENT:
+          FormalComment();
+          break;
+        default:
+          jj_la1[16] = jj_gen;
+          jj_consume_token(-1);
+          throw new ParseException();
+        }
+      }
+      jj_consume_token(RBRACE);
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case SENAO:
+        jj_consume_token(SENAO);
+        jj_consume_token(LBRACE);
+        label_5:
+        while (true) {
+          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+          case ENTRADA:
+          case SAIDA:
+          case ESPERA:
+          case LEIA:
+          case ESCREVA:
+          case ESCREVA_PWM:
+          case ESCRITA_MON:
+          case SE:
+          case BYTE:
+          case INT:
+          case UNSIGNED_INT:
+          case LONG:
+          case UNSIGNED_LONG:
+          case FLOAT:
+          case CHAR:
+          case STRING_TYPE:
+          case BOOLEAN:
+          case IDENTIFIER:
+          case SINGLE_LINE_COMMENT:
+          case MULTI_LINE_COMMENT:
+          case FORMAL_COMMENT:
+            ;
+            break;
+          default:
+            jj_la1[17] = jj_gen;
+            break label_5;
+          }
+          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+          case ENTRADA:
+          case SAIDA:
+          case ESPERA:
+          case LEIA:
+          case ESCREVA:
+          case ESCREVA_PWM:
+          case ESCRITA_MON:
+          case SE:
+          case BYTE:
+          case INT:
+          case UNSIGNED_INT:
+          case LONG:
+          case UNSIGNED_LONG:
+          case FLOAT:
+          case CHAR:
+          case STRING_TYPE:
+          case BOOLEAN:
+          case IDENTIFIER:
+            Comando();
+            break;
+          case SINGLE_LINE_COMMENT:
+            SingleLineComment();
+            break;
+          case MULTI_LINE_COMMENT:
+            MultiLineComment();
+            break;
+          case FORMAL_COMMENT:
+            FormalComment();
+            break;
+          default:
+            jj_la1[18] = jj_gen;
+            jj_consume_token(-1);
+            throw new ParseException();
+          }
+        }
+        jj_consume_token(RBRACE);
+        break;
+      default:
+        jj_la1[19] = jj_gen;
+        ;
+      }
+    } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      {if (true) throw (RuntimeException)jjte000;}
+    }
+    if (jjte000 instanceof ParseException) {
+      {if (true) throw (ParseException)jjte000;}
+    }
+    {if (true) throw (Error)jjte000;}
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+    }
+  }
+
+  final public void Condicao() throws ParseException {
+ /*@bgen(jjtree) Condicao */
+  ASTCondicao jjtn000 = new ASTCondicao(JJTCONDICAO);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+    try {
+      jj_consume_token(IDENTIFIER);
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+    }
+  }
+
+// Atribuição de variáveis
+  final public void Atribuicao() throws ParseException {
+ /*@bgen(jjtree) Atribuicao */
+  ASTAtribuicao jjtn000 = new ASTAtribuicao(JJTATRIBUICAO);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+    try {
+      jj_consume_token(IDENTIFIER);
+      jj_consume_token(61);
+      Expressao();
+      jj_consume_token(SEMICOLON);
+    } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      {if (true) throw (RuntimeException)jjte000;}
+    }
+    if (jjte000 instanceof ParseException) {
+      {if (true) throw (ParseException)jjte000;}
+    }
+    {if (true) throw (Error)jjte000;}
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+    }
+  }
+
+  final public void Expressao() throws ParseException {
+ /*@bgen(jjtree) Expressao */
+  ASTExpressao jjtn000 = new ASTExpressao(JJTEXPRESSAO);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+    try {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case LEIA:
+        LeiaExpressao();
+        break;
+      case NUM_FLT:
+      case NUM_INT:
+        ValorNumerico();
+        break;
+      case IDENTIFIER:
+        jj_consume_token(IDENTIFIER);
+        break;
+      default:
+        jj_la1[20] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+    } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      {if (true) throw (RuntimeException)jjte000;}
+    }
+    if (jjte000 instanceof ParseException) {
+      {if (true) throw (ParseException)jjte000;}
+    }
+    {if (true) throw (Error)jjte000;}
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+    }
+  }
+
+  final public void LeiaExpressao() throws ParseException {
+ /*@bgen(jjtree) LeiaExpressao */
+  ASTLeiaExpressao jjtn000 = new ASTLeiaExpressao(JJTLEIAEXPRESSAO);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+    try {
+      jj_consume_token(LEIA);
+      Pinos();
+    } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      {if (true) throw (RuntimeException)jjte000;}
+    }
+    if (jjte000 instanceof ParseException) {
+      {if (true) throw (ParseException)jjte000;}
+    }
+    {if (true) throw (Error)jjte000;}
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+    }
+  }
+
+  final public void ValorNumerico() throws ParseException {
+ /*@bgen(jjtree) ValorNumerico */
+ ASTValorNumerico jjtn000 = new ASTValorNumerico(JJTVALORNUMERICO);
+ boolean jjtc000 = true;
+ jjtree.openNodeScope(jjtn000);
+ jjtn000.jjtSetFirstToken(getToken(1));Token t;
+    try {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case NUM_INT:
+        t = jj_consume_token(NUM_INT);
+        break;
+      case NUM_FLT:
+        t = jj_consume_token(NUM_FLT);
+        break;
+      default:
+        jj_la1[21] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+    }
+  }
+
   /** Generated Token Manager. */
   public ADSLTokenManager token_source;
   SimpleCharStream jj_input_stream;
@@ -1074,7 +1415,7 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
   public Token jj_nt;
   private int jj_ntk;
   private int jj_gen;
-  final private int[] jj_la1 = new int[15];
+  final private int[] jj_la1 = new int[22];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -1082,10 +1423,10 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x6,0x6,0xf0000058,0xf0000058,0xf00007b8,0xf00007b8,0x18,0x0,0xfff0000,0xf800,0xf00007b8,0x0,0x0,0xf0000000,0x0,};
+      jj_la1_0 = new int[] {0x6,0x6,0xc0000058,0xc0000058,0xc0000fb8,0xc0000fb8,0x18,0x0,0x3ffc0000,0x3e000,0xc0000fb8,0x0,0x0,0xc0000000,0x0,0xc0000fb8,0xc0000fb8,0xc0000fb8,0xc0000fb8,0x1000,0x80,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x1c00,0x1c00,0x1c1f,0x1c1f,0x1c1f,0x1c1f,0x0,0xc0,0x0,0x0,0x1f,0x300,0x8000000,0x1f,0x360,};
+      jj_la1_1 = new int[] {0x7000,0x7000,0x707f,0x707f,0x787f,0x787f,0x0,0x300,0x0,0x0,0x87f,0xc00,0x20000000,0x7f,0xd80,0x787f,0x787f,0x787f,0x787f,0x0,0x980,0x180,};
    }
 
   /** Constructor with InputStream. */
@@ -1099,7 +1440,7 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1114,7 +1455,7 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -1124,7 +1465,7 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1135,7 +1476,7 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -1144,7 +1485,7 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1154,7 +1495,7 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 22; i++) jj_la1[i] = -1;
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
@@ -1205,12 +1546,12 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[60];
+    boolean[] la1tokens = new boolean[62];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 15; i++) {
+    for (int i = 0; i < 22; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -1222,7 +1563,7 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
         }
       }
     }
-    for (int i = 0; i < 60; i++) {
+    for (int i = 0; i < 62; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

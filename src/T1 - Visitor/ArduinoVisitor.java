@@ -247,10 +247,8 @@ public class ArduinoVisitor implements ADSLVisitor {
         if (contentToken.kind == ADSLConstants.STRING) {
             // Se for string, processa como antes
             content = processarString(content);
-        } else {
-            // Se for identificador, usa diretamente (já é o nome da variável)
-            // Não precisa de processamento
         }
+        // Se for identificador, usa diretamente (não precisa de processamento)
         
         System.out.println("  Serial.println(" + content + ");");
         return data;
@@ -341,5 +339,89 @@ public class ArduinoVisitor implements ADSLVisitor {
             case "Boolean": return "boolean";
             default: return "int"; // padrão
         }
+    }
+
+    @Override
+    public Object visit(ASTSeSenao node, Object data) {
+        // O primeiro filho é a condição
+        SimpleNode condicaoNode = (SimpleNode) node.jjtGetChild(0);
+        Token condicaoToken = condicaoNode.jjtGetFirstToken();
+        String condicao = condicaoToken.image;
+        
+        System.out.println("  if (" + condicao + ") {");
+        
+        // Processa os comandos do bloco "se"
+        // Começa do filho 1 até encontrar o senao ou terminar
+        boolean inElse = false;
+        for (int i = 1; i < node.jjtGetNumChildren(); i++) {
+            Node child = node.jjtGetChild(i);
+            if (child instanceof SimpleNode) {
+                SimpleNode simpleChild = (SimpleNode) child;
+                // Verifica se é um nó de comando (não é condição)
+                if (!(simpleChild instanceof ASTCondicao)) {
+                    simpleChild.jjtAccept(this, data);
+                }
+            }
+        }
+        
+        System.out.println("  }");
+        
+        // Por enquanto, não processamos o senao automaticamente
+        // Você precisaria modificar a estrutura do nó para identificar
+        // onde começa o bloco senao
+        // Esta é uma implementação simplificada
+        
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTCondicao node, Object data) {
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTAtribuicao node, Object data) {
+        Token idToken = node.jjtGetFirstToken();
+        String identifier = idToken.image;
+        
+        SimpleNode expressaoNode = (SimpleNode) node.jjtGetChild(0);
+        
+        System.out.print("  " + identifier + " = ");
+        expressaoNode.jjtAccept(this, data);
+        System.out.println(";");
+        
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTExpressao node, Object data) {
+        return node.childrenAccept(this, data);
+    }
+
+    @Override
+    public Object visit(ASTLeiaExpressao node, Object data) {
+        SimpleNode pinosNode = (SimpleNode) node.jjtGetChild(0);
+        Token pinoToken = pinosNode.jjtGetFirstToken();
+        String pino = pinoToken.image;
+
+        // Decide automaticamente se é leitura digital ou analógica
+        if (pinosNode instanceof ASTPinosA) {
+            // Para pino analógico, usa analogRead
+            int analogPin = Integer.parseInt(pino.substring(1));
+            System.out.print("analogRead(" + analogPin + ")");
+        } else {
+            // Para pino digital, usa digitalRead
+            System.out.print("digitalRead(" + pino + ")");
+        }
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTValorNumerico node, Object data) {
+        Token t = node.jjtGetFirstToken();
+        if (t != null) {
+            System.out.print(t.image);
+        }
+        return data;
     }
 }

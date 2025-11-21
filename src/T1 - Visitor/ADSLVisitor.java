@@ -30,5 +30,11 @@ public interface ADSLVisitor
   public Object visit(ASTDecVar node, Object data);
   public Object visit(ASTTiposVar node, Object data);
   public Object visit(ASTInicializador node, Object data);
+  public Object visit(ASTSeSenao node, Object data);
+  public Object visit(ASTCondicao node, Object data);
+  public Object visit(ASTAtribuicao node, Object data);
+  public Object visit(ASTExpressao node, Object data);
+  public Object visit(ASTLeiaExpressao node, Object data);
+  public Object visit(ASTValorNumerico node, Object data);
 }
-/* JavaCC - OriginalChecksum=f738be12bd4e794b6fea2bd9b4b816a1 (do not edit this line) */
+/* JavaCC - OriginalChecksum=6b93043ebd6ecc6b99befc5025740a38 (do not edit this line) */

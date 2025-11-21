@@ -1,35 +1,21 @@
 Config {
     Monitor 9600;
+    Entrada 2;
     Saida 13;
-    Saida 9;
-
-    // Declarações de variáveis no setup
-    int contador = 0;
-    float temperatura = 25.5;
-    String mensagem = "Hello World";
-    Boolean ledEstado = false;
+    
+    Boolean sensorAtivo = false;
 }
 
 Repita {
-    EscritaMon("Iniciando programa...");
-    EscritaMon("Ligando LED");
-    Escreva 13 1;
-    Espere 1500 ms;
-    EscritaMon("Desligando LED");
-    Escreva 13 0;
-    Espere 500 ms;
-
-    // Declarações de variáveis no loop
-    int leituraSensor;
-    long tempoInicio;
-    EscritaMon(mensagem);
-
-    String msg = "oi";
+    sensorAtivo = Leia 2;
     
-    EscritaMon("Testando PWM");
-    EscrevaPWM 9 128;
-    Espere 2000 ms;
-    EscrevaPWM 9 0;
+    se (sensorAtivo) {
+        EscritaMon("Sensor ativado!");
+        Escreva 13 1;
+    } senao {
+        EscritaMon("Sensor desativado");
+        Escreva 13 0;
+    }
     
-    EscritaMon(msg);
+    Espere 100 ms;
 }

@@ -29,6 +29,12 @@ public interface ADSLTreeConstants
   public int JJTDECVAR = 25;
   public int JJTTIPOSVAR = 26;
   public int JJTINICIALIZADOR = 27;
+  public int JJTSESENAO = 28;
+  public int JJTCONDICAO = 29;
+  public int JJTATRIBUICAO = 30;
+  public int JJTEXPRESSAO = 31;
+  public int JJTLEIAEXPRESSAO = 32;
+  public int JJTVALORNUMERICO = 33;
 
 
   public String[] jjtNodeName = {
@@ -60,6 +66,12 @@ public interface ADSLTreeConstants
     "DecVar",
     "TiposVar",
     "Inicializador",
+    "SeSenao",
+    "Condicao",
+    "Atribuicao",
+    "Expressao",
+    "LeiaExpressao",
+    "ValorNumerico",
   };
 }
-/* JavaCC - OriginalChecksum=5cea1f00798ae89ddfc2a30b45712757 (do not edit this line) */
+/* JavaCC - OriginalChecksum=22ae3cdb068c19eba53df4f3d0a89111 (do not edit this line) */
