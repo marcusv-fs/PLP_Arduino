@@ -120,7 +120,25 @@ void Config()        :
 {/*@bgen(jjtree) Config */
   try {
 /*@egen*/
-  <CONFIG> "{" "}"/*@bgen(jjtree)*/
+  <CONFIG> "{" (
+    SingleLineComment()
+  | MultiLineComment()
+  | FormalComment()
+  )* "}"/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
   } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
@@ -140,7 +158,25 @@ void Repita()        :
 {/*@bgen(jjtree) Repita */
   try {
 /*@egen*/
-  <REPITA> "{" "}"/*@bgen(jjtree)*/
+  <REPITA> "{" (
+    SingleLineComment()
+  | MultiLineComment()
+  | FormalComment()
+  )* "}"/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
   } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);

@@ -75,13 +75,21 @@ SimpleNode Start() #Start:
 void Config() #Config:
 {}
 {
-  <CONFIG> "{" "}"
+  <CONFIG> "{" (
+    SingleLineComment()
+  | MultiLineComment()
+  | FormalComment()
+  )* "}"
 }
 
 void Repita() #Repita:
 {}
 {
-  <REPITA> "{" "}"
+  <REPITA> "{" (
+    SingleLineComment()
+  | MultiLineComment()
+  | FormalComment()
+  )* "}"
 }
 
 void SingleLineComment() #SingleLineComment : {}
