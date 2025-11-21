@@ -13,29 +13,37 @@ public interface ADSLConstants {
   /** RegularExpression Id. */
   int REPITA = 2;
   /** RegularExpression Id. */
-  int SINGLE_LINE_COMMENT = 8;
+  int ENTRADA = 3;
   /** RegularExpression Id. */
-  int MULTI_LINE_COMMENT = 9;
+  int SAIDA = 4;
   /** RegularExpression Id. */
-  int FORMAL_COMMENT = 10;
+  int NUMERO = 5;
   /** RegularExpression Id. */
-  int LPAREN = 11;
+  int PINO_ANALOGICO = 6;
   /** RegularExpression Id. */
-  int RPAREN = 12;
+  int SINGLE_LINE_COMMENT = 7;
   /** RegularExpression Id. */
-  int LBRACE = 13;
+  int MULTI_LINE_COMMENT = 8;
   /** RegularExpression Id. */
-  int RBRACE = 14;
+  int FORMAL_COMMENT = 9;
   /** RegularExpression Id. */
-  int LBRACKET = 15;
+  int LPAREN = 15;
   /** RegularExpression Id. */
-  int RBRACKET = 16;
+  int RPAREN = 16;
   /** RegularExpression Id. */
-  int SEMICOLON = 17;
+  int LBRACE = 17;
   /** RegularExpression Id. */
-  int COMMA = 18;
+  int RBRACE = 18;
   /** RegularExpression Id. */
-  int DOT = 19;
+  int LBRACKET = 19;
+  /** RegularExpression Id. */
+  int RBRACKET = 20;
+  /** RegularExpression Id. */
+  int SEMICOLON = 21;
+  /** RegularExpression Id. */
+  int COMMA = 22;
+  /** RegularExpression Id. */
+  int DOT = 23;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -45,14 +53,18 @@ public interface ADSLConstants {
     "<EOF>",
     "\"Config\"",
     "\"Repita\"",
+    "\"Entrada\"",
+    "\"Saida\"",
+    "<NUMERO>",
+    "<PINO_ANALOGICO>",
+    "<SINGLE_LINE_COMMENT>",
+    "<MULTI_LINE_COMMENT>",
+    "<FORMAL_COMMENT>",
     "\" \"",
     "\"\\t\"",
     "\"\\n\"",
     "\"\\r\"",
     "\"\\f\"",
-    "<SINGLE_LINE_COMMENT>",
-    "<MULTI_LINE_COMMENT>",
-    "<FORMAL_COMMENT>",
     "\"(\"",
     "\")\"",
     "\"{\"",

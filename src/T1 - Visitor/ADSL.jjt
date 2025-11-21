@@ -31,6 +31,17 @@ PARSER_END(ADSL)
 TOKEN: {
   <CONFIG: "Config">
 | <REPITA: "Repita">
+| <ENTRADA: "Entrada">
+| <SAIDA: "Saida">
+
+| <NUMERO: (["0"-"9"])+ >
+| <PINO_ANALOGICO: "A" (["0"-"5"]) >
+}
+
+TOKEN: { /* COMMENTS */
+  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")?>
+| <MULTI_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
+| <FORMAL_COMMENT: "/**" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
 }
 
 SKIP : /* WHITE SPACE */
@@ -40,12 +51,6 @@ SKIP : /* WHITE SPACE */
 | "\n"
 | "\r"
 | "\f"
-}
-
-TOKEN: { /* COMMENTS */
-  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")?>
-| <MULTI_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
-| <FORMAL_COMMENT: "/**" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
 }
 
 TOKEN : /* SEPARATORS */
@@ -79,7 +84,8 @@ void Config() #Config:
 {}
 {
   <CONFIG> "{" (
-    SingleLineComment()
+    PinMode()
+  | SingleLineComment()
   | MultiLineComment()
   | FormalComment()
   )* "}"
@@ -89,10 +95,69 @@ void Repita() #Repita:
 {}
 {
   <REPITA> "{" (
-    SingleLineComment()
+    Comando()
+  | SingleLineComment()
   | MultiLineComment()
   | FormalComment()
   )* "}"
+}
+
+void PinMode() #PinMode:
+{}
+{
+  ( <ENTRADA> | <SAIDA> ) Pinos() ";"
+}
+
+void Pinos() #Pinos:
+{}
+{
+  ( PinosD() | PinosA() )
+}
+
+void PinosD() #PinosD:
+{Token t;}
+{
+  t=<NUMERO>
+  {
+    // Validação para pinos digitais (0-13)
+    int pino = Integer.parseInt(t.image);
+    if (pino < 0 || pino > 13) {
+      throw new ParseException("Pino digital deve estar entre 0 e 13: " + pino);
+    }
+  }
+}
+
+void PinosA() #PinosA:
+{}
+{
+  <PINO_ANALOGICO>
+}
+
+void PinosPWM() #PinosPWM:
+{Token t;}
+{
+  t=<NUMERO>
+  {
+    // Validação para pinos PWM (3,5,6,9,10,11)
+    int pino = Integer.parseInt(t.image);
+    int[] pwmPins = {3,5,6,9,10,11};
+    boolean isValid = false;
+    for (int pin : pwmPins) {
+      if (pino == pin) {
+        isValid = true;
+        break;
+      }
+    }
+    if (!isValid) {
+      throw new ParseException("Pino PWM deve ser 3,5,6,9,10 ou 11: " + pino);
+    }
+  }
+}
+
+void Comando() #Comando:
+{}
+{
+  ( PinMode() ) // Adicione outros comandos aqui no futuro
 }
 
 void SingleLineComment() #SingleLineComment : {}

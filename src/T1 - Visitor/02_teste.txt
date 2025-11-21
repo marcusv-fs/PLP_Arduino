@@ -1,5 +1,12 @@
+// Configuração dos pinos
 Config {
+  Entrada 2;
+  Saida 13;
+  Saida A0;
+  Entrada A1;
 }
 
+// Loop principal
 Repita {
+  // Comandos futuros aqui
 }

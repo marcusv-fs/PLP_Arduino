@@ -35,6 +35,17 @@ PARSER_END(ADSL)
 TOKEN: {
   <CONFIG: "Config">
 | <REPITA: "Repita">
+| <ENTRADA: "Entrada">
+| <SAIDA: "Saida">
+
+| <NUMERO: (["0"-"9"])+ >
+| <PINO_ANALOGICO: "A" (["0"-"5"]) >
+}
+
+TOKEN: { /* COMMENTS */
+  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")?>
+| <MULTI_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
+| <FORMAL_COMMENT: "/**" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
 }
 
 SKIP : /* WHITE SPACE */
@@ -44,12 +55,6 @@ SKIP : /* WHITE SPACE */
 | "\n"
 | "\r"
 | "\f"
-}
-
-TOKEN: { /* COMMENTS */
-  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")?>
-| <MULTI_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
-| <FORMAL_COMMENT: "/**" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
 }
 
 TOKEN : /* SEPARATORS */
@@ -124,7 +129,8 @@ void Config()        :
   try {
 /*@egen*/
   <CONFIG> "{" (
-    SingleLineComment()
+    PinMode()
+  | SingleLineComment()
   | MultiLineComment()
   | FormalComment()
   )* "}"/*@bgen(jjtree)*/
@@ -162,7 +168,8 @@ void Repita()        :
   try {
 /*@egen*/
   <REPITA> "{" (
-    SingleLineComment()
+    Comando()
+  | SingleLineComment()
   | MultiLineComment()
   | FormalComment()
   )* "}"/*@bgen(jjtree)*/
@@ -187,6 +194,202 @@ void Repita()        :
     }
   }
 /*@egen*/
+}
+
+void PinMode()         :
+{/*@bgen(jjtree) PinMode */
+  ASTPinMode jjtn000 = new ASTPinMode(JJTPINMODE);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) PinMode */
+  try {
+/*@egen*/
+  ( <ENTRADA> | <SAIDA> ) Pinos() ";"/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void Pinos()       :
+{/*@bgen(jjtree) Pinos */
+  ASTPinos jjtn000 = new ASTPinos(JJTPINOS);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) Pinos */
+  try {
+/*@egen*/
+  ( PinosD() | PinosA() )/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void PinosD()        :
+{/*@bgen(jjtree) PinosD */
+ ASTPinosD jjtn000 = new ASTPinosD(JJTPINOSD);
+ boolean jjtc000 = true;
+ jjtree.openNodeScope(jjtn000);
+ jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/Token t;}
+{/*@bgen(jjtree) PinosD */
+  try {
+/*@egen*/
+  t=<NUMERO>/*@bgen(jjtree)*/
+  {
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+    jjtn000.jjtSetLastToken(getToken(0));
+  }
+/*@egen*/
+  {
+    // Valida\u00e7\u00e3o para pinos digitais (0-13)
+    int pino = Integer.parseInt(t.image);
+    if (pino < 0 || pino > 13) {
+      throw new ParseException("Pino digital deve estar entre 0 e 13: " + pino);
+    }
+  }/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void PinosA()        :
+{/*@bgen(jjtree) PinosA */
+  ASTPinosA jjtn000 = new ASTPinosA(JJTPINOSA);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) PinosA */
+  try {
+/*@egen*/
+  <PINO_ANALOGICO>/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void PinosPWM()          :
+{/*@bgen(jjtree) PinosPWM */
+ ASTPinosPWM jjtn000 = new ASTPinosPWM(JJTPINOSPWM);
+ boolean jjtc000 = true;
+ jjtree.openNodeScope(jjtn000);
+ jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/Token t;}
+{/*@bgen(jjtree) PinosPWM */
+  try {
+/*@egen*/
+  t=<NUMERO>/*@bgen(jjtree)*/
+  {
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+    jjtn000.jjtSetLastToken(getToken(0));
+  }
+/*@egen*/
+  {
+    // Valida\u00e7\u00e3o para pinos PWM (3,5,6,9,10,11)
+    int pino = Integer.parseInt(t.image);
+    int[] pwmPins = {3,5,6,9,10,11};
+    boolean isValid = false;
+    for (int pin : pwmPins) {
+      if (pino == pin) {
+        isValid = true;
+        break;
+      }
+    }
+    if (!isValid) {
+      throw new ParseException("Pino PWM deve ser 3,5,6,9,10 ou 11: " + pino);
+    }
+  }/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void Comando()         :
+{/*@bgen(jjtree) Comando */
+  ASTComando jjtn000 = new ASTComando(JJTCOMANDO);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) Comando */
+  try {
+/*@egen*/
+  ( PinMode() )/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/ // Adicione outros comandos aqui no futuro
 }
 
 void SingleLineComment()                    : {/*@bgen(jjtree) SingleLineComment */
