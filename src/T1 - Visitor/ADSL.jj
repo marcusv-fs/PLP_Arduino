@@ -32,6 +32,7 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants/*@egen*/ {/*@bgen
 }
 PARSER_END(ADSL)
 
+// Palavras reservadas
 TOKEN: {
   <CONFIG: "Config">
 | <REPITA: "Repita">
@@ -77,12 +78,41 @@ TOKEN: {
 | <UNSIGNED_INT: "unsigned int">
 | <LONG: "long">
 | <UNSIGNED_LONG: "unsigned long">
-| <FLOAT: "float">
+| <FLOAT: "real">
 | <CHAR: "char">
 | <STRING_TYPE: "String">
 | <BOOLEAN: "Boolean">
+}
 
-| <NUM_FLT: (["0"-"9"])+ "." (["0"-"9"])+ >
+// Operadores
+TOKEN: {
+  < ASSIGN: "=" >
+| < GT: ">" >
+| < LT: "<" >
+| < BANG: "!" >
+| < TILDE: "~" >
+| < HOOK: "?" >
+| < COLON: ":" >
+| < EQ: "==" >
+| < LE: "<=" >
+| < GE: ">=" >
+| < NE: "!=" >
+| < SC_OR: "||" >
+| < SC_AND: "&&" >
+| < CONCAT: "++" >
+| < PLUS: "+" >
+| < MINUS: "-" >
+| < STAR: "*" >
+| < SLASH: "/" >
+| < BIT_AND: "&" >
+| < BIT_OR: "|" >
+| < XOR: "^" >
+| < REM: "%" >
+}
+
+// Literais e identificadores
+TOKEN: {
+  <NUM_FLT: (["0"-"9"])+ "." (["0"-"9"])+ >
 | <NUM_INT: (["0"-"9"])+ >
 | <PINO_ANALOGICO: "A" (["0"-"5"]) >
 | <STRING: "\"" (~["\""])* "\"">
@@ -133,6 +163,7 @@ SimpleNode Start()       :
   | SingleLineComment()
   | MultiLineComment()
   | FormalComment()
+  | DecVar()
   )*
   <EOF>/*@bgen(jjtree)*/
   {
@@ -955,7 +986,22 @@ void Inicializador()               :
   | t=<NUM_FLT>
   | t=<STRING>
   | t=<IDENTIFIER>
+  | Expressao()
   )/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
   } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
@@ -1088,8 +1134,22 @@ void Condicao()          :
 {/*@bgen(jjtree) Condicao */
   try {
 /*@egen*/
-  // Aceita identificadores (vari\u00e1veis booleanas)
-  <IDENTIFIER>/*@bgen(jjtree)*/
+  // Aceita identificadores (vari\u00e1veis booleanas) ou express\u00f5es booleanas
+  ExpressaoBooleana()/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
   } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
@@ -1144,10 +1204,284 @@ void Expressao()           :
 {/*@bgen(jjtree) Expressao */
   try {
 /*@egen*/
+  ExpressaoBooleana()/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void ExpressaoBooleana()                   :
+{/*@bgen(jjtree) ExpressaoBooleana */
+  ASTExpressaoBooleana jjtn000 = new ASTExpressaoBooleana(JJTEXPRESSAOBOOLEANA);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) ExpressaoBooleana */
+  try {
+/*@egen*/
+  ExpressaoOu()/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void ExpressaoOu()             :
+{/*@bgen(jjtree) ExpressaoOu */
+  ASTExpressaoOu jjtn000 = new ASTExpressaoOu(JJTEXPRESSAOOU);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) ExpressaoOu */
+  try {
+/*@egen*/
+  ExpressaoE() ( <SC_OR> ExpressaoE() )*/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void ExpressaoE()            :
+{/*@bgen(jjtree) ExpressaoE */
+  ASTExpressaoE jjtn000 = new ASTExpressaoE(JJTEXPRESSAOE);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) ExpressaoE */
+  try {
+/*@egen*/
+  ExpressaoRelacional() ( <SC_AND> ExpressaoRelacional() )*/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void ExpressaoRelacional()                     :
+{/*@bgen(jjtree) ExpressaoRelacional */
+  ASTExpressaoRelacional jjtn000 = new ASTExpressaoRelacional(JJTEXPRESSAORELACIONAL);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) ExpressaoRelacional */
+  try {
+/*@egen*/
+  ExpressaoAditiva() ( ( <LT> | <GT> | <LE> | <GE> | <EQ> | <NE> ) ExpressaoAditiva() )?/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void ExpressaoAditiva()                  :
+{/*@bgen(jjtree) ExpressaoAditiva */
+  ASTExpressaoAditiva jjtn000 = new ASTExpressaoAditiva(JJTEXPRESSAOADITIVA);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) ExpressaoAditiva */
+  try {
+/*@egen*/
+  ExpressaoMultiplicativa() ( ( <PLUS> | <MINUS> ) ExpressaoMultiplicativa() )*/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void ExpressaoMultiplicativa()                         :
+{/*@bgen(jjtree) ExpressaoMultiplicativa */
+  ASTExpressaoMultiplicativa jjtn000 = new ASTExpressaoMultiplicativa(JJTEXPRESSAOMULTIPLICATIVA);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) ExpressaoMultiplicativa */
+  try {
+/*@egen*/
+  ExpressaoUnaria() ( ( <STAR> | <SLASH> | <REM> ) ExpressaoUnaria() )*/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void ExpressaoUnaria()                 :
+{/*@bgen(jjtree) ExpressaoUnaria */
+  ASTExpressaoUnaria jjtn000 = new ASTExpressaoUnaria(JJTEXPRESSAOUNARIA);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) ExpressaoUnaria */
+  try {
+/*@egen*/
+  ( ( <PLUS> | <MINUS> | <BANG> | <TILDE> ) ExpressaoUnaria() ) | ExpressaoPrimaria()/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void ExpressaoPrimaria()                   :
+{/*@bgen(jjtree) ExpressaoPrimaria */
+  ASTExpressaoPrimaria jjtn000 = new ASTExpressaoPrimaria(JJTEXPRESSAOPRIMARIA);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) ExpressaoPrimaria */
+  try {
+/*@egen*/
   (
-    LeiaExpressao()
-  | ValorNumerico()
+    ValorNumerico()
+  | <STRING>
   | <IDENTIFIER>
+  | LeiaExpressao()
+  | "(" ExpressaoBooleana() ")"
   )/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {

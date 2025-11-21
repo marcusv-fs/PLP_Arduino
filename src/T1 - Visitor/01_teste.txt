@@ -5,7 +5,7 @@ Config {
 
     // Declarações de variáveis no setup
     int contador = 0;
-    float temperatura = 25.5;
+    real temperatura = 25.5;
     String mensagem = "Hello World";
     Boolean ledEstado = false;
 }

@@ -36,7 +36,15 @@ public interface ADSLVisitor
   public Object visit(ASTCondicao node, Object data);
   public Object visit(ASTAtribuicao node, Object data);
   public Object visit(ASTExpressao node, Object data);
+  public Object visit(ASTExpressaoBooleana node, Object data);
+  public Object visit(ASTExpressaoOu node, Object data);
+  public Object visit(ASTExpressaoE node, Object data);
+  public Object visit(ASTExpressaoRelacional node, Object data);
+  public Object visit(ASTExpressaoAditiva node, Object data);
+  public Object visit(ASTExpressaoMultiplicativa node, Object data);
+  public Object visit(ASTExpressaoUnaria node, Object data);
+  public Object visit(ASTExpressaoPrimaria node, Object data);
   public Object visit(ASTLeiaExpressao node, Object data);
   public Object visit(ASTValorNumerico node, Object data);
 }
-/* JavaCC - OriginalChecksum=700506b8c956efad871cb557c9128e38 (do not edit this line) */
+/* JavaCC - OriginalChecksum=bde39f077966839d64d8b32c1da1e424 (do not edit this line) */

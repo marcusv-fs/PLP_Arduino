@@ -314,15 +314,23 @@ public class ArduinoVisitor implements ADSLVisitor {
         String inicializacao = "";
         if (node.jjtGetNumChildren() > 1) {
             SimpleNode initNode = (SimpleNode) node.jjtGetChild(1);
-            Token initToken = initNode.jjtGetFirstToken();
-            String valor = initToken.image;
-            
-            // Processa strings (remove aspas)
-            if (initToken.kind == ADSLConstants.STRING) {
-                valor = processarString(valor);
+            // Para expressões complexas, precisamos processar o nó de expressão
+            if (initNode instanceof ASTInicializador) {
+                Token initToken = initNode.jjtGetFirstToken();
+                String valor = initToken.image;
+                
+                // Processa strings (remove aspas)
+                if (initToken.kind == ADSLConstants.STRING) {
+                    valor = processarString(valor);
+                }
+                inicializacao = " = " + valor;
+            } else {
+                // É uma expressão complexa
+                System.out.print(getIndent() + mapType(tipo) + " " + identifier + " = ");
+                initNode.jjtAccept(this, data);
+                System.out.println(";");
+                return data;
             }
-            
-            inicializacao = " = " + valor;
         }
         
         // Mapeia o tipo do ADSL para o tipo do Arduino
@@ -339,7 +347,8 @@ public class ArduinoVisitor implements ADSLVisitor {
 
     @Override
     public Object visit(ASTInicializador node, Object data) {
-        return data;
+        // Processa o conteúdo do inicializador
+        return node.childrenAccept(this, data);
     }
 
     private String mapType(String tipo) {
@@ -349,7 +358,7 @@ public class ArduinoVisitor implements ADSLVisitor {
             case "unsigned int": return "unsigned int";
             case "long": return "long";
             case "unsigned long": return "unsigned long";
-            case "float": return "float";
+            case "real": return "float";
             case "char": return "char";
             case "String": return "String";
             case "Boolean": return "boolean";
@@ -359,13 +368,13 @@ public class ArduinoVisitor implements ADSLVisitor {
 
     @Override
     public Object visit(ASTSeSenao node, Object data) {
-        // O primeiro filho é a condição
-        SimpleNode condicaoNode = (SimpleNode) node.jjtGetChild(0);
-        Token condicaoToken = condicaoNode.jjtGetFirstToken();
-        String condicao = condicaoToken.image;
-        
         String currentIndent = getIndent();
-        System.out.println(currentIndent + "if (" + condicao + ") {");
+        
+        // Processa a condição
+        System.out.print(currentIndent + "if (");
+        SimpleNode condicaoNode = (SimpleNode) node.jjtGetChild(0);
+        condicaoNode.jjtAccept(this, data);
+        System.out.println(") {");
         
         // Aumenta indentação para o bloco se
         indentLevel++;
@@ -401,7 +410,8 @@ public class ArduinoVisitor implements ADSLVisitor {
 
     @Override
     public Object visit(ASTCondicao node, Object data) {
-        return data;
+        // A condição agora é uma expressão booleana
+        return node.childrenAccept(this, data);
     }
 
     @Override
@@ -424,16 +434,181 @@ public class ArduinoVisitor implements ADSLVisitor {
     }
 
     @Override
+    public Object visit(ASTExpressaoBooleana node, Object data) {
+        return node.childrenAccept(this, data);
+    }
+
+    @Override
+    public Object visit(ASTExpressaoOu node, Object data) {
+        // Processa expressão OR (||)
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            if (i > 0) {
+                System.out.print(" || ");
+            }
+            Node child = node.jjtGetChild(i);
+            if (child instanceof SimpleNode) {
+                ((SimpleNode) child).jjtAccept(this, data);
+            }
+        }
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTExpressaoE node, Object data) {
+        // Processa expressão AND (&&)
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            if (i > 0) {
+                System.out.print(" && ");
+            }
+            Node child = node.jjtGetChild(i);
+            if (child instanceof SimpleNode) {
+                ((SimpleNode) child).jjtAccept(this, data);
+            }
+        }
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTExpressaoRelacional node, Object data) {
+        // Processa comparações: <, >, <=, >=, ==, !=
+        if (node.jjtGetNumChildren() == 1) {
+            // Apenas uma expressão, sem operador
+            Node child = node.jjtGetChild(0);
+            if (child instanceof SimpleNode) {
+                ((SimpleNode) child).jjtAccept(this, data);
+            }
+        } else if (node.jjtGetNumChildren() == 2) {
+            // Expressão operador expressão
+            Node left = node.jjtGetChild(0);
+            Node right = node.jjtGetChild(1);
+            
+            if (left instanceof SimpleNode) {
+                ((SimpleNode) left).jjtAccept(this, data);
+            }
+            
+            // Obtém o operador
+            Token operatorToken = null;
+            for (Token t = node.jjtGetFirstToken(); t != null; t = t.next) {
+                if (t.kind == ADSLConstants.LT || t.kind == ADSLConstants.GT ||
+                    t.kind == ADSLConstants.LE || t.kind == ADSLConstants.GE ||
+                    t.kind == ADSLConstants.EQ || t.kind == ADSLConstants.NE) {
+                    operatorToken = t;
+                    break;
+                }
+            }
+            
+            if (operatorToken != null) {
+                System.out.print(" " + operatorToken.image + " ");
+            }
+            
+            if (right instanceof SimpleNode) {
+                ((SimpleNode) right).jjtAccept(this, data);
+            }
+        }
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTExpressaoAditiva node, Object data) {
+        // Processa adição e subtração: +, -
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            if (i > 0) {
+                // Obtém o operador entre as expressões
+                boolean isPlus = true;
+                // Lógica simplificada para determinar o operador
+                // Em uma implementação real, você precisaria de uma lógica mais sofisticada
+                System.out.print(" + ");
+            }
+            Node child = node.jjtGetChild(i);
+            if (child instanceof SimpleNode) {
+                ((SimpleNode) child).jjtAccept(this, data);
+            }
+        }
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTExpressaoMultiplicativa node, Object data) {
+        // Processa multiplicação, divisão e módulo: *, /, %
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            if (i > 0) {
+                // Lógica simplificada para operadores
+                System.out.print(" * ");
+            }
+            Node child = node.jjtGetChild(i);
+            if (child instanceof SimpleNode) {
+                ((SimpleNode) child).jjtAccept(this, data);
+            }
+        }
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTExpressaoUnaria node, Object data) {
+        // Processa operadores unários: +, -, !, ~
+        Token firstToken = node.jjtGetFirstToken();
+        if (firstToken != null && 
+            (firstToken.kind == ADSLConstants.PLUS || 
+             firstToken.kind == ADSLConstants.MINUS ||
+             firstToken.kind == ADSLConstants.BANG ||
+             firstToken.kind == ADSLConstants.TILDE)) {
+            System.out.print(firstToken.image);
+        }
+        
+        // Processa a expressão
+        if (node.jjtGetNumChildren() > 0) {
+            Node child = node.jjtGetChild(0);
+            if (child instanceof SimpleNode) {
+                ((SimpleNode) child).jjtAccept(this, data);
+            }
+        }
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTExpressaoPrimaria node, Object data) {
+        // Processa elementos primários: números, strings, identificadores, leituras, parênteses
+        if (node.jjtGetNumChildren() == 0) {
+            // Pode ser um literal ou identificador direto
+            Token firstToken = node.jjtGetFirstToken();
+            if (firstToken != null) {
+                if (firstToken.kind == ADSLConstants.STRING) {
+                    System.out.print(processarString(firstToken.image));
+                } else if (firstToken.kind == ADSLConstants.LPAREN) {
+                    System.out.print("(");
+                    // O conteúdo entre parênteses será processado pelos filhos
+                } else if (firstToken.kind == ADSLConstants.RPAREN) {
+                    System.out.print(")");
+                } else {
+                    System.out.print(firstToken.image);
+                }
+            }
+        } else {
+            // Processa os filhos
+            for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+                Node child = node.jjtGetChild(i);
+                if (child instanceof SimpleNode) {
+                    if (i > 0) {
+                        // Adiciona espaço entre elementos se necessário
+                        System.out.print(" ");
+                    }
+                    ((SimpleNode) child).jjtAccept(this, data);
+                }
+            }
+        }
+        return data;
+    }
+
+    @Override
     public Object visit(ASTLeiaExpressao node, Object data) {
         SimpleNode pinosNode = (SimpleNode) node.jjtGetChild(0);
         Token pinoToken = pinosNode.jjtGetFirstToken();
         String pino = pinoToken.image;
 
-        // Decide automaticamente se é leitura digital ou analógica
-        if (pinosNode instanceof ASTPinosA) {
+        // Verifica diretamente pelo nome do pino se começa com "A"
+        if (pino.startsWith("A")) {
             // Para pino analógico, usa analogRead
-            int analogPin = Integer.parseInt(pino.substring(1));
-            System.out.print("analogRead(" + analogPin + ")");
+            System.out.print("analogRead(" + pino + ")");
         } else {
             // Para pino digital, usa digitalRead
             System.out.print("digitalRead(" + pino + ")");

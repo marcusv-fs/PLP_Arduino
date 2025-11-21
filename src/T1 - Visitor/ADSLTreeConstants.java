@@ -35,8 +35,16 @@ public interface ADSLTreeConstants
   public int JJTCONDICAO = 31;
   public int JJTATRIBUICAO = 32;
   public int JJTEXPRESSAO = 33;
-  public int JJTLEIAEXPRESSAO = 34;
-  public int JJTVALORNUMERICO = 35;
+  public int JJTEXPRESSAOBOOLEANA = 34;
+  public int JJTEXPRESSAOOU = 35;
+  public int JJTEXPRESSAOE = 36;
+  public int JJTEXPRESSAORELACIONAL = 37;
+  public int JJTEXPRESSAOADITIVA = 38;
+  public int JJTEXPRESSAOMULTIPLICATIVA = 39;
+  public int JJTEXPRESSAOUNARIA = 40;
+  public int JJTEXPRESSAOPRIMARIA = 41;
+  public int JJTLEIAEXPRESSAO = 42;
+  public int JJTVALORNUMERICO = 43;
 
 
   public String[] jjtNodeName = {
@@ -74,8 +82,16 @@ public interface ADSLTreeConstants
     "Condicao",
     "Atribuicao",
     "Expressao",
+    "ExpressaoBooleana",
+    "ExpressaoOu",
+    "ExpressaoE",
+    "ExpressaoRelacional",
+    "ExpressaoAditiva",
+    "ExpressaoMultiplicativa",
+    "ExpressaoUnaria",
+    "ExpressaoPrimaria",
     "LeiaExpressao",
     "ValorNumerico",
   };
 }
-/* JavaCC - OriginalChecksum=262b5019726e03edc775c9dd0d6ac507 (do not edit this line) */
+/* JavaCC - OriginalChecksum=5e09a547425a1c4d6acd13b4d977aec7 (do not edit this line) */

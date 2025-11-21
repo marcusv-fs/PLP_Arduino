@@ -28,6 +28,7 @@ public class ADSL {
 }
 PARSER_END(ADSL)
 
+// Palavras reservadas
 TOKEN: {
   <CONFIG: "Config">
 | <REPITA: "Repita">
@@ -73,12 +74,41 @@ TOKEN: {
 | <UNSIGNED_INT: "unsigned int">
 | <LONG: "long">
 | <UNSIGNED_LONG: "unsigned long">
-| <FLOAT: "float">
+| <FLOAT: "real">
 | <CHAR: "char">
 | <STRING_TYPE: "String">
 | <BOOLEAN: "Boolean">
+}
 
-| <NUM_FLT: (["0"-"9"])+ "." (["0"-"9"])+ >
+// Operadores
+TOKEN: {
+  < ASSIGN: "=" >
+| < GT: ">" >
+| < LT: "<" >
+| < BANG: "!" >
+| < TILDE: "~" >
+| < HOOK: "?" >
+| < COLON: ":" >
+| < EQ: "==" >
+| < LE: "<=" >
+| < GE: ">=" >
+| < NE: "!=" >
+| < SC_OR: "||" >
+| < SC_AND: "&&" >
+| < CONCAT: "++" >
+| < PLUS: "+" >
+| < MINUS: "-" >
+| < STAR: "*" >
+| < SLASH: "/" >
+| < BIT_AND: "&" >
+| < BIT_OR: "|" >
+| < XOR: "^" >
+| < REM: "%" >
+}
+
+// Literais e identificadores
+TOKEN: {
+  <NUM_FLT: (["0"-"9"])+ "." (["0"-"9"])+ >
 | <NUM_INT: (["0"-"9"])+ >
 | <PINO_ANALOGICO: "A" (["0"-"5"]) >
 | <STRING: "\"" (~["\""])* "\"">
@@ -122,6 +152,7 @@ SimpleNode Start() #Start:
   | SingleLineComment()
   | MultiLineComment()
   | FormalComment()
+  | DecVar()
   )*
   <EOF>
   { return jjtThis; }
@@ -354,6 +385,7 @@ void Inicializador() #Inicializador:
   | t=<NUM_FLT>
   | t=<STRING>
   | t=<IDENTIFIER>
+  | Expressao()
   )
 }
 
@@ -389,8 +421,8 @@ void BlocoSenao() #BlocoSenao:
 void Condicao() #Condicao:
 {}
 {
-  // Aceita identificadores (variáveis booleanas)
-  <IDENTIFIER>
+  // Aceita identificadores (variáveis booleanas) ou expressões booleanas
+  ExpressaoBooleana()
 }
 
 // Atribuição de variáveis
@@ -403,10 +435,60 @@ void Atribuicao() #Atribuicao:
 void Expressao() #Expressao:
 {}
 {
+  ExpressaoBooleana()
+}
+
+void ExpressaoBooleana() #ExpressaoBooleana:
+{}
+{
+  ExpressaoOu()
+}
+
+void ExpressaoOu() #ExpressaoOu:
+{}
+{
+  ExpressaoE() ( <SC_OR> ExpressaoE() )*
+}
+
+void ExpressaoE() #ExpressaoE:
+{}
+{
+  ExpressaoRelacional() ( <SC_AND> ExpressaoRelacional() )*
+}
+
+void ExpressaoRelacional() #ExpressaoRelacional:
+{}
+{
+  ExpressaoAditiva() ( ( <LT> | <GT> | <LE> | <GE> | <EQ> | <NE> ) ExpressaoAditiva() )?
+}
+
+void ExpressaoAditiva() #ExpressaoAditiva:
+{}
+{
+  ExpressaoMultiplicativa() ( ( <PLUS> | <MINUS> ) ExpressaoMultiplicativa() )*
+}
+
+void ExpressaoMultiplicativa() #ExpressaoMultiplicativa:
+{}
+{
+  ExpressaoUnaria() ( ( <STAR> | <SLASH> | <REM> ) ExpressaoUnaria() )*
+}
+
+void ExpressaoUnaria() #ExpressaoUnaria:
+{}
+{
+  ( ( <PLUS> | <MINUS> | <BANG> | <TILDE> ) ExpressaoUnaria() ) | ExpressaoPrimaria()
+}
+
+void ExpressaoPrimaria() #ExpressaoPrimaria:
+{}
+{
   (
-    LeiaExpressao()
-  | ValorNumerico()
+    ValorNumerico()
+  | <STRING>
   | <IDENTIFIER>
+  | LeiaExpressao()
+  | "(" ExpressaoBooleana() ")"
   )
 }
 

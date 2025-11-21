@@ -85,39 +85,83 @@ public interface ADSLConstants {
   /** RegularExpression Id. */
   int BOOLEAN = 38;
   /** RegularExpression Id. */
-  int NUM_FLT = 39;
+  int ASSIGN = 39;
   /** RegularExpression Id. */
-  int NUM_INT = 40;
+  int GT = 40;
   /** RegularExpression Id. */
-  int PINO_ANALOGICO = 41;
+  int LT = 41;
   /** RegularExpression Id. */
-  int STRING = 42;
+  int BANG = 42;
   /** RegularExpression Id. */
-  int IDENTIFIER = 43;
+  int TILDE = 43;
   /** RegularExpression Id. */
-  int SINGLE_LINE_COMMENT = 44;
+  int HOOK = 44;
   /** RegularExpression Id. */
-  int MULTI_LINE_COMMENT = 45;
+  int COLON = 45;
   /** RegularExpression Id. */
-  int FORMAL_COMMENT = 46;
+  int EQ = 46;
   /** RegularExpression Id. */
-  int LPAREN = 52;
+  int LE = 47;
   /** RegularExpression Id. */
-  int RPAREN = 53;
+  int GE = 48;
   /** RegularExpression Id. */
-  int LBRACE = 54;
+  int NE = 49;
   /** RegularExpression Id. */
-  int RBRACE = 55;
+  int SC_OR = 50;
   /** RegularExpression Id. */
-  int LBRACKET = 56;
+  int SC_AND = 51;
   /** RegularExpression Id. */
-  int RBRACKET = 57;
+  int CONCAT = 52;
   /** RegularExpression Id. */
-  int SEMICOLON = 58;
+  int PLUS = 53;
   /** RegularExpression Id. */
-  int COMMA = 59;
+  int MINUS = 54;
   /** RegularExpression Id. */
-  int DOT = 60;
+  int STAR = 55;
+  /** RegularExpression Id. */
+  int SLASH = 56;
+  /** RegularExpression Id. */
+  int BIT_AND = 57;
+  /** RegularExpression Id. */
+  int BIT_OR = 58;
+  /** RegularExpression Id. */
+  int XOR = 59;
+  /** RegularExpression Id. */
+  int REM = 60;
+  /** RegularExpression Id. */
+  int NUM_FLT = 61;
+  /** RegularExpression Id. */
+  int NUM_INT = 62;
+  /** RegularExpression Id. */
+  int PINO_ANALOGICO = 63;
+  /** RegularExpression Id. */
+  int STRING = 64;
+  /** RegularExpression Id. */
+  int IDENTIFIER = 65;
+  /** RegularExpression Id. */
+  int SINGLE_LINE_COMMENT = 66;
+  /** RegularExpression Id. */
+  int MULTI_LINE_COMMENT = 67;
+  /** RegularExpression Id. */
+  int FORMAL_COMMENT = 68;
+  /** RegularExpression Id. */
+  int LPAREN = 74;
+  /** RegularExpression Id. */
+  int RPAREN = 75;
+  /** RegularExpression Id. */
+  int LBRACE = 76;
+  /** RegularExpression Id. */
+  int RBRACE = 77;
+  /** RegularExpression Id. */
+  int LBRACKET = 78;
+  /** RegularExpression Id. */
+  int RBRACKET = 79;
+  /** RegularExpression Id. */
+  int SEMICOLON = 80;
+  /** RegularExpression Id. */
+  int COMMA = 81;
+  /** RegularExpression Id. */
+  int DOT = 82;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -159,10 +203,32 @@ public interface ADSLConstants {
     "\"unsigned int\"",
     "\"long\"",
     "\"unsigned long\"",
-    "\"float\"",
+    "\"real\"",
     "\"char\"",
     "\"String\"",
     "\"Boolean\"",
+    "\"=\"",
+    "\">\"",
+    "\"<\"",
+    "\"!\"",
+    "\"~\"",
+    "\"?\"",
+    "\":\"",
+    "\"==\"",
+    "\"<=\"",
+    "\">=\"",
+    "\"!=\"",
+    "\"||\"",
+    "\"&&\"",
+    "\"++\"",
+    "\"+\"",
+    "\"-\"",
+    "\"*\"",
+    "\"/\"",
+    "\"&\"",
+    "\"|\"",
+    "\"^\"",
+    "\"%\"",
     "<NUM_FLT>",
     "<NUM_INT>",
     "<PINO_ANALOGICO>",
@@ -185,7 +251,6 @@ public interface ADSLConstants {
     "\";\"",
     "\",\"",
     "\".\"",
-    "\"=\"",
   };
 
 }

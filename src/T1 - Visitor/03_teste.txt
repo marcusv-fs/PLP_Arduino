@@ -1,0 +1,27 @@
+Config {
+    Monitor 9600;
+    Entrada 2;
+    Saida 13;
+    
+    Boolean sensorAtivo = false;
+}
+
+Repita {
+    int sensorAtivo;
+    sensorAtivo = Leia 2;
+    
+    se (sensorAtivo) {
+        EscritaMon("Sensor ativado!");
+        Escreva 13 1;
+    } senao {
+        EscritaMon("Sensor desativado");
+        Escreva 13 0;
+    }
+
+    se (sensorAtivo) {
+        EscritaMon("Sensor ativado!");
+        Escreva 13 1;
+    }
+    
+    Espere 100 ms;
+}
