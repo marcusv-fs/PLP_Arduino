@@ -9,15 +9,15 @@ public interface ADSLConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int SINGLE_LINE_COMMENT = 6;
+  int CONFIG = 6;
   /** RegularExpression Id. */
-  int FORMAL_COMMENT = 7;
+  int REPITA = 7;
   /** RegularExpression Id. */
-  int MULTI_LINE_COMMENT = 8;
+  int SINGLE_LINE_COMMENT = 8;
   /** RegularExpression Id. */
-  int CONFIG = 9;
+  int MULTI_LINE_COMMENT = 9;
   /** RegularExpression Id. */
-  int REPITA = 10;
+  int FORMAL_COMMENT = 10;
   /** RegularExpression Id. */
   int LPAREN = 11;
   /** RegularExpression Id. */
@@ -48,11 +48,11 @@ public interface ADSLConstants {
     "\"\\n\"",
     "\"\\r\"",
     "\"\\f\"",
-    "<SINGLE_LINE_COMMENT>",
-    "<FORMAL_COMMENT>",
-    "<MULTI_LINE_COMMENT>",
     "\"Config\"",
     "\"Repita\"",
+    "<SINGLE_LINE_COMMENT>",
+    "<MULTI_LINE_COMMENT>",
+    "<FORMAL_COMMENT>",
     "\"(\"",
     "\")\"",
     "\"{\"",

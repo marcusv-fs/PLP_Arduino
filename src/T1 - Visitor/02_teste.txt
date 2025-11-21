@@ -1,2 +1,15 @@
-Config {}
-Repita {}
+// Este é um comentário de linha única
+Config {
+}
+
+/* 
+   Este é um comentário
+   multi-linha
+*/
+Repita {
+}
+
+/**
+ * Este é um comentário formal
+ * que pode ter múltiplas linhas
+ */

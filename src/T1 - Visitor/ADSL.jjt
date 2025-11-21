@@ -2,6 +2,7 @@ options {
   STATIC = false;
   VISITOR = true;
   MULTI=true;
+  TRACK_TOKENS = true;
 }
 
 PARSER_BEGIN(ADSL)
@@ -36,17 +37,12 @@ SKIP : /* WHITE SPACE */
 | "\f"
 }
 
-SPECIAL_TOKEN : /* COMMENTS */
-{
-  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
-| <FORMAL_COMMENT: "/**" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
-| <MULTI_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
-}
-
-
 TOKEN: {
   <CONFIG: "Config">
 | <REPITA: "Repita">
+| <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")?>
+| <MULTI_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
+| <FORMAL_COMMENT: "/**" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
 }
 
 TOKEN : /* SEPARATORS */
@@ -65,7 +61,14 @@ TOKEN : /* SEPARATORS */
 SimpleNode Start() #Start:
 {}
 {
-  Config() Repita() <EOF>
+  (
+    Config()
+  | Repita() 
+  | SingleLineComment()
+  | MultiLineComment()
+  | FormalComment()
+  )*
+  <EOF>
   { return jjtThis; }
 }
 
@@ -79,4 +82,19 @@ void Repita() #Repita:
 {}
 {
   <REPITA> "{" "}"
+}
+
+void SingleLineComment() #SingleLineComment : {}
+{
+  <SINGLE_LINE_COMMENT>
+}
+
+void MultiLineComment() #MultiLineComment : {}
+{
+  <MULTI_LINE_COMMENT>
+}
+
+void FormalComment() #FormalComment : {}
+{
+  <FORMAL_COMMENT>  
 }

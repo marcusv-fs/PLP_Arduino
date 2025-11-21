@@ -4,12 +4,18 @@ public interface ADSLTreeConstants
   public int JJTSTART = 0;
   public int JJTCONFIG = 1;
   public int JJTREPITA = 2;
+  public int JJTSINGLELINECOMMENT = 3;
+  public int JJTMULTILINECOMMENT = 4;
+  public int JJTFORMALCOMMENT = 5;
 
 
   public String[] jjtNodeName = {
     "Start",
     "Config",
     "Repita",
+    "SingleLineComment",
+    "MultiLineComment",
+    "FormalComment",
   };
 }
-/* JavaCC - OriginalChecksum=a74ce6d6d31ae90aff10000875df1570 (do not edit this line) */
+/* JavaCC - OriginalChecksum=0ff5752cc90d4a38c630c177963ff0a6 (do not edit this line) */

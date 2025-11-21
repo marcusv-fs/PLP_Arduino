@@ -3,6 +3,7 @@
   STATIC = false;
                  
              
+                      
 }
 
 PARSER_BEGIN(ADSL)
@@ -40,17 +41,12 @@ SKIP : /* WHITE SPACE */
 | "\f"
 }
 
-SPECIAL_TOKEN : /* COMMENTS */
-{
-  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
-| <FORMAL_COMMENT: "/**" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
-| <MULTI_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
-}
-
-
 TOKEN: {
   <CONFIG: "Config">
 | <REPITA: "Repita">
+| <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")?>
+| <MULTI_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
+| <FORMAL_COMMENT: "/**" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
 }
 
 TOKEN : /* SEPARATORS */
@@ -71,14 +67,23 @@ SimpleNode Start()       :
   ASTStart jjtn000 = new ASTStart(JJTSTART);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
 /*@egen*/}
 {/*@bgen(jjtree) Start */
   try {
 /*@egen*/
-  Config() Repita() <EOF>/*@bgen(jjtree)*/
+  (
+    Config()
+  | Repita() 
+  | SingleLineComment()
+  | MultiLineComment()
+  | FormalComment()
+  )*
+  <EOF>/*@bgen(jjtree)*/
   {
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
+    jjtn000.jjtSetLastToken(getToken(0));
   }
 /*@egen*/
   { return jjtn000; }/*@bgen(jjtree)*/
@@ -99,6 +104,7 @@ SimpleNode Start()       :
   } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
     }
   }
 /*@egen*/
@@ -109,6 +115,7 @@ void Config()        :
   ASTConfig jjtn000 = new ASTConfig(JJTCONFIG);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
 /*@egen*/}
 {/*@bgen(jjtree) Config */
   try {
@@ -117,6 +124,7 @@ void Config()        :
   } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
     }
   }
 /*@egen*/
@@ -127,6 +135,7 @@ void Repita()        :
   ASTRepita jjtn000 = new ASTRepita(JJTREPITA);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
 /*@egen*/}
 {/*@bgen(jjtree) Repita */
   try {
@@ -135,7 +144,65 @@ void Repita()        :
   } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
     }
   }
 /*@egen*/
+}
+
+void SingleLineComment()                    : {/*@bgen(jjtree) SingleLineComment */
+  ASTSingleLineComment jjtn000 = new ASTSingleLineComment(JJTSINGLELINECOMMENT);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) SingleLineComment */
+  try {
+/*@egen*/
+  <SINGLE_LINE_COMMENT>/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void MultiLineComment()                   : {/*@bgen(jjtree) MultiLineComment */
+  ASTMultiLineComment jjtn000 = new ASTMultiLineComment(JJTMULTILINECOMMENT);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) MultiLineComment */
+  try {
+/*@egen*/
+  <MULTI_LINE_COMMENT>/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/
+}
+
+void FormalComment()                : {/*@bgen(jjtree) FormalComment */
+  ASTFormalComment jjtn000 = new ASTFormalComment(JJTFORMALCOMMENT);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtn000.jjtSetFirstToken(getToken(1));
+/*@egen*/}
+{/*@bgen(jjtree) FormalComment */
+  try {
+/*@egen*/
+  <FORMAL_COMMENT>/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtn000.jjtSetLastToken(getToken(0));
+    }
+  }
+/*@egen*/  
 }
