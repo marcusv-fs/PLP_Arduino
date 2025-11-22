@@ -2,50 +2,49 @@
 // Commands supported: "acender pino N", "apagar pino N", "esperar N segundos"
 
 options {
-  STATIC = false;
-  JAVA_UNICODE_ESCAPE = true;
+STATIC = false;
+JAVA_UNICODE_ESCAPE = true;
 }
+
 
 PARSER_BEGIN(ArduinoDSLParser)
 import java.util.*;
 import java.io.*;
+import utils.ArduinoSketchEmitter; // classe utilitária que escreve o .ino (package utils)
+
 
 public class ArduinoDSLParser {
-    // collected pins to configure in setup()
+    // coletar pinos para configurar em setup()
     private Set pins = new LinkedHashSet();
-    // commands that will go into loop()
+    // corpo do loop() que será preenchido pelos comandos
     private StringBuilder loopCode = new StringBuilder();
 
+
+    /**
+    * Main único: recebe opcionalmente: <input.dsl> <output.ino>
+    * - se nenhum argumento: lê de stdin e escreve "generated_sketch.ino"
+    */
     public static void main(String[] args) throws Exception {
         InputStream in = System.in;
+        String outFile = "generated_sketch.ino";
+
+
         if (args.length > 0) in = new FileInputStream(args[0]);
-        // Use the JavaCC-generated constructors (do not declare constructors with the same signatures here)
+        if (args.length > 1) outFile = args[1];
+
+
+        // Use o construtor gerado pelo JavaCC (evite declarar construtores com a mesma assinatura)
         ArduinoDSLParser parser = new ArduinoDSLParser(new java.io.InputStreamReader(in));
         parser.Program();
-        parser.emitArduinoSketch();
+        parser.emitArduinoSketch(outFile);
     }
 
-    // NOTE: Do NOT declare a constructor that accepts Reader/InputStream here.
-    // JavaCC generates constructors with those signatures and declaring them manually
-    // causes "constructor ... is already defined" compile errors.
 
-    private void emitArduinoSketch() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("// Código gerado pela DSL Arduino (português)");
-        sb.append("#include <Arduino.h>");
-        sb.append("void setup() {");
-        for (Object pObj : pins) {
-            int p = (pObj instanceof Integer) ? ((Integer)pObj).intValue() : Integer.parseInt(pObj.toString());
-            sb.append("  pinMode("+p+", OUTPUT);");
-        }
-        sb.append("}");
-        sb.append("void loop() {");
-        sb.append(loopCode.toString());
-        sb.append("  // repetir com pequeno atraso");
-        sb.append("  delay(100);");
-        sb.append("}");
-
-        System.out.println(sb.toString());
+    /**
+    * Delegação para a classe utilitária que escreve o arquivo .ino
+    */
+    private void emitArduinoSketch(String outFilename) {
+        ArduinoSketchEmitter.writeSketch(pins, loopCode.toString(), outFilename);
     }
 }
 PARSER_END(ArduinoDSLParser)
@@ -111,15 +110,14 @@ SKIP : {
 }
 
 /*
-Usage:
-1) Generate parser with JavaCC: javacc ArduinoDSL.jj
-2) Compile generated Java files: javac *.java
-3) Run the parser on an input file: java ArduinoDSLParser exemplo.dsl
+Uso:
+1) Gere o parser com JavaCC: javacc ArduinoDSL.jj
+2) Compile os arquivos gerados e a classe utilitária: javac -d bin utils/*.java *.java
+3) Rode: java -cp bin ArduinoDSLParser exemplo.dsl generated/meu_sketch.ino
 
-Example input (exemplo.dsl):
+
+Exemplo (.dsl):
 acender pino 13
 esperar 2 segundos
 apagar pino 13
-
-The parser prints the generated Arduino sketch to stdout.
 */
