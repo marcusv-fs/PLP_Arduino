@@ -1,7 +1,0 @@
-{
-var x = 10, var y = 0;
-write (x);
-read (y);
-write (y);
-write (y + x)
-}
