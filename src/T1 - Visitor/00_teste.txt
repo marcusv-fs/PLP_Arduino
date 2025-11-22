@@ -7,11 +7,15 @@ funcao piscaLed(int pino, int vezes) : void {
         Espere 500 ms;
         Escreva pino 0;
         Espere 500 ms;
+        real valor;
+        valor = 10 - 5;
     }
 }
 
 Config {
     Saida 13;
+    //Comentario
+    Entrada 3;
 }
 
 Execute {

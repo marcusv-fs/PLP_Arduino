@@ -556,7 +556,11 @@ void ExpressaoAditiva() #ExpressaoAditiva:
 void ExpressaoMultiplicativa() #ExpressaoMultiplicativa:
 {}
 {
-  ExpressaoUnaria() ( ( <STAR> | <SLASH> | <REM> ) ExpressaoUnaria() )*
+  ExpressaoUnaria() 
+  ( 
+    LOOKAHEAD( ( <STAR> | <SLASH> | <REM> ) ExpressaoUnaria() )
+    ( <STAR> | <SLASH> | <REM> ) ExpressaoUnaria() 
+  )*
 }
 
 void ExpressaoUnaria() #ExpressaoUnaria:
