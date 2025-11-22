@@ -6,7 +6,7 @@ Config {
     Boolean sensorAtivo = false;
 }
 
-Repita {
+Execute {
     int sensorAtivo;
     sensorAtivo = Leia 2;
     

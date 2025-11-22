@@ -1,0 +1,9 @@
+Config {
+    Saida 13;
+}
+Execute {
+    Escreva 13 1;
+    Espere 100 ms;
+    Escreva 13 0;
+    Espere 100 ms;
+}

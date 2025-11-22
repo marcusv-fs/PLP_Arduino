@@ -2,7 +2,7 @@ Config {
     Saida 11;
 }
 
-Repita {
+Execute {
     EscritaMon("Iniciando programa...");
     EscritaMon("Ligando LED");
     Escreva 13 1;
