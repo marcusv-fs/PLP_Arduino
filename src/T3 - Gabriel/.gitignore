@@ -9,6 +9,7 @@ Token.java
 JJT*.java
 *Parser.java
 *Constants.java
+*TokenManager.java
 *.jjtmp
 
 # Caso você gere em outra pasta
