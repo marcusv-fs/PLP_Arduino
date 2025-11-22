@@ -1,3 +1,14 @@
+# O projeto
+Esta proposta de trabalho visa o desenvolvimento de uma Domain-Specific Language
+(DSL) projetada para simplificar a programac ̧  ̃ao de microcontroladores Arduino, com um
+foco particular na leitura de sensores e na escrita em atuadores digitais e anal  ́ogicos. O
+objetivo  ́e criar uma camada de abstrac ̧  ̃ao que simplifique e torne mais intuitiva a interac ̧  ̃ao
+com o hardware, de forma a diminuir a barreira de entrada para crianc ̧as, idosos e pessoas
+que nunca programaram
+
+## As duas abordagens
+Durante o desenvolvimento deste projeto, foram utilizadas duas abordagens. Uma baseada em visitors, a T1 - Visitors e a outra onde a tradução já estava diretamente associada a linguagem, a T2.
+
 # Organização
 Na pasta Docs se encontram os arquivos docx, pdfs e pptx utilizados durante a disciplina.
 Na pasta javacc, temos a versão do javacc utilizada para a realização das atividades.
@@ -12,8 +23,5 @@ Na pasta src, temos os códigos específicos do nosso projeto.
 # Como testar nosso programa
 1. Abra a pasta src no terminal e execute: "java ADSL [ARQUIVO PARA TESTE] [PARAMETROS, SE NECESSÁRIO]"
 
-# Como usar o javacc
-1. Abra a pasta onde se encontra o arquivo .jj que deseja executar.
-2. Digite "javacc [ARQUIVO].jj
-3. Digite: "javac *.java"
-4. Digite: "java [ARQUIVO]"
+# Como executar?
+Dentro da pasta src/T1 e src/T2 existem READMEs que explicam como executar.

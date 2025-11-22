@@ -779,10 +779,10 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
     jjtn000.jjtSetLastToken(getToken(0));
-    // Validação para pinos digitais (0-19)
+    // Validação para pinos digitais (0-13)
     int pino = Integer.parseInt(t.image);
-    if (pino < 0 || pino > 19) {
-      {if (true) throw new ParseException("Pino digital deve estar entre 0 e 19: " + pino);}
+    if (pino < 0 || pino > 13) {
+      {if (true) throw new ParseException("Pino digital deve estar entre 0 e 13: " + pino);}
     }
     } finally {
     if (jjtc000) {
@@ -1014,7 +1014,7 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
     }
   }
 
-// Comando de leitura unificado
+// Comando de leitura unificado (Analog e Digital)
   final public void Read() throws ParseException {
  /*@bgen(jjtree) Read */
   ASTRead jjtn000 = new ASTRead(JJTREAD);
@@ -2604,6 +2604,11 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
     return false;
   }
 
+  private boolean jj_3R_15() {
+    if (jj_scan_token(NUM_INT)) return true;
+    return false;
+  }
+
   private boolean jj_3R_16() {
     if (jj_3R_17()) return true;
     Token xsp;
@@ -2611,11 +2616,6 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
       xsp = jj_scanpos;
       if (jj_3R_20()) { jj_scanpos = xsp; break; }
     }
-    return false;
-  }
-
-  private boolean jj_3R_15() {
-    if (jj_scan_token(NUM_INT)) return true;
     return false;
   }
 
@@ -2655,14 +2655,14 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
     return false;
   }
 
-  private boolean jj_3R_38() {
-    if (jj_scan_token(SC_OR)) return true;
-    if (jj_3R_37()) return true;
+  private boolean jj_3_2() {
+    if (jj_3R_14()) return true;
     return false;
   }
 
-  private boolean jj_3_2() {
-    if (jj_3R_14()) return true;
+  private boolean jj_3R_38() {
+    if (jj_scan_token(SC_OR)) return true;
+    if (jj_3R_37()) return true;
     return false;
   }
 
@@ -2724,14 +2724,14 @@ public class ADSL/*@bgen(jjtree)*/implements ADSLTreeConstants, ADSLConstants {/
     return false;
   }
 
-  private boolean jj_3R_33() {
-    if (jj_3R_35()) return true;
-    return false;
-  }
-
   private boolean jj_3_5() {
     if (jj_scan_token(IDENTIFIER)) return true;
     if (jj_scan_token(LPAREN)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_33() {
+    if (jj_3R_35()) return true;
     return false;
   }
 

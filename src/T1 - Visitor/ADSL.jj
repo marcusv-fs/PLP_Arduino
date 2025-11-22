@@ -45,7 +45,7 @@ TOKEN: {
 | <RETORNE: "retorne">
 | <VOID: "void">
 
-// Comandos unificados de leitura/escrita
+// Comandos de leitura e escrita
 | <LEIA: "Leia">
 | <ESCREVA: "Escreva">
 | <ESCREVA_PWM: "EscrevaPWM">
@@ -62,7 +62,7 @@ TOKEN: {
 | <MIN: "min">
 | <H: "h">
 
-// Frequ\u00eancias de monitora\u00e7\u00e3o
+// Frequ\u00eancias do Serial Monitor
 | <FREQ_300: "300">
 | <FREQ_600: "600">
 | <FREQ_1200: "1200">
@@ -164,7 +164,7 @@ SimpleNode Start()       :
   (
     Config()
   | Execute() 
-  | Funcao()  // \u2190 ADICIONE ESTA LINHA
+  | Funcao()
   | SingleLineComment()
   | MultiLineComment()
   | FormalComment()
@@ -612,10 +612,10 @@ void PinosD()        :
   }
 /*@egen*/
   {
-    // Valida\u00e7\u00e3o para pinos digitais (0-19)
+    // Valida\u00e7\u00e3o para pinos digitais (0-13)
     int pino = Integer.parseInt(t.image);
-    if (pino < 0 || pino > 19) {
-      throw new ParseException("Pino digital deve estar entre 0 e 19: " + pino);
+    if (pino < 0 || pino > 13) {
+      throw new ParseException("Pino digital deve estar entre 0 e 13: " + pino);
     }
   }/*@bgen(jjtree)*/
   } finally {
@@ -820,7 +820,7 @@ void UnidadeTempo()              :
 /*@egen*/
 }
 
-// Comando de leitura unificado
+// Comando de leitura unificado (Analog e Digital)
 void Read()      :
 {/*@bgen(jjtree) Read */
   ASTRead jjtn000 = new ASTRead(JJTREAD);
@@ -1439,7 +1439,6 @@ void Condicao()          :
 {/*@bgen(jjtree) Condicao */
   try {
 /*@egen*/
-  // Aceita identificadores (vari\u00e1veis booleanas) ou express\u00f5es booleanas
   ExpressaoBooleana()/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
