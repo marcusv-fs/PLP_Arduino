@@ -21,7 +21,4 @@ Na pasta src, temos os códigos específicos do nosso projeto.
 4. Abrir a pasta javacc-javacc-7.0.13 no console e digitar "javacc". Se tudo der certo, a versão do javacc será exibida.
 
 # Como testar nosso programa
-1. Abra a pasta src no terminal e execute: "java ADSL [ARQUIVO PARA TESTE] [PARAMETROS, SE NECESSÁRIO]"
-
-# Como executar?
-Dentro da pasta src/T1 e src/T2 existem READMEs que explicam como executar.
+Dentro da pasta src/T1 e src/T2 existem READMEs que explicam como executar cada uma das versões.
