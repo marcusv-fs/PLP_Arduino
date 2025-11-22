@@ -1,5 +1,10 @@
 # O projeto
-Esta proposta de trabalho visa o desenvolvimento de uma Domain-Specific Language (DSL) projetada para simplificar a programação de microcontroladores Arduino, com foco particular na leitura de sensores e na escrita em atuadores digitais e analógicos. O objetivo ́e criar uma camada de abstração que simplifique e torne mais intuitiva a interação com o hardware, de forma a diminuir a barreira de entrada para crianças, idosos e pessoas que nunca programaram.
+Esta proposta de trabalho visa o desenvolvimento de uma Domain-Specific Language
+(DSL) projetada para simplificar a programac ̧  ̃ao de microcontroladores Arduino, com um
+foco particular na leitura de sensores e na escrita em atuadores digitais e anal  ́ogicos. O
+objetivo  ́e criar uma camada de abstrac ̧  ̃ao que simplifique e torne mais intuitiva a interac ̧  ̃ao
+com o hardware, de forma a diminuir a barreira de entrada para crianc ̧as, idosos e pessoas
+que nunca programaram
 
 ## As duas abordagens
 Durante o desenvolvimento deste projeto, foram utilizadas duas abordagens. Uma baseada em visitors, a T1 e a T2 onde a tradução já estava diretamente associada a linguagem
