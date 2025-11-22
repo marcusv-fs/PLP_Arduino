@@ -1,0 +1,5 @@
+# Ignorar arquivos compilados Java
+*.class
+
+# Ignorar arquivos-fonte Java
+*.java
