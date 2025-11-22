@@ -7,7 +7,7 @@ com o hardware, de forma a diminuir a barreira de entrada para crianc ̧as, idos
 que nunca programaram
 
 ## As duas abordagens
-Durante o desenvolvimento deste projeto, foram utilizadas duas abordagens. Uma baseada em visitors, a T1 e a T2 onde a tradução já estava diretamente associada a linguagem
+Durante o desenvolvimento deste projeto, foram utilizadas duas abordagens. Uma baseada em visitors, a T1 - Visitors e a outra onde a tradução já estava diretamente associada a linguagem, a T2.
 
 # Organização
 Na pasta Docs se encontram os arquivos docx, pdfs e pptx utilizados durante a disciplina.
