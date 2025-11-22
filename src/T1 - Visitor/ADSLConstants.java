@@ -23,147 +23,153 @@ public interface ADSLConstants {
   /** RegularExpression Id. */
   int REPITA = 7;
   /** RegularExpression Id. */
-  int LEIA = 8;
+  int FUNCAO = 8;
   /** RegularExpression Id. */
-  int ESCREVA = 9;
+  int RETORNE = 9;
   /** RegularExpression Id. */
-  int ESCREVA_PWM = 10;
+  int VOID = 10;
   /** RegularExpression Id. */
-  int ESCRITA_MON = 11;
+  int LEIA = 11;
   /** RegularExpression Id. */
-  int SE = 12;
+  int ESCREVA = 12;
   /** RegularExpression Id. */
-  int SENAO = 13;
+  int ESCREVA_PWM = 13;
   /** RegularExpression Id. */
-  int NS = 14;
+  int ESCREVA_MON = 14;
   /** RegularExpression Id. */
-  int MS = 15;
+  int SE = 15;
   /** RegularExpression Id. */
-  int S = 16;
+  int SENAO = 16;
   /** RegularExpression Id. */
-  int MIN = 17;
+  int NS = 17;
   /** RegularExpression Id. */
-  int H = 18;
+  int MS = 18;
   /** RegularExpression Id. */
-  int FREQ_300 = 19;
+  int S = 19;
   /** RegularExpression Id. */
-  int FREQ_600 = 20;
+  int MIN = 20;
   /** RegularExpression Id. */
-  int FREQ_1200 = 21;
+  int H = 21;
   /** RegularExpression Id. */
-  int FREQ_2400 = 22;
+  int FREQ_300 = 22;
   /** RegularExpression Id. */
-  int FREQ_4800 = 23;
+  int FREQ_600 = 23;
   /** RegularExpression Id. */
-  int FREQ_9600 = 24;
+  int FREQ_1200 = 24;
   /** RegularExpression Id. */
-  int FREQ_14400 = 25;
+  int FREQ_2400 = 25;
   /** RegularExpression Id. */
-  int FREQ_19200 = 26;
+  int FREQ_4800 = 26;
   /** RegularExpression Id. */
-  int FREQ_28800 = 27;
+  int FREQ_9600 = 27;
   /** RegularExpression Id. */
-  int FREQ_38400 = 28;
+  int FREQ_14400 = 28;
   /** RegularExpression Id. */
-  int FREQ_57600 = 29;
+  int FREQ_19200 = 29;
   /** RegularExpression Id. */
-  int FREQ_115200 = 30;
+  int FREQ_28800 = 30;
   /** RegularExpression Id. */
-  int BYTE = 31;
+  int FREQ_38400 = 31;
   /** RegularExpression Id. */
-  int INT = 32;
+  int FREQ_57600 = 32;
   /** RegularExpression Id. */
-  int UNSIGNED_INT = 33;
+  int FREQ_115200 = 33;
   /** RegularExpression Id. */
-  int LONG = 34;
+  int BYTE = 34;
   /** RegularExpression Id. */
-  int UNSIGNED_LONG = 35;
+  int INT = 35;
   /** RegularExpression Id. */
-  int FLOAT = 36;
+  int UNSIGNED_INT = 36;
   /** RegularExpression Id. */
-  int CHAR = 37;
+  int LONG = 37;
   /** RegularExpression Id. */
-  int STRING_TYPE = 38;
+  int UNSIGNED_LONG = 38;
   /** RegularExpression Id. */
-  int BOOLEAN = 39;
+  int FLOAT = 39;
   /** RegularExpression Id. */
-  int ASSIGN = 40;
+  int CHAR = 40;
   /** RegularExpression Id. */
-  int GT = 41;
+  int STRING_TYPE = 41;
   /** RegularExpression Id. */
-  int LT = 42;
+  int BOOLEAN = 42;
   /** RegularExpression Id. */
-  int BANG = 43;
+  int ASSIGN = 43;
   /** RegularExpression Id. */
-  int TILDE = 44;
+  int GT = 44;
   /** RegularExpression Id. */
-  int HOOK = 45;
+  int LT = 45;
   /** RegularExpression Id. */
-  int COLON = 46;
+  int BANG = 46;
   /** RegularExpression Id. */
-  int EQ = 47;
+  int TILDE = 47;
   /** RegularExpression Id. */
-  int LE = 48;
+  int HOOK = 48;
   /** RegularExpression Id. */
-  int GE = 49;
+  int COLON = 49;
   /** RegularExpression Id. */
-  int NE = 50;
+  int EQ = 50;
   /** RegularExpression Id. */
-  int SC_OR = 51;
+  int LE = 51;
   /** RegularExpression Id. */
-  int SC_AND = 52;
+  int GE = 52;
   /** RegularExpression Id. */
-  int CONCAT = 53;
+  int NE = 53;
   /** RegularExpression Id. */
-  int PLUS = 54;
+  int SC_OR = 54;
   /** RegularExpression Id. */
-  int MINUS = 55;
+  int SC_AND = 55;
   /** RegularExpression Id. */
-  int STAR = 56;
+  int CONCAT = 56;
   /** RegularExpression Id. */
-  int SLASH = 57;
+  int PLUS = 57;
   /** RegularExpression Id. */
-  int BIT_AND = 58;
+  int MINUS = 58;
   /** RegularExpression Id. */
-  int BIT_OR = 59;
+  int STAR = 59;
   /** RegularExpression Id. */
-  int XOR = 60;
+  int SLASH = 60;
   /** RegularExpression Id. */
-  int REM = 61;
+  int BIT_AND = 61;
   /** RegularExpression Id. */
-  int NUM_FLT = 62;
+  int BIT_OR = 62;
   /** RegularExpression Id. */
-  int NUM_INT = 63;
+  int XOR = 63;
   /** RegularExpression Id. */
-  int PINO_ANALOGICO = 64;
+  int REM = 64;
   /** RegularExpression Id. */
-  int STRING = 65;
+  int NUM_FLT = 65;
   /** RegularExpression Id. */
-  int IDENTIFIER = 66;
+  int NUM_INT = 66;
   /** RegularExpression Id. */
-  int SINGLE_LINE_COMMENT = 67;
+  int PINO_ANALOGICO = 67;
   /** RegularExpression Id. */
-  int MULTI_LINE_COMMENT = 68;
+  int STRING = 68;
   /** RegularExpression Id. */
-  int FORMAL_COMMENT = 69;
+  int IDENTIFIER = 69;
   /** RegularExpression Id. */
-  int LPAREN = 75;
+  int SINGLE_LINE_COMMENT = 70;
   /** RegularExpression Id. */
-  int RPAREN = 76;
+  int MULTI_LINE_COMMENT = 71;
   /** RegularExpression Id. */
-  int LBRACE = 77;
+  int FORMAL_COMMENT = 72;
   /** RegularExpression Id. */
-  int RBRACE = 78;
+  int LPAREN = 78;
   /** RegularExpression Id. */
-  int LBRACKET = 79;
+  int RPAREN = 79;
   /** RegularExpression Id. */
-  int RBRACKET = 80;
+  int LBRACE = 80;
   /** RegularExpression Id. */
-  int SEMICOLON = 81;
+  int RBRACE = 81;
   /** RegularExpression Id. */
-  int COMMA = 82;
+  int LBRACKET = 82;
   /** RegularExpression Id. */
-  int DOT = 83;
+  int RBRACKET = 83;
+  /** RegularExpression Id. */
+  int SEMICOLON = 84;
+  /** RegularExpression Id. */
+  int COMMA = 85;
+  /** RegularExpression Id. */
+  int DOT = 86;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -178,10 +184,13 @@ public interface ADSLConstants {
     "\"Espere\"",
     "\"Monitor\"",
     "\"repita\"",
+    "\"funcao\"",
+    "\"retorne\"",
+    "\"void\"",
     "\"Leia\"",
     "\"Escreva\"",
     "\"EscrevaPWM\"",
-    "\"EscritaMon\"",
+    "\"EscrevaMon\"",
     "\"se\"",
     "\"senao\"",
     "\"ns\"",

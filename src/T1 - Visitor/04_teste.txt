@@ -1,0 +1,27 @@
+Config {
+    Monitor 9600;
+    Saida 11;
+    Entrada A0;
+}
+real sensorAtivo;
+
+Execute {
+    sensorAtivo = Leia A0;
+    
+    se (sensorAtivo >= 0.4) {
+        EscritaMon("Sensor ativado!");
+        Escreva 11 1;
+    } senao {
+        repita 5{
+            Escreva 13 1;
+            Espere 500 ms;
+            Escreva 13 0;
+            Espere 500 ms;
+        }
+
+        // Comentario
+    }
+
+    EscritaMon(sensorAtivo);
+    Espere 1000 ms;
+}

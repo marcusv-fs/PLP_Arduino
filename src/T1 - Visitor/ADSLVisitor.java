@@ -3,6 +3,13 @@ public interface ADSLVisitor
 {
   public Object visit(SimpleNode node, Object data);
   public Object visit(ASTStart node, Object data);
+  public Object visit(ASTFuncao node, Object data);
+  public Object visit(ASTParametros node, Object data);
+  public Object visit(ASTParametro node, Object data);
+  public Object visit(ASTTipoRetorno node, Object data);
+  public Object visit(ASTRetorne node, Object data);
+  public Object visit(ASTChamadaFuncao node, Object data);
+  public Object visit(ASTArgumentos node, Object data);
   public Object visit(ASTConfig node, Object data);
   public Object visit(ASTExecute node, Object data);
   public Object visit(ASTPinMode node, Object data);
@@ -27,8 +34,6 @@ public interface ADSLVisitor
   public Object visit(ASTMultiLineComment node, Object data);
   public Object visit(ASTFormalComment node, Object data);
   public Object visit(ASTSerialPrint node, Object data);
-  public Object visit(ASTPrintContent node, Object data);
-  public Object visit(ASTString node, Object data);
   public Object visit(ASTDecVar node, Object data);
   public Object visit(ASTTiposVar node, Object data);
   public Object visit(ASTInicializador node, Object data);
@@ -46,7 +51,8 @@ public interface ADSLVisitor
   public Object visit(ASTExpressaoMultiplicativa node, Object data);
   public Object visit(ASTExpressaoUnaria node, Object data);
   public Object visit(ASTExpressaoPrimaria node, Object data);
+  public Object visit(ASTChamadaFuncaoExpressao node, Object data);
   public Object visit(ASTLeiaExpressao node, Object data);
   public Object visit(ASTValorNumerico node, Object data);
 }
-/* JavaCC - OriginalChecksum=fa5a6d459f93d515ff816e84fb2fd57e (do not edit this line) */
+/* JavaCC - OriginalChecksum=168a709eaf7f0250e6a1d98401d9b4ae (do not edit this line) */

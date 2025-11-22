@@ -37,12 +37,15 @@ TOKEN: {
 | <ESPERA: "Espere">
 | <MONITOR: "Monitor">
 | <REPITA: "repita"> 
+| <FUNCAO: "funcao">
+| <RETORNE: "retorne">
+| <VOID: "void">
 
 // Comandos unificados de leitura/escrita
 | <LEIA: "Leia">
 | <ESCREVA: "Escreva">
 | <ESCREVA_PWM: "EscrevaPWM">
-| <ESCRITA_MON: "EscritaMon">
+| <ESCREVA_MON: "EscrevaMon">
 
 // Estruturas de controle
 | <SE: "se">
@@ -150,6 +153,7 @@ SimpleNode Start() #Start:
   (
     Config()
   | Execute() 
+  | Funcao()  // ← ADICIONE ESTA LINHA
   | SingleLineComment()
   | MultiLineComment()
   | FormalComment()
@@ -157,6 +161,55 @@ SimpleNode Start() #Start:
   )*
   <EOF>
   { return jjtThis; }
+}
+
+void Funcao() #Funcao:
+{}
+{
+  <FUNCAO> <IDENTIFIER> "(" (Parametros())? ")" ( ":" TipoRetorno() )? "{" (
+    Comando()
+  | SingleLineComment()
+  | MultiLineComment()
+  | FormalComment()
+  | Retorne()
+  )* "}"
+}
+
+void Parametros() #Parametros:
+{}
+{
+  Parametro() ( "," Parametro() )*
+}
+
+void Parametro() #Parametro:
+{}
+{
+  TiposVar() <IDENTIFIER>
+}
+
+void TipoRetorno() #TipoRetorno:
+{}
+{
+  TiposVar() | <VOID>
+}
+
+void Retorne() #Retorne:
+{}
+{
+  <RETORNE> Expressao() ";"
+}
+
+// Chamada de função
+void ChamadaFuncao() #ChamadaFuncao:
+{}
+{
+  <IDENTIFIER> "(" (Argumentos())? ")" ";"
+}
+
+void Argumentos() #Argumentos:
+{}
+{
+  Expressao() ( "," Expressao() )*
 }
 
 void Config() #Config:
@@ -273,20 +326,34 @@ void UnidadeTempo() #UnidadeTempo:
 void Read() #Read:
 {}
 {
-  <LEIA> Pinos() ";"
+  <LEIA> 
+  (
+    LOOKAHEAD( Pinos() ) Pinos()
+  | Expressao()
+  )
+  ";"
 }
 
-// Comando de escrita digital unificado
 void DigitalWrite() #DigitalWrite:
 {}
 {
-  <ESCREVA> Pinos() ValorDigital() ";"
+  <ESCREVA> 
+  (
+    LOOKAHEAD( Pinos() ) Pinos()
+  | Expressao()
+  )
+  Expressao() ";"
 }
 
 void AnalogWrite() #AnalogWrite:
 {}
 {
-  <ESCREVA_PWM> PinosPWM() ValorAnalogico() ";"
+  <ESCREVA_PWM>
+  (
+    LOOKAHEAD( PinosPWM() ) PinosPWM()
+  | Expressao()
+  )
+  Expressao() ";"
 }
 
 void ValorDigital() #ValorDigital:
@@ -318,7 +385,7 @@ void ValorAnalogico() #ValorAnalogico:
 void Repita() #Repita:
 {}
 {
-  <REPITA> <NUM_INT> "{" BlocoRepita() "}"
+  <REPITA> Expressao() "{" BlocoRepita() "}"
 }
 
 void BlocoRepita() #BlocoRepita:
@@ -335,7 +402,19 @@ void BlocoRepita() #BlocoRepita:
 void Comando() #Comando:
 {}
 {
-  ( PinMode() | Delay() | Read() | DigitalWrite() | AnalogWrite() | SerialPrint() | DecVar() | SeSenao() | Atribuicao() | Repita() )
+  ( 
+    PinMode() 
+  | Delay() 
+  | Read() 
+  | DigitalWrite() 
+  | AnalogWrite() 
+  | SerialPrint() 
+  | DecVar() 
+  | SeSenao() 
+  | Repita() 
+  | LOOKAHEAD( <IDENTIFIER> "=" ) Atribuicao()
+  | LOOKAHEAD( <IDENTIFIER> "(" ) ChamadaFuncao()
+  )
 }
 
 void SingleLineComment() #SingleLineComment : {}
@@ -357,19 +436,7 @@ void FormalComment() #FormalComment : {}
 void SerialPrint() #SerialPrint:
 {}
 {
-  <ESCRITA_MON> "(" PrintContent() ")" ";"
-}
-
-void PrintContent() #PrintContent:
-{Token t;}
-{
-  (t=<STRING> | t=<IDENTIFIER>)
-}
-
-void String() #String:
-{Token t;}
-{
-  t=<STRING>
+  <ESCREVA_MON> "(" Expressao() ")" ";"
 }
 
 // Declaração de variáveis
@@ -399,11 +466,7 @@ void Inicializador() #Inicializador:
 {Token t;}
 {
   (
-    t=<NUM_INT>
-  | t=<NUM_FLT>
-  | t=<STRING>
-  | t=<IDENTIFIER>
-  | Expressao()
+    Expressao()
   )
 }
 
@@ -483,7 +546,11 @@ void ExpressaoRelacional() #ExpressaoRelacional:
 void ExpressaoAditiva() #ExpressaoAditiva:
 {}
 {
-  ExpressaoMultiplicativa() ( ( <PLUS> | <MINUS> ) ExpressaoMultiplicativa() )*
+  ExpressaoMultiplicativa() 
+  ( 
+    LOOKAHEAD( ( <PLUS> | <MINUS> ) ExpressaoMultiplicativa() )
+    ( <PLUS> | <MINUS> ) ExpressaoMultiplicativa() 
+  )*
 }
 
 void ExpressaoMultiplicativa() #ExpressaoMultiplicativa:
@@ -504,10 +571,17 @@ void ExpressaoPrimaria() #ExpressaoPrimaria:
   (
     ValorNumerico()
   | <STRING>
+  | LOOKAHEAD( <IDENTIFIER> "(" ) ChamadaFuncaoExpressao()
   | <IDENTIFIER>
   | LeiaExpressao()
   | "(" ExpressaoBooleana() ")"
   )
+}
+
+void ChamadaFuncaoExpressao() #ChamadaFuncaoExpressao:
+{}
+{
+  <IDENTIFIER> "(" (Argumentos())? ")"
 }
 
 void LeiaExpressao() #LeiaExpressao:

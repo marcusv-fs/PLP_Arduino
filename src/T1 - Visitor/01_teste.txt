@@ -10,7 +10,7 @@ Config {
     Boolean ledEstado = false;
 }
 
-Repita {
+Execute {
     EscritaMon("Iniciando programa...");
     EscritaMon("Ligando LED");
     Escreva 13 1;

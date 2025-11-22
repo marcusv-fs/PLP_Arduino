@@ -2,55 +2,68 @@
 public interface ADSLTreeConstants
 {
   public int JJTSTART = 0;
-  public int JJTCONFIG = 1;
-  public int JJTEXECUTE = 2;
-  public int JJTPINMODE = 3;
-  public int JJTPINOS = 4;
-  public int JJTPINOSD = 5;
-  public int JJTPINOSA = 6;
-  public int JJTPINOSPWM = 7;
-  public int JJTFREQMONITOR = 8;
-  public int JJTFREQUENCIA = 9;
-  public int JJTDELAY = 10;
-  public int JJTVALORTEMPO = 11;
-  public int JJTUNIDADETEMPO = 12;
-  public int JJTREAD = 13;
-  public int JJTDIGITALWRITE = 14;
-  public int JJTANALOGWRITE = 15;
-  public int JJTVALORDIGITAL = 16;
-  public int JJTVALORANALOGICO = 17;
-  public int JJTREPITA = 18;
-  public int JJTBLOCOREPITA = 19;
-  public int JJTCOMANDO = 20;
-  public int JJTSINGLELINECOMMENT = 21;
-  public int JJTMULTILINECOMMENT = 22;
-  public int JJTFORMALCOMMENT = 23;
-  public int JJTSERIALPRINT = 24;
-  public int JJTPRINTCONTENT = 25;
-  public int JJTSTRING = 26;
-  public int JJTDECVAR = 27;
-  public int JJTTIPOSVAR = 28;
-  public int JJTINICIALIZADOR = 29;
-  public int JJTSESENAO = 30;
-  public int JJTBLOCOSE = 31;
-  public int JJTBLOCOSENAO = 32;
-  public int JJTCONDICAO = 33;
-  public int JJTATRIBUICAO = 34;
-  public int JJTEXPRESSAO = 35;
-  public int JJTEXPRESSAOBOOLEANA = 36;
-  public int JJTEXPRESSAOOU = 37;
-  public int JJTEXPRESSAOE = 38;
-  public int JJTEXPRESSAORELACIONAL = 39;
-  public int JJTEXPRESSAOADITIVA = 40;
-  public int JJTEXPRESSAOMULTIPLICATIVA = 41;
-  public int JJTEXPRESSAOUNARIA = 42;
-  public int JJTEXPRESSAOPRIMARIA = 43;
-  public int JJTLEIAEXPRESSAO = 44;
-  public int JJTVALORNUMERICO = 45;
+  public int JJTFUNCAO = 1;
+  public int JJTPARAMETROS = 2;
+  public int JJTPARAMETRO = 3;
+  public int JJTTIPORETORNO = 4;
+  public int JJTRETORNE = 5;
+  public int JJTCHAMADAFUNCAO = 6;
+  public int JJTARGUMENTOS = 7;
+  public int JJTCONFIG = 8;
+  public int JJTEXECUTE = 9;
+  public int JJTPINMODE = 10;
+  public int JJTPINOS = 11;
+  public int JJTPINOSD = 12;
+  public int JJTPINOSA = 13;
+  public int JJTPINOSPWM = 14;
+  public int JJTFREQMONITOR = 15;
+  public int JJTFREQUENCIA = 16;
+  public int JJTDELAY = 17;
+  public int JJTVALORTEMPO = 18;
+  public int JJTUNIDADETEMPO = 19;
+  public int JJTREAD = 20;
+  public int JJTDIGITALWRITE = 21;
+  public int JJTANALOGWRITE = 22;
+  public int JJTVALORDIGITAL = 23;
+  public int JJTVALORANALOGICO = 24;
+  public int JJTREPITA = 25;
+  public int JJTBLOCOREPITA = 26;
+  public int JJTCOMANDO = 27;
+  public int JJTSINGLELINECOMMENT = 28;
+  public int JJTMULTILINECOMMENT = 29;
+  public int JJTFORMALCOMMENT = 30;
+  public int JJTSERIALPRINT = 31;
+  public int JJTDECVAR = 32;
+  public int JJTTIPOSVAR = 33;
+  public int JJTINICIALIZADOR = 34;
+  public int JJTSESENAO = 35;
+  public int JJTBLOCOSE = 36;
+  public int JJTBLOCOSENAO = 37;
+  public int JJTCONDICAO = 38;
+  public int JJTATRIBUICAO = 39;
+  public int JJTEXPRESSAO = 40;
+  public int JJTEXPRESSAOBOOLEANA = 41;
+  public int JJTEXPRESSAOOU = 42;
+  public int JJTEXPRESSAOE = 43;
+  public int JJTEXPRESSAORELACIONAL = 44;
+  public int JJTEXPRESSAOADITIVA = 45;
+  public int JJTEXPRESSAOMULTIPLICATIVA = 46;
+  public int JJTEXPRESSAOUNARIA = 47;
+  public int JJTEXPRESSAOPRIMARIA = 48;
+  public int JJTCHAMADAFUNCAOEXPRESSAO = 49;
+  public int JJTLEIAEXPRESSAO = 50;
+  public int JJTVALORNUMERICO = 51;
 
 
   public String[] jjtNodeName = {
     "Start",
+    "Funcao",
+    "Parametros",
+    "Parametro",
+    "TipoRetorno",
+    "Retorne",
+    "ChamadaFuncao",
+    "Argumentos",
     "Config",
     "Execute",
     "PinMode",
@@ -75,8 +88,6 @@ public interface ADSLTreeConstants
     "MultiLineComment",
     "FormalComment",
     "SerialPrint",
-    "PrintContent",
-    "String",
     "DecVar",
     "TiposVar",
     "Inicializador",
@@ -94,8 +105,9 @@ public interface ADSLTreeConstants
     "ExpressaoMultiplicativa",
     "ExpressaoUnaria",
     "ExpressaoPrimaria",
+    "ChamadaFuncaoExpressao",
     "LeiaExpressao",
     "ValorNumerico",
   };
 }
-/* JavaCC - OriginalChecksum=27c14da0f11167c7c0439de950855c0e (do not edit this line) */
+/* JavaCC - OriginalChecksum=13311ea1442c7cef612b589fb491fabc (do not edit this line) */

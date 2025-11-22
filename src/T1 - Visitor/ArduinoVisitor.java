@@ -109,58 +109,92 @@ public class ArduinoVisitor implements ADSLVisitor {
 
     @Override
     public Object visit(ASTRead node, Object data) {
-        SimpleNode pinosNode = (SimpleNode) node.jjtGetChild(0);
-        Token pinoToken = pinosNode.jjtGetFirstToken();
-        String pino = pinoToken.image;
+        // O primeiro filho pode ser Expressao ou Pinos
+        Node pinoNode = node.jjtGetChild(0);
+        
+        System.out.print(getIndent());
+        
+        // Verifica o tipo do nó do pino
+        if (pinoNode instanceof ASTPinos) {
+            // Notação antiga com Pinos() - precisa verificar o filho para saber o tipo
+            SimpleNode tipoPinoNode = (SimpleNode) ((SimpleNode) pinoNode).jjtGetChild(0);
+            Token pinoToken = tipoPinoNode.jjtGetFirstToken();
+            String pino = pinoToken.image;
 
-        // Decide automaticamente se é leitura digital ou analógica
-        if (pinosNode instanceof ASTPinosA) {
-            // Para pino analógico, usa analogRead
-            int analogPin = Integer.parseInt(pino.substring(1));
-            System.out.println(getIndent() + "analogRead(" + analogPin + ");");
+            if (tipoPinoNode instanceof ASTPinosA) {
+                // Para pino analógico, usa analogRead
+                System.out.println("analogRead(" + pino + ");");
+            } else {
+                // Para pino digital, usa digitalRead
+                System.out.println("digitalRead(" + pino + ");");
+            }
         } else {
-            // Para pino digital, usa digitalRead
-            System.out.println(getIndent() + "digitalRead(" + pino + ");");
+            // Notação nova com Expressao() - assume digitalRead
+            System.out.print("digitalRead(");
+            ((SimpleNode) pinoNode).jjtAccept(this, data);
+            System.out.println(");");
         }
         return data;
     }
 
     @Override
     public Object visit(ASTDigitalWrite node, Object data) {
-        SimpleNode pinosNode = (SimpleNode) node.jjtGetChild(0);
-        Token pinoToken = pinosNode.jjtGetFirstToken();
-        String pino = pinoToken.image;
-        
+        // O primeiro filho pode ser Expressao ou Pinos
+        Node pinoNode = node.jjtGetChild(0);
+        // O segundo filho é sempre a expressão do valor
         SimpleNode valorNode = (SimpleNode) node.jjtGetChild(1);
-        Token valorToken = valorNode.jjtGetFirstToken();
-        String valor = valorToken.image;
         
-        if (pinosNode instanceof ASTPinosA) {
-            int analogPin = Integer.parseInt(pino.substring(1));
-            pino = String.valueOf(analogPin + 14);
+        System.out.print(getIndent() + "digitalWrite(");
+        
+        // Verifica o tipo do nó do pino
+        if (pinoNode instanceof ASTPinos) {
+            // Notação antiga com Pinos() - precisa verificar o filho para saber o tipo
+            SimpleNode tipoPinoNode = (SimpleNode) ((SimpleNode) pinoNode).jjtGetChild(0);
+            Token pinoToken = tipoPinoNode.jjtGetFirstToken();
+            String pino = pinoToken.image;
+            
+            if (tipoPinoNode instanceof ASTPinosA) {
+                int analogPin = Integer.parseInt(pino.substring(1));
+                pino = String.valueOf(analogPin + 14);
+            }
+            
+            System.out.print(pino);
+        } else {
+            // Notação nova com Expressao()
+            ((SimpleNode) pinoNode).jjtAccept(this, data);
         }
         
-        // Converter 0/1 para LOW/HIGH
-        String arduinoValue = "LOW";
-        if (valor.equals("1")) {
-            arduinoValue = "HIGH";
-        }
+        System.out.print(", ");
+        valorNode.jjtAccept(this, data);
+        System.out.println(");");
         
-        System.out.println(getIndent() + "digitalWrite(" + pino + ", " + arduinoValue + ");");
         return data;
     }
 
+
     @Override
     public Object visit(ASTAnalogWrite node, Object data) {
-        SimpleNode pinosNode = (SimpleNode) node.jjtGetChild(0);
-        Token pinoToken = pinosNode.jjtGetFirstToken();
-        String pino = pinoToken.image;
-        
+        // O primeiro filho pode ser Expressao ou PinosPWM
+        Node pinoNode = node.jjtGetChild(0);
+        // O segundo filho é sempre a expressão do valor
         SimpleNode valorNode = (SimpleNode) node.jjtGetChild(1);
-        Token valorToken = valorNode.jjtGetFirstToken();
-        String valor = valorToken.image;
         
-        System.out.println(getIndent() + "analogWrite(" + pino + ", " + valor + ");");
+        System.out.print(getIndent() + "analogWrite(");
+        
+        // Verifica o tipo do nó do pino
+        if (pinoNode instanceof ASTPinosPWM) {
+            // Notação antiga com PinosPWM()
+            Token pinoToken = ((SimpleNode) pinoNode).jjtGetFirstToken();
+            System.out.print(pinoToken.image);
+        } else {
+            // Notação nova com Expressao()
+            ((SimpleNode) pinoNode).jjtAccept(this, data);
+        }
+        
+        System.out.print(", ");
+        valorNode.jjtAccept(this, data);
+        System.out.println(");");
+        
         return data;
     }
 
@@ -255,28 +289,12 @@ public class ArduinoVisitor implements ADSLVisitor {
 
     @Override
     public Object visit(ASTSerialPrint node, Object data) {
-        SimpleNode contentNode = (SimpleNode) node.jjtGetChild(0);
-        Token contentToken = contentNode.jjtGetFirstToken();
-        String content = contentToken.image;
+        SimpleNode expressaoNode = (SimpleNode) node.jjtGetChild(0);
         
-        // Verifica se é string ou identificador
-        if (contentToken.kind == ADSLConstants.STRING) {
-            // Se for string, processa como antes
-            content = processarString(content);
-        }
-        // Se for identificador, usa diretamente (não precisa de processamento)
+        System.out.print(getIndent() + "Serial.println(");
+        expressaoNode.jjtAccept(this, data);
+        System.out.println(");");
         
-        System.out.println(getIndent() + "Serial.println(" + content + ");");
-        return data;
-    }
-
-    @Override
-    public Object visit(ASTPrintContent node, Object data) {
-        return data;
-    }
-
-    @Override
-    public Object visit(ASTString node, Object data) {
         return data;
     }
 
@@ -362,6 +380,7 @@ public class ArduinoVisitor implements ADSLVisitor {
             case "char": return "char";
             case "String": return "String";
             case "Boolean": return "boolean";
+            case "void": return "void";
             default: return "int"; // padrão
         }
     }
@@ -627,26 +646,23 @@ public class ArduinoVisitor implements ADSLVisitor {
 
     @Override
     public Object visit(ASTRepita node, Object data) {
-        Token numToken = null;
-        for (Token t = node.jjtGetFirstToken(); t != null; t = t.next) {
-            if (t.kind == ADSLConstants.NUM_INT) {
-                numToken = t;
-                break;
-            }
-        }
-        
-        if (numToken == null) {
-            throw new RuntimeException("Número de repetições não encontrado");
-        }
-        
-        String numero = numToken.image;
         String currentIndent = getIndent();
-        System.out.println(currentIndent + "for (int i = 0; i < " + numero + "; i++) {");
+        
+        // Processa a expressão (que pode ser número ou variável)
+        System.out.print(currentIndent + "for (int i = 0; i < ");
+        
+        // O primeiro filho agora é a expressão
+        if (node.jjtGetNumChildren() > 0) {
+            SimpleNode expressaoNode = (SimpleNode) node.jjtGetChild(0);
+            expressaoNode.jjtAccept(this, data);
+        }
+        
+        System.out.println("; i++) {");
         
         // Processa o bloco de comandos
         indentLevel++;
-        if (node.jjtGetNumChildren() > 0) {
-            SimpleNode blocoNode = (SimpleNode) node.jjtGetChild(0);
+        if (node.jjtGetNumChildren() > 1) {
+            SimpleNode blocoNode = (SimpleNode) node.jjtGetChild(1);
             blocoNode.jjtAccept(this, data);
         }
         indentLevel--;
@@ -659,5 +675,138 @@ public class ArduinoVisitor implements ADSLVisitor {
     @Override
     public Object visit(ASTBlocoRepita node, Object data) {
         return node.childrenAccept(this, data);
-}
+    }
+
+    @Override
+    public Object visit(ASTFuncao node, Object data) {
+        Token nomeToken = node.jjtGetFirstToken().next; // Token após "funcao"
+        String nomeFuncao = nomeToken.image;
+        
+        // Processa tipo de retorno (se existir)
+        String tipoRetorno = "void";
+        if (node.jjtGetNumChildren() > 0) {
+            SimpleNode tipoRetornoNode = (SimpleNode) node.jjtGetChild(0);
+            if (tipoRetornoNode instanceof ASTTipoRetorno) {
+                Token tipoToken = tipoRetornoNode.jjtGetFirstToken();
+                tipoRetorno = mapType(tipoToken.image);
+            }
+        }
+        
+        System.out.print(tipoRetorno + " " + nomeFuncao + "(");
+        
+        // Processa parâmetros
+        int startIndex = (tipoRetorno.equals("void") && node.jjtGetNumChildren() > 0) ? 0 : 1;
+        if (node.jjtGetNumChildren() > startIndex) {
+            SimpleNode parametrosNode = (SimpleNode) node.jjtGetChild(startIndex);
+            parametrosNode.jjtAccept(this, data);
+        }
+        
+        System.out.println(") {");
+        
+        // Processa corpo da função
+        indentLevel++;
+        for (int i = startIndex + 1; i < node.jjtGetNumChildren(); i++) {
+            Node child = node.jjtGetChild(i);
+            if (child instanceof SimpleNode) {
+                ((SimpleNode) child).jjtAccept(this, data);
+            }
+        }
+        indentLevel--;
+        
+        System.out.println("}");
+        System.out.println();
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTParametros node, Object data) {
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            if (i > 0) {
+                System.out.print(", ");
+            }
+            Node child = node.jjtGetChild(i);
+            if (child instanceof SimpleNode) {
+                ((SimpleNode) child).jjtAccept(this, data);
+            }
+        }
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTParametro node, Object data) {
+        SimpleNode tipoNode = (SimpleNode) node.jjtGetChild(0);
+        Token tipoToken = tipoNode.jjtGetFirstToken();
+        String tipo = mapType(tipoToken.image);
+        
+        Token idToken = node.jjtGetFirstToken().next; // Token após o tipo
+        String identificador = idToken.image;
+        
+        System.out.print(tipo + " " + identificador);
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTTipoRetorno node, Object data) {
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTRetorne node, Object data) {
+        System.out.print(getIndent() + "return");
+        
+        if (node.jjtGetNumChildren() > 0) {
+            System.out.print(" ");
+            SimpleNode expressaoNode = (SimpleNode) node.jjtGetChild(0);
+            expressaoNode.jjtAccept(this, data);
+        }
+        
+        System.out.println(";");
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTChamadaFuncao node, Object data) {
+        Token nomeToken = node.jjtGetFirstToken();
+        String nomeFuncao = nomeToken.image;
+        
+        System.out.print(getIndent() + nomeFuncao + "(");
+        
+        if (node.jjtGetNumChildren() > 0) {
+            SimpleNode argumentosNode = (SimpleNode) node.jjtGetChild(0);
+            argumentosNode.jjtAccept(this, data);
+        }
+        
+        System.out.println(");");
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTChamadaFuncaoExpressao node, Object data) {
+        Token nomeToken = node.jjtGetFirstToken();
+        String nomeFuncao = nomeToken.image;
+        
+        System.out.print(nomeFuncao + "(");
+        
+        if (node.jjtGetNumChildren() > 0) {
+            SimpleNode argumentosNode = (SimpleNode) node.jjtGetChild(0);
+            argumentosNode.jjtAccept(this, data);
+        }
+        
+        System.out.print(")");
+        return data;
+    }
+
+    @Override
+    public Object visit(ASTArgumentos node, Object data) {
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            if (i > 0) {
+                System.out.print(", ");
+            }
+            Node child = node.jjtGetChild(i);
+            if (child instanceof SimpleNode) {
+                ((SimpleNode) child).jjtAccept(this, data);
+            }
+        }
+        return data;
+    }
 }

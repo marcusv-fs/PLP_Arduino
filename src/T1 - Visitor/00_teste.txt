@@ -1,25 +1,19 @@
-Config {
-    Monitor 9600;
-    Saida 11;
-    Entrada A0;
+funcao piscaLed(int pino, int vezes) : void {
+    repita vezes {
+        String msg = "oi";
+        EscrevaMon(msg);
+        Escreva A7 1;
+        Leia A3;
+        Espere 500 ms;
+        Escreva pino 0;
+        Espere 500 ms;
+    }
 }
-real sensorAtivo;
+
+Config {
+    Saida 13;
+}
 
 Execute {
-    sensorAtivo = Leia A0;
-    
-    se (sensorAtivo >= 0.4) {
-        EscritaMon("Sensor ativado!");
-        Escreva 11 1;
-    } senao {
-        repita 5{
-            Escreva 13 1;
-            Espere 500 ms;
-            Escreva 13 0;
-            Espere 500 ms;
-        }
-    }
-
-    EscritaMon(sensorAtivo);
-    Espere 1000 ms;
+    piscaLed(13, 5);
 }
