@@ -123,16 +123,18 @@ void EsperarCmd() : { Token t; } {
 void IfCmd() : { Token t; } {
     <IF> <BOTAO> t = <NUMBER> <PRESSIONADO> <THEN> <LBRACE> Command() ( Command() )* <RBRACE>
     {
-        int condPin = Integer.parseInt(t.image);
-        pins.add(condPin);
-        loopCode.append("  if (digitalRead(" + condPin + ") == HIGH) {\n");
-    }
-    ( Command() )*
-    [ <ELSE> {
-        loopCode.append("  } else {\n");
-    }
-    ( Command() )* ]
-    {
+        int pin = Integer.parseInt(t.image);
+        pins.add(pin);
+        StringBuilder ifBody = new StringBuilder();
+        // extract the commands added to loopCode during Command() calls
+        int startIdx = loopCode.lastIndexOf("  "); // find last command start
+        ifBody.append(loopCode.substring(startIdx));
+        // remove from loopCode
+        loopCode.setLength(startIdx);
+
+        // now add the if statement to loopCode
+        loopCode.append("  if (digitalRead(" + pin + ") == HIGH) {\n");
+        loopCode.append(ifBody.toString());
         loopCode.append("  }\n");
     }
 }
