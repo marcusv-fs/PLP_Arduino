@@ -56,9 +56,30 @@ TOKEN : {
   | < APAGAR:  ("apagar")  >
   | < ESPERAR: ("esperar") >
   | < PINO:    ("pino")    >
+  | < LED:    ("led")    >
   | < SEGUNDOS: ("segundos") >
   | < NUMBER: ( ["0"-"9"] ) ( ["0"-"9"] )* >
   | < SEMI: ";" >
+}
+
+TOKEN : {
+    < LBRACE: "{" >
+|   < RBRACE: "}" >
+|   < LPAREN: "(" >
+|   < RPAREN: ")" >
+}
+
+TOKEN :
+{
+    <BOTAO: ("botao" | "botão") >
+|   <PRESSIONADO: ("pressionado" | "apertado") >
+}
+
+TOKEN : /* TOKENS DE IMPERATIVA 1 */
+{
+    < IF: "se" >
+|   < THEN: ("entao" | "então") >
+|   < ELSE: ("senao" | "senão") >
 }
 
 SKIP : {
@@ -72,11 +93,11 @@ void Program() : {} {
 }
 
 void Command() : {} {
-    ( AcenderCmd() | ApagarCmd() | EsperarCmd() )
+    ( AcenderCmd() | ApagarCmd() | EsperarCmd() | IfCmd() )
 }
 
 void AcenderCmd() : { Token t; } {
-    <ACENDER> <PINO> t = <NUMBER> [ <SEMI> ] {
+    <ACENDER> (<PINO> | <LED>) t = <NUMBER> [ <SEMI> ] {
         int pin = Integer.parseInt(t.image);
         pins.add(pin);
         loopCode.append("  digitalWrite("+pin+", HIGH);\n");
@@ -84,7 +105,7 @@ void AcenderCmd() : { Token t; } {
 }
 
 void ApagarCmd() : { Token t; } {
-    <APAGAR> <PINO> t = <NUMBER> [ <SEMI> ] {
+    <APAGAR> (<PINO> | <LED>) t = <NUMBER> [ <SEMI> ] {
         int pin = Integer.parseInt(t.image);
         pins.add(pin);
         loopCode.append("  digitalWrite("+pin+", LOW);\n");
@@ -99,6 +120,22 @@ void EsperarCmd() : { Token t; } {
     }
 }
 
+void IfCmd() : { Token t; } {
+    <IF> <BOTAO> t = <NUMBER> <PRESSIONADO> <THEN> <LBRACE> Command() ( Command() )* <RBRACE>
+    {
+        int condPin = Integer.parseInt(t.image);
+        pins.add(condPin);
+        loopCode.append("  if (digitalRead(" + condPin + ") == HIGH) {\n");
+    }
+    ( Command() )*
+    [ <ELSE> {
+        loopCode.append("  } else {\n");
+    }
+    ( Command() )* ]
+    {
+        loopCode.append("  }\n");
+    }
+}
 // optional: allow comments starting with // until end of line
 
 TOKEN : {
@@ -111,7 +148,7 @@ SKIP : {
 
 /*
 Uso:
-1) Gere o parser com JavaCC: javacc ArduinoDSL.jj
+1) Gere o parser com JavaCC: javacc ArduinoDSLParser.jj
 2) Compile os arquivos gerados e a classe utilitária: javac -d bin utils/*.java *.java
 3) Rode: java -cp bin ArduinoDSLParser exemplo.dsl generated/meu_sketch.ino
 

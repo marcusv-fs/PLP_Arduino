@@ -1,3 +1,6 @@
-acender pino 13
+acender led 13
 esperar 2 segundos
-apagar pino 13
+apagar led 13
+se botao 4 pressionado entao {
+acender led 13
+}
