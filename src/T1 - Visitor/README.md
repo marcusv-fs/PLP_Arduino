@@ -57,7 +57,6 @@ Esta sessão apresenta a equivalência entre os comandos da linguagem ADSL, defi
 
 | Unidade ADSL | Equivalente Arduino (C/C++) | Fator de Conversão para `delay()` |
 | :--- | :--- | :--- |
-| `ns` | - | Nanosegundos (uso limitado, geralmente para `delayMicroseconds`). |
 | `ms` | `delay()` | Milissegundos (fator 1). |
 | `s` | `delay()` | Segundos (fator 1000). |
 | `min` | `delay()` | Minutos (fator 60000). |
