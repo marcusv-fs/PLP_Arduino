@@ -122,14 +122,32 @@ SKIP : {
 // -------------------- Grammar productions --------------------
 
 void Program() : {} {
-    ( Command() )* <EOF>
+    ListaComandos()
+    <EOF>
 }
 
-void Command() : {} {
-    ( AcenderCmd() | ApagarCmd() | EsperarCmd() | IfCmd() | EscreverCmd() )
+void ListaComandos() : {} {
+    ( Comando() )*
 }
 
-void AcenderCmd() : { Token t; } {
+void BlocoDeComandos() : {} {
+    Comando()
+    ( Comando() )*
+}
+
+void Comando() : {} {
+    (
+        ComandoEmbutido()
+      | ComandoSe()
+        // | ComandoRepetir() // reservado para futuras extensões do BNF
+    )
+}
+
+void ComandoEmbutido() : {} {
+    ( ComandoAcender() | ComandoApagar() | ComandoEsperar() | ComandoEscrever() )
+}
+
+void ComandoAcender() : { Token t; } {
     <ACENDER> (<PINO> | <LED>) t = <NUMBER> [ <SEMI> ] {
         int pin = Integer.parseInt(t.image);
         outputPins.add(pin);
@@ -137,7 +155,7 @@ void AcenderCmd() : { Token t; } {
     }
 }
 
-void ApagarCmd() : { Token t; } {
+void ComandoApagar() : { Token t; } {
     <APAGAR> (<PINO> | <LED>) t = <NUMBER> [ <SEMI> ] {
         int pin = Integer.parseInt(t.image);
         outputPins.add(pin);
@@ -145,7 +163,7 @@ void ApagarCmd() : { Token t; } {
     }
 }
 
-void EsperarCmd() : { Token t; Token tempo; } {
+void ComandoEsperar() : { Token t; Token tempo; } {
     <ESPERAR> t = <NUMBER> (tempo = <SEGUNDOS> | tempo = <MILISSEGUNDOS>) [ <SEMI> ] {
         int value = Integer.parseInt(t.image);
         int delayMs;
@@ -158,7 +176,7 @@ void EsperarCmd() : { Token t; Token tempo; } {
     }
 }
 
-void IfCmd() : { Token t; int savedStartIdx; int pin; String ifBody; } {
+void ComandoSe() : { Token t; int savedStartIdx; int pin; String ifBody; } {
     <IF> <BOTAO> t = <NUMBER> <PRESSIONADO> <THEN> 
     (
         // Sintaxe com chaves: se ... entao { ... }
@@ -173,7 +191,7 @@ void IfCmd() : { Token t; int savedStartIdx; int pin; String ifBody; } {
             // salva o índice onde começam os comandos do bloco
             savedStartIdx = loopCode.length();
         }
-        Command() ( Command() )* 
+        BlocoDeComandos()
         <RBRACE>
         {
             // extrai o corpo do if (comandos adicionados dentro do bloco)
@@ -201,7 +219,7 @@ void IfCmd() : { Token t; int savedStartIdx; int pin; String ifBody; } {
             // salva o índice onde começam os comandos do bloco
             savedStartIdx = loopCode.length();
         }
-        Command() ( Command() )* 
+        BlocoDeComandos()
         ( <FIMSE> | <FIM> )
         {
             // extrai o corpo do if (comandos adicionados dentro do bloco)
@@ -220,7 +238,7 @@ void IfCmd() : { Token t; int savedStartIdx; int pin; String ifBody; } {
 }
 
 // Comando escrever: escrever <SAIDA> com valor (<NUMERO> | <ENTRADA>)
-void EscreverCmd() : { Token perifSaida; Token numSaida; Token numValor; Token perifEntrada; Token numEntrada; boolean isAnalogOutput; boolean isAnalogInput; int pinNum; String pinStr; int value; int[] pwmPins = {3, 5, 6, 9, 10, 11}; } {
+void ComandoEscrever() : { Token perifSaida; Token numSaida; Token numValor; Token perifEntrada; Token numEntrada; boolean isAnalogOutput; boolean isAnalogInput; int pinNum; String pinStr; int value; int[] pwmPins = {3, 5, 6, 9, 10, 11}; } {
     <ESCREVER> (perifSaida = <PINO> | perifSaida = <LED> | perifSaida = <BUZZER>) numSaida = <NUMBER> <COM> <VALOR> 
     (
         // Caso 1: valor é um número (0-255)
