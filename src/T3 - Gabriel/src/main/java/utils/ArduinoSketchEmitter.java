@@ -6,13 +6,14 @@ import java.io.*;
 /**
  * Utility class that writes an Arduino .ino sketch from collected data.
  * Expected inputs:
- *  - pins: a Set containing Integer (or parsable) pin numbers
+ *  - outputPins: a Set containing Integer (or parsable) pin numbers for OUTPUT pins (LEDs)
+ *  - inputPins: a Set containing Integer (or parsable) pin numbers for INPUT_PULLUP pins (botões)
  *  - loopBody: the body of the loop() as a String (already contains proper indentation and newlines)
  *  - outFilename: the path to the .ino output file
  */
 public class ArduinoSketchEmitter {
 
-    public static void writeSketch(Set pins, String loopBody, String outFilename) {
+    public static void writeSketch(Set<?> outputPins, Set<?> inputPins, String loopBody, String outFilename) {
         if (outFilename == null || outFilename.trim().isEmpty()) {
             outFilename = "generated_sketch.ino";
         }
@@ -22,12 +23,20 @@ public class ArduinoSketchEmitter {
         sb.append("#include <Arduino.h>\n\n");
         sb.append("void setup() {\n");
 
-        // write pinMode lines for each pin
-        for (Object pObj : pins) {
+        // write pinMode lines for output pins (LEDs)
+        for (Object pObj : outputPins) {
             int p;
             if (pObj instanceof Integer) p = ((Integer)pObj).intValue();
             else p = Integer.parseInt(pObj.toString());
             sb.append("  pinMode(" + p + ", OUTPUT);\n");
+        }
+
+        // write pinMode lines for input pins (botões) as INPUT_PULLUP
+        for (Object pObj : inputPins) {
+            int p;
+            if (pObj instanceof Integer) p = ((Integer)pObj).intValue();
+            else p = Integer.parseInt(pObj.toString());
+            sb.append("  pinMode(" + p + ", INPUT_PULLUP);\n");
         }
 
         sb.append("}\n\n");

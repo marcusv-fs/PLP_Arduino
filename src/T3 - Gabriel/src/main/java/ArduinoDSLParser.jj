@@ -14,8 +14,10 @@ import utils.ArduinoSketchEmitter; // classe utilitária que escreve o .ino (pac
 
 
 public class ArduinoDSLParser {
-    // coletar pinos para configurar em setup()
-    private Set pins = new LinkedHashSet();
+    // coletar pinos de saída (LEDs) para configurar em setup() como OUTPUT
+    private Set outputPins = new LinkedHashSet();
+    // coletar pinos de entrada (botões) para configurar em setup() como INPUT_PULLUP
+    private Set inputPins = new LinkedHashSet();
     // corpo do loop() que será preenchido pelos comandos
     private StringBuilder loopCode = new StringBuilder();
 
@@ -41,10 +43,10 @@ public class ArduinoDSLParser {
 
 
     /**
-    * Delegação para a classe utilitária que escreve o arquivo .ino
-    */
+     * Delegação para a classe utilitária que escreve o arquivo .ino
+     */
     private void emitArduinoSketch(String outFilename) {
-        ArduinoSketchEmitter.writeSketch(pins, loopCode.toString(), outFilename);
+        ArduinoSketchEmitter.writeSketch(outputPins, inputPins, loopCode.toString(), outFilename);
     }
 }
 PARSER_END(ArduinoDSLParser)
@@ -99,7 +101,7 @@ void Command() : {} {
 void AcenderCmd() : { Token t; } {
     <ACENDER> (<PINO> | <LED>) t = <NUMBER> [ <SEMI> ] {
         int pin = Integer.parseInt(t.image);
-        pins.add(pin);
+        outputPins.add(pin);
         loopCode.append("  digitalWrite("+pin+", HIGH);\n");
     }
 }
@@ -107,7 +109,7 @@ void AcenderCmd() : { Token t; } {
 void ApagarCmd() : { Token t; } {
     <APAGAR> (<PINO> | <LED>) t = <NUMBER> [ <SEMI> ] {
         int pin = Integer.parseInt(t.image);
-        pins.add(pin);
+        outputPins.add(pin);
         loopCode.append("  digitalWrite("+pin+", LOW);\n");
     }
 }
@@ -124,7 +126,7 @@ void IfCmd() : { Token t; } {
     <IF> <BOTAO> t = <NUMBER> <PRESSIONADO> <THEN> <LBRACE> Command() ( Command() )* <RBRACE>
     {
         int pin = Integer.parseInt(t.image);
-        pins.add(pin);
+        inputPins.add(pin);
         StringBuilder ifBody = new StringBuilder();
         // extract the commands added to loopCode during Command() calls
         int startIdx = loopCode.lastIndexOf("  "); // find last command start
