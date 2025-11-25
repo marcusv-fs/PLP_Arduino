@@ -71,7 +71,7 @@ TOKEN : {
   | < ESPERAR: ("esperar") >
   | < PINO:    ("pino")    >
   | < LED:    ("led")    >
-  | < SEGUNDOS: ("segundos") >
+  | < SEGUNDOS: ("segundos" | "s" | "segundo") >
   | < NUMBER: ( ["0"-"9"] ) ( ["0"-"9"] )* >
   | < SEMI: ";" >
 }
@@ -81,7 +81,7 @@ TOKEN : {
 |   < RBRACE: "}" >
 |   < LPAREN: "(" >
 |       < RPAREN: ")" >
-||   < COLON: ":" >
+|   < COLON: ":" >
 }
 
 TOKEN :
@@ -95,8 +95,8 @@ TOKEN : /* TOKENS DE IMPERATIVA 1 */
     < IF: "se" >
 |   < THEN: ("entao" | "então") >
 |       < ELSE: ("senao" | "senão") >
-||   < FIM: "fim" >
-||   < FIMSE: "fimse" >
+|   < FIM: "fim" >
+|   < FIMSE: "fimse" >
 }
 
 SKIP : {
@@ -184,7 +184,7 @@ void IfCmd() : { Token t; int savedStartIdx; int pin; } {
         ( <FIMSE> | <FIM> )
         {
             // extrai o corpo do if (comandos adicionados dentro do bloco)
-            String ifBody = loopCode.substring(savedStartIdx);
+            ifBody = loopCode.substring(savedStartIdx);
             // remove esses comandos do loopCode principal
             loopCode.setLength(savedStartIdx);
             
