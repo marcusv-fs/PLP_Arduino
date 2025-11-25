@@ -1,3 +1,2 @@
-se botao 4 pressionado entao {
-acender led 2
-}
+escrever pino 6 com valor potenciometro 0
+esperar 2 milissegundos
