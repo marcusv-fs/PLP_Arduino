@@ -214,10 +214,4 @@ Uso:
 1) Gere o parser com JavaCC: javacc ArduinoDSLParser.jj
 2) Compile os arquivos gerados e a classe utilitária: javac -d bin utils/*.java *.java
 3) Rode: java -cp bin ArduinoDSLParser exemplo.dsl generated/meu_sketch.ino
-
-
-Exemplo (.dsl):
-acender pino 13
-esperar 2 segundos
-apagar pino 13
 */
