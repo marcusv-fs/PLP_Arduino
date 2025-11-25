@@ -1,0 +1,322 @@
+// ArduinoDSL.jj - JavaCC grammar that parses a small Portuguese DSL for Arduino
+// Commands supported: "acender pino N", "apagar pino N", "esperar N segundos"
+
+options {
+STATIC = false;
+JAVA_UNICODE_ESCAPE = true;
+}
+
+
+PARSER_BEGIN(ArduinoDSLParser)
+import java.util.*;
+import java.io.*;
+import utils.ArduinoSketchEmitter; // classe utilitária que escreve o .ino (package utils)
+
+
+public class ArduinoDSLParser {
+    // coletar pinos de saída digital (LEDs) para configurar em setup() como OUTPUT
+    private Set outputPins = new LinkedHashSet();
+    // coletar pinos de entrada digital (botões) para configurar em setup() como INPUT_PULLUP
+    private Set inputPins = new LinkedHashSet();
+    // coletar pinos de saída analógica (PWM: 3,5,6,9,10,11) para configurar em setup() como OUTPUT
+    private Set analogOutputPins = new LinkedHashSet();
+    // coletar pinos de entrada analógica (A0-A5) para configurar em setup() como INPUT
+    private Set analogInputPins = new LinkedHashSet();
+    // corpo do loop() que será preenchido pelos comandos
+    private StringBuilder loopCode = new StringBuilder();
+    // nível de indentação atual (para blocos aninhados)
+    // indentLevel = 1 significa indentação base do loop() (2 espaços)
+    private int indentLevel = 1;
+    // string de indentação base (2 espaços por nível)
+    private static final String INDENT = "  ";
+    
+    // retorna a indentação atual baseada no nível
+    private String getIndent() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < indentLevel; i++) {
+            sb.append(INDENT);
+        }
+        return sb.toString();
+    }
+
+
+    /**
+    * Main único: recebe opcionalmente: <input.dsl> <output.ino>
+    * - se nenhum argumento: lê de stdin e escreve "generated_sketch.ino"
+    */
+    public static void main(String[] args) throws Exception {
+        InputStream in = System.in;
+        String outFile = "generated_sketch.ino";
+
+
+        if (args.length > 0) in = new FileInputStream(args[0]);
+        if (args.length > 1) outFile = args[1];
+
+
+        // Use o construtor gerado pelo JavaCC (evite declarar construtores com a mesma assinatura)
+        ArduinoDSLParser parser = new ArduinoDSLParser(new java.io.InputStreamReader(in));
+        parser.Program();
+        parser.emitArduinoSketch(outFile);
+    }
+
+
+    /**
+     * Delegação para a classe utilitária que escreve o arquivo .ino
+     */
+    private void emitArduinoSketch(String outFilename) {
+        ArduinoSketchEmitter.writeSketch(outputPins, inputPins, analogOutputPins, analogInputPins, loopCode.toString(), outFilename);
+    }
+}
+PARSER_END(ArduinoDSLParser)
+
+// -------------------- Tokens --------------------
+
+TOKEN : {
+    < ACENDER: ("acender") >
+  | < APAGAR:  ("apagar")  >
+  | < ESPERAR: ("esperar") >
+  | < ESCREVER: ("escrever") >
+  | < COM: ("com") >
+  | < VALOR: ("valor") >
+  | < PINO:    ("pino")    >
+  | < LED:    ("led")    >
+  | < BUZZER: ("buzzer") >
+  | < SEGUNDOS: ("segundos" | "s" | "segundo") >
+  | < MILISSEGUNDOS: ("milissegundos" | "ms" | "milissegundo") >
+  | < NUMBER: ( ["0"-"9"] ) ( ["0"-"9"] )* >
+  | < SEMI: ";" >
+}
+
+TOKEN : {
+    < LBRACE: "{" >
+|   < RBRACE: "}" >
+|   < LPAREN: "(" >
+|       < RPAREN: ")" >
+|   < COLON: ":" >
+}
+
+TOKEN :
+{
+    <BOTAO: ("botao" | "botão") >
+|   <PRESSIONADO: ("pressionado" | "apertado") >
+|   <CHAVE: ("chave") >
+|   <A_PIN: ("A") >
+|   <POTENCIOMETRO: ("potenciometro" | "potenciômetro") >
+|   <SENSOR_TEMP: ("sensor_de_temperatura") >
+|   <LDR: ("LDR" | "ldr") >
+}
+
+TOKEN : /* TOKENS DE IMPERATIVA 1 */
+{
+    < IF: "se" >
+|   < THEN: ("entao" | "então") >
+|       < ELSE: ("senao" | "senão") >
+|   < FIM: "fim" >
+|   < FIMSE: "fimse" >
+}
+
+SKIP : {
+    " " | "\t" | "\r" | "\n"  // whitespace
+}
+
+// -------------------- Grammar productions --------------------
+
+void Program() : {} {
+    ( Command() )* <EOF>
+}
+
+void Command() : {} {
+    ( AcenderCmd() | ApagarCmd() | EsperarCmd() | IfCmd() | EscreverCmd() )
+}
+
+void AcenderCmd() : { Token t; } {
+    <ACENDER> (<PINO> | <LED>) t = <NUMBER> [ <SEMI> ] {
+        int pin = Integer.parseInt(t.image);
+        outputPins.add(pin);
+        loopCode.append(getIndent() + "digitalWrite("+pin+", HIGH);\n");
+    }
+}
+
+void ApagarCmd() : { Token t; } {
+    <APAGAR> (<PINO> | <LED>) t = <NUMBER> [ <SEMI> ] {
+        int pin = Integer.parseInt(t.image);
+        outputPins.add(pin);
+        loopCode.append(getIndent() + "digitalWrite("+pin+", LOW);\n");
+    }
+}
+
+void EsperarCmd() : { Token t; Token tempo; } {
+    <ESPERAR> t = <NUMBER> (tempo = <SEGUNDOS> | tempo = <MILISSEGUNDOS>) [ <SEMI> ] {
+        int value = Integer.parseInt(t.image);
+        int delayMs;
+        if (tempo.kind == MILISSEGUNDOS) {
+            delayMs = value;
+        } else {
+            delayMs = value * 1000;
+        }
+        loopCode.append(getIndent() + "delay(" + delayMs + ");\n");
+    }
+}
+
+void IfCmd() : { Token t; int savedStartIdx; int pin; String ifBody; } {
+    <IF> <BOTAO> t = <NUMBER> <PRESSIONADO> <THEN> 
+    (
+        // Sintaxe com chaves: se ... entao { ... }
+        <LBRACE> 
+        {
+            pin = Integer.parseInt(t.image);
+            inputPins.add(pin);
+            // adiciona o if statement com indentação atual (nível do loop)
+            loopCode.append(getIndent() + "if (digitalRead(" + pin + ") == HIGH) {\n");
+            // incrementa o nível de indentação para comandos dentro do bloco
+            indentLevel++;
+            // salva o índice onde começam os comandos do bloco
+            savedStartIdx = loopCode.length();
+        }
+        Command() ( Command() )* 
+        <RBRACE>
+        {
+            // extrai o corpo do if (comandos adicionados dentro do bloco)
+            ifBody = loopCode.substring(savedStartIdx);
+            // remove esses comandos do loopCode principal
+            loopCode.setLength(savedStartIdx);
+            
+            // restaura o nível de indentação antes de fechar o bloco
+            indentLevel--;
+            
+            // adiciona o corpo do if e fecha o bloco
+            loopCode.append(ifBody);
+            loopCode.append(getIndent() + "}\n");
+        }
+    |
+        // Sintaxe com dois pontos (estilo Python): se ... entao: ... fim
+        <COLON>
+        {
+            pin = Integer.parseInt(t.image);
+            inputPins.add(pin);
+            // adiciona o if statement com indentação atual (nível do loop)
+            loopCode.append(getIndent() + "if (digitalRead(" + pin + ") == HIGH) {\n");
+            // incrementa o nível de indentação para comandos dentro do bloco
+            indentLevel++;
+            // salva o índice onde começam os comandos do bloco
+            savedStartIdx = loopCode.length();
+        }
+        Command() ( Command() )* 
+        ( <FIMSE> | <FIM> )
+        {
+            // extrai o corpo do if (comandos adicionados dentro do bloco)
+            ifBody = loopCode.substring(savedStartIdx);
+            // remove esses comandos do loopCode principal
+            loopCode.setLength(savedStartIdx);
+            
+            // restaura o nível de indentação antes de fechar o bloco
+            indentLevel--;
+            
+            // adiciona o corpo do if e fecha o bloco
+            loopCode.append(ifBody);
+            loopCode.append(getIndent() + "}\n");
+        }
+    )
+}
+
+// Comando escrever: escrever <SAIDA> com valor (<NUMERO> | <ENTRADA>)
+void EscreverCmd() : { Token perifSaida; Token numSaida; Token numValor; Token perifEntrada; Token numEntrada; boolean isAnalogOutput; boolean isAnalogInput; int pinNum; String pinStr; int value; int[] pwmPins = {3, 5, 6, 9, 10, 11}; } {
+    <ESCREVER> (perifSaida = <PINO> | perifSaida = <LED> | perifSaida = <BUZZER>) numSaida = <NUMBER> <COM> <VALOR> 
+    (
+        // Caso 1: valor é um número (0-255)
+        numValor = <NUMBER> [ <SEMI> ] {
+            pinNum = Integer.parseInt(numSaida.image);
+            value = Integer.parseInt(numValor.image);
+            
+            // Determinar se é saída analógica (PWM) ou digital
+            isAnalogOutput = false;
+            for (int p : pwmPins) {
+                if (pinNum == p) {
+                    isAnalogOutput = true;
+                    break;
+                }
+            }
+            
+            if (isAnalogOutput && (perifSaida.kind == PINO || perifSaida.kind == LED || perifSaida.kind == BUZZER)) {
+                // Saída analógica (PWM)
+                analogOutputPins.add(pinNum);
+                loopCode.append(getIndent() + "analogWrite(" + pinNum + ", " + value + ");\n");
+            } else if (pinNum >= 0 && pinNum <= 13 && (perifSaida.kind == PINO || perifSaida.kind == LED)) {
+                // Saída digital
+                outputPins.add(pinNum);
+                if (value > 127) {
+                    loopCode.append(getIndent() + "digitalWrite(" + pinNum + ", HIGH);\n");
+                } else {
+                    loopCode.append(getIndent() + "digitalWrite(" + pinNum + ", LOW);\n");
+                }
+            }
+        }
+    |
+        // Caso 2: valor é uma entrada
+        (perifEntrada = <BOTAO> | perifEntrada = <CHAVE> | perifEntrada = <A_PIN> | perifEntrada = <POTENCIOMETRO> | perifEntrada = <SENSOR_TEMP> | perifEntrada = <LDR>) numEntrada = <NUMBER> [ <SEMI> ] {
+            pinNum = Integer.parseInt(numSaida.image);
+            int inputPinNum = Integer.parseInt(numEntrada.image);
+            
+            // Determinar tipo de saída
+            isAnalogOutput = false;
+            for (int p : pwmPins) {
+                if (pinNum == p) {
+                    isAnalogOutput = true;
+                    break;
+                }
+            }
+            
+            // Determinar tipo de entrada
+            isAnalogInput = (perifEntrada.kind == A_PIN || perifEntrada.kind == POTENCIOMETRO || 
+                           perifEntrada.kind == SENSOR_TEMP || perifEntrada.kind == LDR);
+            
+            if (isAnalogInput && inputPinNum >= 0 && inputPinNum <= 5) {
+                // Entrada analógica (A0-A5)
+                analogInputPins.add(inputPinNum);
+                pinStr = "A" + inputPinNum;
+                
+                if (isAnalogOutput && (perifSaida.kind == PINO || perifSaida.kind == LED || perifSaida.kind == BUZZER)) {
+                    // analogWrite com map de analogRead
+                    analogOutputPins.add(pinNum);
+                    loopCode.append(getIndent() + "analogWrite(" + pinNum + ", map(analogRead(" + pinStr + "), 0, 1023, 0, 255));\n");
+                } else if (pinNum >= 0 && pinNum <= 13 && (perifSaida.kind == PINO || perifSaida.kind == LED)) {
+                    // digitalWrite com map de analogRead
+                    outputPins.add(pinNum);
+                    loopCode.append(getIndent() + "digitalWrite(" + pinNum + ", map(analogRead(" + pinStr + "), 0, 1023, 0, 255) > 127 ? HIGH : LOW);\n");
+                }
+            } else if (!isAnalogInput && (perifEntrada.kind == BOTAO || perifEntrada.kind == CHAVE) && 
+                      inputPinNum >= 0 && inputPinNum <= 13) {
+                // Entrada digital
+                inputPins.add(inputPinNum);
+                pinStr = String.valueOf(inputPinNum);
+                
+                if (isAnalogOutput && (perifSaida.kind == PINO || perifSaida.kind == LED || perifSaida.kind == BUZZER)) {
+                    // analogWrite com map de digitalRead
+                    analogOutputPins.add(pinNum);
+                    loopCode.append(getIndent() + "analogWrite(" + pinNum + ", digitalRead(" + pinStr + ") == HIGH ? 255 : 0);\n");
+                } else if (pinNum >= 0 && pinNum <= 13 && (perifSaida.kind == PINO || perifSaida.kind == LED)) {
+                    // digitalWrite com digitalRead
+                    outputPins.add(pinNum);
+                    loopCode.append(getIndent() + "digitalWrite(" + pinNum + ", digitalRead(" + pinStr + "));\n");
+                }
+            }
+        }
+    )
+}
+
+// optional: allow comments starting with // until end of line
+
+TOKEN : {
+    < LINE_COMMENT: "//" (~["\n","\r"]) * >
+}
+
+SKIP : {
+    < LINE_COMMENT >
+}
+
+/*
+Uso:
+1) Gere o parser com JavaCC: javacc ArduinoDSLParser.jj
+2) Compile os arquivos gerados e a classe utilitária: javac -d bin utils/*.java *.java
+3) Rode: java -cp bin ArduinoDSLParser exemplo.dsl generated/meu_sketch.ino
+*/

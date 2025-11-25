@@ -1,0 +1,63 @@
+# --------------------------------------------
+# IGNORAR ARTEFATOS DO JAVACC
+# --------------------------------------------
+# Arquivos gerados automaticamente pelo JavaCC
+JavaCharStream.java
+ParseException.java
+TokenMgrError.java
+Token.java
+JJT*.java
+*Parser.java
+*Constants.java
+*TokenManager.java
+*.jjtmp
+
+# Caso você gere em outra pasta
+gen/
+out/
+build/
+
+# --------------------------------------------
+# IGNORAR ARTEFATOS DA COMPILAÇÃO JAVAC
+# --------------------------------------------
+*.class
+*.jar
+
+# Pasta típica de build
+bin/
+target/
+dist/
+
+# --------------------------------------------
+# IGNORAR ARTEFATOS DA DSL Arduino
+# --------------------------------------------
+# Arquivos .ino gerados automaticamente
+generated/
+*.ino
+
+# Ignorar arquivos .dsl, exceto exemplo.dsl
+*.dsl
+!exemplo.dsl
+
+# --------------------------------------------
+# IGNORAR ARTEFATOS DO SISTEMA
+# --------------------------------------------
+.DS_Store
+Thumbs.db
+
+# --------------------------------------------
+# IGNORAR ARTEFATOS DO EDITOR / IDE
+# --------------------------------------------
+# VSCode
+.vscode/
+*.log
+
+# IntelliJ / IDEA
+.idea/
+*.iml
+out/
+
+# Eclipse
+.project
+.classpath
+.settings/
