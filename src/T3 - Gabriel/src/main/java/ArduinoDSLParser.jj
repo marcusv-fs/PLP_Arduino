@@ -20,6 +20,20 @@ public class ArduinoDSLParser {
     private Set inputPins = new LinkedHashSet();
     // corpo do loop() que será preenchido pelos comandos
     private StringBuilder loopCode = new StringBuilder();
+    // nível de indentação atual (para blocos aninhados)
+    // indentLevel = 1 significa indentação base do loop() (2 espaços)
+    private int indentLevel = 1;
+    // string de indentação base (2 espaços por nível)
+    private static final String INDENT = "  ";
+    
+    // retorna a indentação atual baseada no nível
+    private String getIndent() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < indentLevel; i++) {
+            sb.append(INDENT);
+        }
+        return sb.toString();
+    }
 
 
     /**
@@ -59,7 +73,7 @@ TOKEN : {
   | < ESPERAR: ("esperar") >
   | < PINO:    ("pino")    >
   | < LED:    ("led")    >
-  | < SEGUNDOS: ("segundos") >
+  | < SEGUNDOS: ("segundos" | "s" | "segundo") >
   | < NUMBER: ( ["0"-"9"] ) ( ["0"-"9"] )* >
   | < SEMI: ";" >
 }
@@ -68,7 +82,8 @@ TOKEN : {
     < LBRACE: "{" >
 |   < RBRACE: "}" >
 |   < LPAREN: "(" >
-|   < RPAREN: ")" >
+|       < RPAREN: ")" >
+|   < COLON: ":" >
 }
 
 TOKEN :
@@ -81,7 +96,9 @@ TOKEN : /* TOKENS DE IMPERATIVA 1 */
 {
     < IF: "se" >
 |   < THEN: ("entao" | "então") >
-|   < ELSE: ("senao" | "senão") >
+|       < ELSE: ("senao" | "senão") >
+|   < FIM: "fim" >
+|   < FIMSE: "fimse" >
 }
 
 SKIP : {
@@ -102,7 +119,7 @@ void AcenderCmd() : { Token t; } {
     <ACENDER> (<PINO> | <LED>) t = <NUMBER> [ <SEMI> ] {
         int pin = Integer.parseInt(t.image);
         outputPins.add(pin);
-        loopCode.append("  digitalWrite("+pin+", HIGH);\n");
+        loopCode.append(getIndent() + "digitalWrite("+pin+", HIGH);\n");
     }
 }
 
@@ -110,7 +127,7 @@ void ApagarCmd() : { Token t; } {
     <APAGAR> (<PINO> | <LED>) t = <NUMBER> [ <SEMI> ] {
         int pin = Integer.parseInt(t.image);
         outputPins.add(pin);
-        loopCode.append("  digitalWrite("+pin+", LOW);\n");
+        loopCode.append(getIndent() + "digitalWrite("+pin+", LOW);\n");
     }
 }
 
@@ -118,27 +135,69 @@ void EsperarCmd() : { Token t; } {
     <ESPERAR> t = <NUMBER> <SEGUNDOS> [ <SEMI> ] {
         int secs = Integer.parseInt(t.image);
         // delay expects milliseconds
-        loopCode.append("  delay(" + (secs*1000) + ");\n");
+        loopCode.append(getIndent() + "delay(" + (secs*1000) + ");\n");
     }
 }
 
-void IfCmd() : { Token t; } {
-    <IF> <BOTAO> t = <NUMBER> <PRESSIONADO> <THEN> <LBRACE> Command() ( Command() )* <RBRACE>
-    {
-        int pin = Integer.parseInt(t.image);
-        inputPins.add(pin);
-        StringBuilder ifBody = new StringBuilder();
-        // extract the commands added to loopCode during Command() calls
-        int startIdx = loopCode.lastIndexOf("  "); // find last command start
-        ifBody.append(loopCode.substring(startIdx));
-        // remove from loopCode
-        loopCode.setLength(startIdx);
-
-        // now add the if statement to loopCode
-        loopCode.append("  if (digitalRead(" + pin + ") == HIGH) {\n");
-        loopCode.append(ifBody.toString());
-        loopCode.append("  }\n");
-    }
+void IfCmd() : { Token t; int savedStartIdx; int pin; } {
+    <IF> <BOTAO> t = <NUMBER> <PRESSIONADO> <THEN> 
+    (
+        // Sintaxe com chaves: se ... entao { ... }
+        <LBRACE> 
+        {
+            pin = Integer.parseInt(t.image);
+            pins.add(pin);
+            // adiciona o if statement com indentação atual (nível do loop)
+            loopCode.append(getIndent() + "if (digitalRead(" + pin + ") == HIGH) {\n");
+            // incrementa o nível de indentação para comandos dentro do bloco
+            indentLevel++;
+            // salva o índice onde começam os comandos do bloco
+            savedStartIdx = loopCode.length();
+        }
+        Command() ( Command() )* 
+        <RBRACE>
+        {
+            // extrai o corpo do if (comandos adicionados dentro do bloco)
+            String ifBody = loopCode.substring(savedStartIdx);
+            // remove esses comandos do loopCode principal
+            loopCode.setLength(savedStartIdx);
+            
+            // restaura o nível de indentação antes de fechar o bloco
+            indentLevel--;
+            
+            // adiciona o corpo do if e fecha o bloco
+            loopCode.append(ifBody);
+            loopCode.append(getIndent() + "}\n");
+        }
+    |
+        // Sintaxe com dois pontos (estilo Python): se ... entao: ... fim
+        <COLON>
+        {
+            pin = Integer.parseInt(t.image);
+            inputPins.add(pin);
+            // adiciona o if statement com indentação atual (nível do loop)
+            loopCode.append(getIndent() + "if (digitalRead(" + pin + ") == HIGH) {\n");
+            // incrementa o nível de indentação para comandos dentro do bloco
+            indentLevel++;
+            // salva o índice onde começam os comandos do bloco
+            savedStartIdx = loopCode.length();
+        }
+        Command() ( Command() )* 
+        ( <FIMSE> | <FIM> )
+        {
+            // extrai o corpo do if (comandos adicionados dentro do bloco)
+            ifBody = loopCode.substring(savedStartIdx);
+            // remove esses comandos do loopCode principal
+            loopCode.setLength(savedStartIdx);
+            
+            // restaura o nível de indentação antes de fechar o bloco
+            indentLevel--;
+            
+            // adiciona o corpo do if e fecha o bloco
+            loopCode.append(ifBody);
+            loopCode.append(getIndent() + "}\n");
+        }
+    )
 }
 // optional: allow comments starting with // until end of line
 
