@@ -35,6 +35,10 @@ dist/
 generated/
 *.ino
 
+# Ignorar arquivos .dsl, exceto exemplo.dsl
+*.dsl
+!exemplo.dsl
+
 # --------------------------------------------
 # IGNORAR ARTEFATOS DO SISTEMA
 # --------------------------------------------

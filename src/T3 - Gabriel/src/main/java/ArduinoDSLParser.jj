@@ -146,7 +146,7 @@ void IfCmd() : { Token t; int savedStartIdx; int pin; } {
         <LBRACE> 
         {
             pin = Integer.parseInt(t.image);
-            pins.add(pin);
+            inputPins.add(pin);
             // adiciona o if statement com indentação atual (nível do loop)
             loopCode.append(getIndent() + "if (digitalRead(" + pin + ") == HIGH) {\n");
             // incrementa o nível de indentação para comandos dentro do bloco
