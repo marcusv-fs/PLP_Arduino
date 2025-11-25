@@ -1,4 +1,4 @@
-# T3 - Gabriel: DSL Arduino em Português
+# T3: DSL Arduino em Português: Linguagem Natural
 
 Uma Domain-Specific Language (DSL) projetada para simplificar a programação de microcontroladores Arduino, utilizando comandos em português para tornar a programação mais acessível e intuitiva.
 
