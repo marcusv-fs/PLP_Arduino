@@ -1,0 +1,41 @@
+Programa ::= Comando
+
+Comando ::= ComandoEmbutido
+            |  ComandoSe
+            |  ComandoRepetir
+            |  Comando
+
+ComandoEmbutido ::= ComandoAcender
+                   | ComandoApagar
+                   | ComandoEsperar
+                   | ComandoEscrever
+
+ComandoAcender ::= ("acender" | "ligar") ( "pino" | "led" ) ValorInteiro 
+ComandoApagar  ::= ("apagar" | "desligar") ( "pino" | "led" ) ValorInteiro
+ComandoEsperar ::= "esperar" ValorInteiro ( "segundo" | "segundos" | "s"
+                                      | "milissegundo" | "milissegundos" | "ms" )
+
+ComandoEscrever ::= "escrever" PerifericoSaida ValorInteiro "com" "valor" ValorRelativo [SEMI]
+PerifericoSaida ::= ( "pino" | "led" | "buzzer" )
+ValorRelativo ::= ValorInteiro | PerifericoEntrada ValorInteiro
+PerifericoEntrada ::= "botao" | "chave" | "A" ValorInteiro | "potenciometro" | "sensor_de_temperatura" | "LDR"
+
+ComandoSe ::= "se" Condicao ( BlocoSeChaves | BlocoSeColon )
+
+BlocoSeChaves ::= "{" Comando "}"
+BlocoSeColon ::= ":" Comando ("fimse" | "fim")
+
+Condicao ::= Expressao
+
+Expressao ::= ExpBinaria | ExpEmbutida 
+
+ExpBinaria ::= ExpBool
+
+ExpBool ::= Expressao "ou" Expressao
+            | Expressao "e" Expressao
+            | Expressao "==" Expressao
+            | Expressao "diferente" Expressao
+
+ExpEmbutida ::= ("botao" | "botão") ValorInteiro ("pressionado" | "apertado")
+
+ComandoRepetir ::= "repetir" ValorInteiro "vezes" ( "{" Comando "}" )
