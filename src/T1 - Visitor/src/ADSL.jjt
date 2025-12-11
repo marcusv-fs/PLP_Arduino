@@ -1,8 +1,8 @@
 options {
   STATIC = false;
   VISITOR = true;
-  MULTI=true;
-  TRACK_TOKENS = true;
+  MULTI=true; // É útil para simplificar a gramática, permitindo a definição uma regra que, por exemplo, crie um nó para cada elemento em uma lista ou em uma sequência de operações.
+  TRACK_TOKENS = true; //o parser armazena o primeiro e o último token que contribuíram para a criação de cada nó da AST
 }
 
 PARSER_BEGIN(ADSL)

@@ -3,10 +3,10 @@ Este projeto consiste na implementação de uma Linguagem Específica de Domíni
 
 # Principais Arquivos
 ## ADSL.jjt
-O arquivo .jjt é o artefato que define a gramática da Linguagem Específica de Domínio (DSL) e, simultaneamente, orienta o JJTree na construção da Árvore de Sintaxe Abstrata (AST). Essencialmente, o .jjt é o modelo que transforma o código-fonte textual em uma estrutura de dados hierárquica e tipada, onde cada nó representa uma construção sintática da linguagem, como comandos, expressões ou declarações.
+O arquivo [ADSL.jjt] (src\T1 - Visitor\src\ADSL.jjt) é o artefato que define a gramática da Linguagem Específica de Domínio (DSL) e, simultaneamente, orienta o JJTree na construção da Árvore de Sintaxe Abstrata (AST). Essencialmente, o .jjt é o modelo que transforma o código-fonte textual em uma estrutura de dados hierárquica e tipada, onde cada nó representa uma construção sintática da linguagem, como comandos, expressões ou declarações.
 
 ## ArduinoVisitor.java
- O Visitor é um padrão de projeto que permite a definição de novas operações sobre os elementos da AST sem a necessidade de modificar as classes dos nós. A classe ArduinoVisitor.java é o componente responsável por percorrer a AST gerada e aplicar a lógica de tradução. Para cada nó visitado, ele gera o código C/C++ equivalente. Essa separação é útil, pois permite que a lógica de tradução seja modificada independentemente da definição da linguagem.
+ O Visitor é um padrão de projeto que permite a definição de novas operações sobre os elementos da AST sem a necessidade de modificar as classes dos nós. A classe [ArduinoVisitor.java] (src\T1 - Visitor\src\ArduinoVisitor.java) é o componente responsável por percorrer a AST gerada e aplicar a lógica de tradução. Para cada nó visitado, ele gera o código C/C++ equivalente. Essa separação é útil, pois permite que a lógica de tradução seja modificada independentemente da definição da linguagem.
 
 # Como executar?
 Entre na pasta src e execute setup.bat ou 

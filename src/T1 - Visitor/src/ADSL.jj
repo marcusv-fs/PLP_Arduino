@@ -2,8 +2,8 @@
 /*@egen*/options {
   STATIC = false;
                  
-             
-                      
+                                                                                                                                                                                     
+                       //o parser armazena o primeiro e o \u00faltimo token que contribu\u00edram para a cria\u00e7\u00e3o de cada n\u00f3 da AST
 }
 
 PARSER_BEGIN(ADSL)

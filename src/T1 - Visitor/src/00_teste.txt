@@ -9,6 +9,7 @@ funcao piscaLed(int pino, int vezes) : void {
         Espere 500 ms;
         real valor;
         valor = 10 * 5;
+        letra = "s";
     }
 }
 
